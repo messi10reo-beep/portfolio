@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portfolio — AIと業務自動化の受託開発</title>
+    <meta name="description" content="AI（生成AI/RAG/LLM組み込み）と業務自動化を得意とする受託開発のポートフォリオ。" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@500&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --canvas: #fbfbfa;
+        --surface: #ffffff;
+        --ink: #18181b;
+        --muted: #6b6b72;
+        --faint: #a1a1aa;
+        --line: #ebeae6;
+        --line-strong: #deded8;
+        --accent: #0e7a55;
+        --accent-soft: #e6f2ec;
+        --amber: #b45309;
+        --blue: #1e40af;
+        --font-display: "Bricolage Grotesque", "Zen Kaku Gothic New", system-ui, sans-serif;
+        --font-sans: "Hanken Grotesk", "Zen Kaku Gothic New", system-ui, sans-serif;
+        --font-mono: "JetBrains Mono", ui-monospace, monospace;
+        --maxw: 1080px;
+        --shadow: 0 1px 2px rgba(24,24,27,.04), 0 18px 40px -24px rgba(24,24,27,.22);
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        font-family: var(--font-sans);
+        background: var(--canvas);
+        color: var(--ink);
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+        line-height: 1.6;
+      }
+      a { color: inherit; text-decoration: none; }
+      .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 28px; }
+
+      /* ---- subtle background grain/gradient ---- */
+      body::before {
+        content: "";
+        position: fixed; inset: 0; z-index: -1;
+        background:
+          radial-gradient(900px 500px at 78% -8%, rgba(14,122,85,.06), transparent 60%),
+          radial-gradient(700px 460px at 4% 4%, rgba(24,24,27,.035), transparent 55%);
+      }
+
+      /* ---- Nav ---- */
+      nav {
+        position: sticky; top: 0; z-index: 20;
+        background: rgba(251,251,250,.8);
+        backdrop-filter: saturate(180%) blur(12px);
+        border-bottom: 1px solid var(--line);
+      }
+      .nav-in { display: flex; align-items: center; gap: 18px; height: 64px; }
+      .brand { display: flex; align-items: center; gap: 11px; font-weight: 700; font-family: var(--font-display); letter-spacing: -.02em; }
+      .brand .dot {
+        width: 30px; height: 30px; border-radius: 8px; background: var(--ink); color: #fff;
+        display: grid; place-items: center; font-size: 15px;
+      }
+      .nav-links { margin-left: auto; display: flex; gap: 26px; font-size: 14px; color: var(--muted); }
+      .nav-links a:hover { color: var(--ink); }
+      .nav-cta {
+        font-size: 14px; font-weight: 600; padding: 9px 16px; border-radius: 9px;
+        background: var(--ink); color: #fff; transition: background .16s, transform .12s;
+      }
+      .nav-cta:hover { background: #000; transform: translateY(-1px); }
+      @media (max-width: 680px) { .nav-links { display: none; } }
+
+      /* ---- Hero ---- */
+      header.hero { padding: 88px 0 64px; }
+      .kicker {
+        display: inline-flex; align-items: center; gap: 8px;
+        font-size: 13px; color: var(--accent); font-weight: 600;
+        background: var(--accent-soft); border: 1px solid #cfe6db;
+        padding: 6px 13px; border-radius: 999px; margin-bottom: 26px;
+      }
+      .kicker .pulse { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 0 rgba(14,122,85,.5); animation: pulse 2s infinite; }
+      h1.title {
+        font-family: var(--font-display); font-weight: 800;
+        font-size: clamp(38px, 6.4vw, 70px); line-height: 1.04; letter-spacing: -.035em;
+        margin: 0 0 22px;
+      }
+      h1.title em { font-style: normal; color: var(--accent); }
+      .lead { font-size: clamp(16px, 2.1vw, 19px); color: var(--muted); max-width: 600px; margin: 0 0 34px; }
+      .hero-cta { display: flex; gap: 12px; flex-wrap: wrap; }
+      .btn {
+        font-family: var(--font-sans); font-weight: 600; font-size: 15px;
+        padding: 13px 22px; border-radius: 11px; cursor: pointer; border: 1px solid transparent;
+        display: inline-flex; align-items: center; gap: 9px;
+        transition: transform .12s, background .16s, border-color .16s, color .16s;
+      }
+      .btn-primary { background: var(--ink); color: #fff; }
+      .btn-primary:hover { background: #000; transform: translateY(-2px); }
+      .btn-ghost { background: var(--surface); border-color: var(--line-strong); color: var(--ink); }
+      .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+      /* ---- Stats ---- */
+      .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; margin-top: 56px; }
+      .stat { background: var(--surface); padding: 22px 24px; }
+      .stat .n { font-family: var(--font-display); font-weight: 700; font-size: 30px; letter-spacing: -.03em; }
+      .stat .l { font-size: 12.5px; color: var(--muted); margin-top: 3px; }
+      @media (max-width: 680px) { .stats { grid-template-columns: repeat(2, 1fr); } }
+
+      /* ---- Section ---- */
+      section { padding: 70px 0; }
+      .sec-head { margin-bottom: 36px; }
+      .sec-head .ey { font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
+      .sec-head h2 { font-family: var(--font-display); font-weight: 700; font-size: clamp(26px, 3.6vw, 36px); letter-spacing: -.025em; margin: 10px 0 0; }
+      .sec-head p { color: var(--muted); margin: 12px 0 0; max-width: 560px; }
+
+      /* ---- Project cards ---- */
+      .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
+      @media (max-width: 760px) { .grid { grid-template-columns: 1fr; } }
+      .card {
+        background: var(--surface); border: 1px solid var(--line); border-radius: 18px; overflow: hidden;
+        display: flex; flex-direction: column; box-shadow: 0 1px 2px rgba(24,24,27,.03);
+        transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+      }
+      .card:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: var(--line-strong); }
+      .thumb { aspect-ratio: 16 / 10; border-bottom: 1px solid var(--line); overflow: hidden; position: relative; background: #f4f4f1; }
+      .thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+      .ph { width: 100%; height: 100%; display: grid; place-items: center; position: relative; }
+      .ph.ai { background: linear-gradient(135deg, #f0f7f3, #e3efe9); }
+      .ph.cli { background: #14171c; }
+      .ph .glyph { font-family: var(--font-display); font-weight: 800; font-size: 52px; letter-spacing: -.04em; color: var(--accent); opacity: .9; }
+      .ph.cli .term { font-family: var(--font-mono); font-size: 12.5px; color: #c9f0db; padding: 22px 24px; width: 100%; line-height: 1.85; }
+      .ph.cli .term .p { color: #5fcf9a; }
+      .ph.cli .term .c { color: #8b94a3; }
+      .ph .soon { position: absolute; top: 12px; right: 12px; font-size: 11px; font-weight: 600; color: var(--amber); background: #fcefd9; border: 1px solid #f1d6a3; padding: 4px 10px; border-radius: 999px; }
+      .card-body { padding: 22px 22px 24px; display: flex; flex-direction: column; flex: 1; }
+      .tags { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 13px; }
+      .tag { font-size: 11.5px; font-weight: 600; color: var(--muted); background: #f4f4f1; border: 1px solid var(--line); padding: 4px 10px; border-radius: 7px; }
+      .tag.cat { color: var(--accent); background: var(--accent-soft); border-color: #cfe6db; }
+      .card h3 { font-family: var(--font-display); font-weight: 700; font-size: 20px; letter-spacing: -.02em; margin: 0 0 9px; }
+      .card p { font-size: 14.5px; color: var(--muted); margin: 0 0 18px; flex: 1; }
+      .links { display: flex; gap: 16px; font-size: 14px; font-weight: 600; }
+      .links a { display: inline-flex; align-items: center; gap: 6px; color: var(--ink); border-bottom: 1.5px solid transparent; padding-bottom: 2px; transition: border-color .15s, color .15s; }
+      .links a:hover { color: var(--accent); border-color: var(--accent); }
+      .links a.muted { color: var(--faint); cursor: default; }
+      .links a.muted:hover { border-color: transparent; }
+
+      /* ---- Strengths ---- */
+      .str-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+      @media (max-width: 680px) { .str-grid { grid-template-columns: 1fr; } }
+      .str { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 26px; }
+      .str .ic { width: 40px; height: 40px; border-radius: 10px; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; font-family: var(--font-display); font-weight: 800; margin-bottom: 16px; }
+      .str h3 { font-family: var(--font-display); font-weight: 700; font-size: 18px; margin: 0 0 8px; letter-spacing: -.01em; }
+      .str p { color: var(--muted); font-size: 14.5px; margin: 0; }
+
+      /* ---- Contact ---- */
+      .contact { background: var(--ink); color: #fff; border-radius: 22px; padding: clamp(36px, 6vw, 64px); text-align: center; }
+      .contact h2 { font-family: var(--font-display); font-weight: 700; font-size: clamp(28px, 4.4vw, 44px); letter-spacing: -.03em; margin: 0 0 16px; }
+      .contact p { color: #c9c9cf; max-width: 480px; margin: 0 auto 30px; }
+      .contact .btn-primary { background: #fff; color: var(--ink); }
+      .contact .btn-primary:hover { background: #f0f0ee; }
+
+      footer { padding: 40px 0 56px; color: var(--faint); font-size: 13px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+
+      /* ---- reveal (load-in; content is always visible, animation is enhancement) ---- */
+      .reveal { animation: rise .7s cubic-bezier(.2,.7,.2,1) both; }
+      @keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+      @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(14,122,85,.5); } 70% { box-shadow: 0 0 0 7px rgba(14,122,85,0); } 100% { box-shadow: 0 0 0 0 rgba(14,122,85,0); } }
+      @media (prefers-reduced-motion: reduce) { .reveal { animation: none; } .pulse { animation: none; } html { scroll-behavior: auto; } }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <div class="wrap nav-in">
+        <span class="brand"><span class="dot">K</span>Portfolio</span>
+        <div class="nav-links">
+          <a href="#work">実績</a>
+          <a href="#strengths">強み</a>
+          <a href="#contact">連絡先</a>
+        </div>
+        <a class="nav-cta" href="#contact">相談する</a>
+      </div>
+    </nav>
+
+    <header class="hero">
+      <div class="wrap">
+        <span class="kicker reveal"><span class="pulse"></span>受託・業務委託 受付中</span>
+        <h1 class="title reveal">AIと自動化で、<br /><em>手作業の業務</em>をなくす。</h1>
+        <p class="lead reveal">
+          生成AI（RAG・LLM組み込み）と業務自動化を得意とする開発者です。
+          機密データを外部に出さない「ローカルで動くAI」を含め、中小企業でも導入しやすい現実的な形で、動くものを早く形にします。
+        </p>
+        <div class="hero-cta reveal">
+          <a class="btn btn-primary" href="#work">制作物を見る →</a>
+          <a class="btn btn-ghost" href="#contact">仕事を相談する</a>
+        </div>
+
+        <div class="stats reveal">
+          <div class="stat"><div class="n">6</div><div class="l">公開プロジェクト</div></div>
+          <div class="stat"><div class="n">190+</div><div class="l">自動テスト</div></div>
+          <div class="stat"><div class="n">100%</div><div class="l">TypeScript strict</div></div>
+          <div class="stat"><div class="n">0</div><div class="l">既知の脆弱性</div></div>
+        </div>
+      </div>
+    </header>
+
+    <section id="work">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <div class="ey">Work</div>
+          <h2>制作物</h2>
+          <p>すべて実際に動作し、テスト・CI・型安全を備えています。AI・業務自動化・社内ツールの3領域をカバー。</p>
+        </div>
+        <div class="grid">
+
+          <!-- rag-chat -->
+          <article class="card reveal">
+            <div class="thumb"><img src="assets/rag-chat.png" alt="ローカル文書RAGチャットの画面" /></div>
+            <div class="card-body">
+              <div class="tags"><span class="tag cat">AI / RAG</span><span class="tag">TypeScript</span><span class="tag">Ollama</span><span class="tag">transformers.js</span></div>
+              <h3>ローカル文書RAGチャット</h3>
+              <p>社内文書を読み込み、その内容だけを根拠に出典つきで回答。埋め込み・検索をローカルで完結し、文書を外部に送信しません。</p>
+              <div class="links"><a href="http://localhost:3000" target="_blank" rel="noopener">ライブデモ ↗</a><a class="muted">コード（公開準備中）</a></div>
+            </div>
+          </article>
+
+          <!-- admin-dashboard -->
+          <article class="card reveal">
+            <div class="thumb"><img src="assets/admin-dashboard.png" alt="問い合わせ管理ダッシュボードの画面" /></div>
+            <div class="card-body">
+              <div class="tags"><span class="tag cat">社内ツール</span><span class="tag">Express</span><span class="tag">TypeScript</span><span class="tag">REST API</span></div>
+              <h3>問い合わせ管理ダッシュボード</h3>
+              <p>顧客からの問い合わせをWebで一元管理。検索・絞り込み・ステータス管理・CSVエクスポートに対応した管理画面。</p>
+              <div class="links"><a href="http://localhost:3100" target="_blank" rel="noopener">ライブデモ ↗</a><a class="muted">コード（公開準備中）</a></div>
+            </div>
+          </article>
+
+          <!-- csv-report -->
+          <article class="card reveal">
+            <div class="thumb">
+              <div class="ph cli">
+                <div class="term">
+                  <div><span class="p">$</span> npm start</div>
+                  <div class="c"># 集計対象 46件 / スキップ 3件</div>
+                  <div>総売上 : <b>¥1,215,120</b></div>
+                  <div class="c">レポートを生成しました →</div>
+                  <div>output/report.md / summary.csv</div>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="tags"><span class="tag cat">業務自動化</span><span class="tag">CLI</span><span class="tag">TypeScript</span><span class="tag">依存ゼロ</span></div>
+              <h3>CSV売上集計レポート生成</h3>
+              <p>複数のCSVを読み込み、集計してMarkdown/CSVレポートを自動生成。Excelの手作業集計を置換。不正データは理由つきで除外・明示します。</p>
+              <div class="links"><a class="muted">CLIツール</a><a class="muted">コード（公開準備中）</a></div>
+            </div>
+          </article>
+
+          <!-- invoice-extractor -->
+          <article class="card reveal">
+            <div class="thumb"><img src="assets/invoice-extractor.png" alt="AI請求書データ抽出ツールの画面" /></div>
+            <div class="card-body">
+              <div class="tags"><span class="tag cat">AI / 自動化</span><span class="tag">Ollama</span><span class="tag">Express</span></div>
+              <h3>AI請求書データ抽出</h3>
+              <p>請求書・領収書から取引先・金額・日付・明細をAIで構造化し、CSV/JSONに出力。機密の請求書をローカルLLMで処理し、外部に出しません。</p>
+              <div class="links"><a href="http://localhost:3200" target="_blank" rel="noopener">ライブデモ ↗</a><a class="muted">コード（公開準備中）</a></div>
+            </div>
+          </article>
+
+          <!-- meeting-summarizer -->
+          <article class="card reveal">
+            <div class="thumb"><img src="assets/meeting-summarizer.png" alt="AI議事録要約ツールの画面" /></div>
+            <div class="card-body">
+              <div class="tags"><span class="tag cat">AI</span><span class="tag">Ollama</span><span class="tag">Express</span></div>
+              <h3>AI議事録要約</h3>
+              <p>会議の文字起こしから、要約・決定事項・ToDo（担当/期限）を自動抽出して議事録を生成。会議内容をローカルで処理します。</p>
+              <div class="links"><a href="http://localhost:3300" target="_blank" rel="noopener">ライブデモ ↗</a><a class="muted">コード（公開準備中）</a></div>
+            </div>
+          </article>
+
+          <!-- brand-site -->
+          <article class="card reveal">
+            <div class="thumb"><img src="assets/brand-site.png" alt="架空コーヒーブランドLPの画面" /></div>
+            <div class="card-body">
+              <div class="tags"><span class="tag cat">ブランドLP</span><span class="tag">HTML/CSS</span><span class="tag">アニメーション</span><span class="tag">レスポンシブ</span></div>
+              <h3>KIRI COFFEE — ブランドLP</h3>
+              <p>架空のスペシャルティ珈琲焙煎所のランディングページ。編集的なタイポグラフィ・スクロール演出・マーキーで世界観を表現。店舗/ブランドサイト制作のデモ。</p>
+              <div class="links"><a href="http://localhost:8090" target="_blank" rel="noopener">ライブデモ ↗</a><a class="muted">コード（公開準備中）</a></div>
+            </div>
+          </article>
+
+          <!-- placeholder for balance / next -->
+          <article class="card reveal" style="border-style: dashed; box-shadow: none; background: transparent;">
+            <div class="card-body" style="justify-content: center; align-items: flex-start; min-height: 220px;">
+              <div class="tags"><span class="tag">次の一手</span></div>
+              <h3 style="color: var(--muted);">あなたの課題に合わせて</h3>
+              <p>業務に合わせたツールを設計から実装まで。「この手作業を自動化したい」をお気軽にご相談ください。</p>
+              <div class="links"><a href="#contact">相談する →</a></div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <section id="strengths">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <div class="ey">Strengths</div>
+          <h2>できること・強み</h2>
+        </div>
+        <div class="str-grid">
+          <div class="str reveal"><div class="ic">AI</div><h3>生成AI・LLM組み込み</h3><p>RAG（社内文書Q&A）、チャットボット、文書からの情報抽出。要件に合わせてローカル/クラウドのLLMを選定します。</p></div>
+          <div class="str reveal"><div class="ic">⚙</div><h3>業務自動化</h3><p>CSV/Excelの集計、定型作業のスクリプト化、レポート自動生成。手作業を仕組みに置き換えます。</p></div>
+          <div class="str reveal"><div class="ic">▤</div><h3>社内ツール・管理画面</h3><p>問い合わせ・在庫・顧客管理などのWebアプリを、フロントからAPIまで一貫して構築します。</p></div>
+          <div class="str reveal"><div class="ic">🔒</div><h3>ローカル＆セキュア</h3><p>機密データを外部に出さないローカル完結の構成、入力バリデーション、型安全な実装で安心して使える品質に。</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="wrap">
+        <div class="contact reveal">
+          <h2>お気軽にご相談ください</h2>
+          <p>「この業務を自動化したい」「AIを使ってみたい」など、まずは現状を教えていただければ、実現イメージをご提案します。</p>
+          <a class="btn btn-primary" href="mailto:your@email.com">メールで相談する</a>
+        </div>
+      </div>
+    </section>
+
+    <footer class="wrap">
+      <span>© 2026 &lt;Your Name&gt; — AI・業務自動化の受託開発</span>
+      <span>TypeScript · Node.js · Ollama · Express</span>
+    </footer>
+
+    <script>
+      // Reveal-on-scroll. Pure DOM, no innerHTML.
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+          }
+        },
+        { threshold: 0.12 }
+      );
+      document.querySelectorAll(".reveal").forEach((n, i) => {
+        n.style.transitionDelay = Math.min(i * 60, 240) + "ms";
+        io.observe(n);
+      });
+    </script>
+  </body>
+</html>
