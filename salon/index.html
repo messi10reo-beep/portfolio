@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>hair atelier hibi｜日々を、整える。</title>
+<meta name="description" content="hair atelier hibi（ヘアアトリエ ひび）は、日々の暮らしに寄り添う上質なヘアサロンです。カット・カラー・パーマ・トリートメント。" />
+<!-- Inline SVG favicon (data URI) -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%233f3a36'/%3E%3Ctext x='16' y='22' font-family='Georgia,serif' font-size='17' fill='%23d8c3a5' text-anchor='middle'%3Eh%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Shippori+Mincho:wght@400;500;600&family=Zen+Kaku+Gothic+New:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --charcoal: #3f3a36;
+    --charcoal-soft: #56504a;
+    --greige: #b9aa97;
+    --greige-light: #e8e0d6;
+    --cream: #f6f2ec;
+    --paper: #fbf9f5;
+    --accent: #a98c6b;       /* くすみブラウンゴールド */
+    --accent-deep: #8a7050;
+    --line: #ddd3c6;
+    --text: #4a443f;
+    --text-soft: #7a726a;
+    --white: #ffffff;
+    --shadow-sm: 0 4px 16px rgba(63, 58, 54, 0.06);
+    --shadow-md: 0 14px 40px rgba(63, 58, 54, 0.12);
+    --serif-en: 'Cormorant Garamond', serif;
+    --serif-ja: 'Shippori Mincho', serif;
+    --sans-ja: 'Zen Kaku Gothic New', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--sans-ja);
+    color: var(--text);
+    background: var(--paper);
+    line-height: 1.9;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  img { display: block; max-width: 100%; }
+
+  a { color: inherit; text-decoration: none; }
+
+  .wrap { width: min(1140px, 90vw); margin-inline: auto; }
+
+  .eyebrow {
+    font-family: var(--serif-en);
+    font-size: 0.95rem;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 0.9rem;
+  }
+
+  .section-title {
+    font-family: var(--serif-ja);
+    font-weight: 600;
+    font-size: clamp(1.7rem, 4vw, 2.5rem);
+    color: var(--charcoal);
+    line-height: 1.4;
+    letter-spacing: 0.06em;
+  }
+
+  /* ---------- Header ---------- */
+  header {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.3rem clamp(1.25rem, 5vw, 3.5rem);
+    transition: background 0.4s ease, padding 0.4s ease, box-shadow 0.4s ease;
+  }
+  header.scrolled {
+    background: rgba(251, 249, 245, 0.92);
+    backdrop-filter: blur(10px);
+    padding-block: 0.85rem;
+    box-shadow: var(--shadow-sm);
+  }
+  .logo {
+    font-family: var(--serif-en);
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    color: var(--white);
+    transition: color 0.4s ease;
+  }
+  .logo .logo-sub {
+    display: block;
+    font-family: var(--sans-ja);
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    margin-top: 2px;
+    opacity: 0.8;
+  }
+  header.scrolled .logo { color: var(--charcoal); }
+
+  nav ul {
+    display: flex;
+    gap: 2.2rem;
+    list-style: none;
+    align-items: center;
+  }
+  nav a {
+    font-size: 0.82rem;
+    letter-spacing: 0.16em;
+    color: var(--white);
+    position: relative;
+    padding-bottom: 3px;
+    transition: color 0.4s ease;
+  }
+  nav a::after {
+    content: '';
+    position: absolute;
+    left: 0; bottom: 0;
+    width: 0; height: 1px;
+    background: var(--accent);
+    transition: width 0.3s ease;
+  }
+  nav a:hover::after { width: 100%; }
+  header.scrolled nav a { color: var(--charcoal-soft); }
+
+  .nav-cta {
+    border: 1px solid currentColor;
+    padding: 0.5rem 1.2rem !important;
+    border-radius: 999px;
+    font-size: 0.78rem !important;
+  }
+  .nav-cta::after { display: none; }
+  .nav-cta:hover { background: var(--accent); border-color: var(--accent); color: var(--white) !important; }
+
+  .menu-toggle { display: none; background: none; border: none; cursor: pointer; }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    color: var(--white);
+    background: linear-gradient(180deg, rgba(40,36,33,0.55) 0%, rgba(40,36,33,0.25) 40%, rgba(40,36,33,0.7) 100%), url('assets/img/hero.jpg') center/cover no-repeat;
+  }
+  .hero-inner { width: min(1140px, 90vw); margin-inline: auto; }
+  .hero .eyebrow { color: var(--greige-light); }
+  .hero h1 {
+    font-family: var(--serif-ja);
+    font-weight: 500;
+    font-size: clamp(2.6rem, 8vw, 5rem);
+    line-height: 1.3;
+    letter-spacing: 0.08em;
+    text-shadow: 0 2px 30px rgba(0,0,0,0.3);
+  }
+  .hero .lede {
+    margin-top: 1.6rem;
+    max-width: 30ch;
+    font-size: clamp(0.95rem, 2.2vw, 1.1rem);
+    letter-spacing: 0.06em;
+    color: rgba(255,255,255,0.92);
+  }
+  .hero .btn { margin-top: 2.4rem; }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    background: var(--accent);
+    color: var(--white);
+    padding: 1rem 2.4rem;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    letter-spacing: 0.14em;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+  }
+  .btn:hover { background: var(--accent-deep); transform: translateY(-3px); box-shadow: var(--shadow-md); }
+  .btn .arrow { transition: transform 0.3s ease; }
+  .btn:hover .arrow { transform: translateX(4px); }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 2rem; left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--serif-en);
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    color: rgba(255,255,255,0.8);
+    writing-mode: vertical-rl;
+    display: flex; align-items: center; gap: 0.8rem;
+  }
+  .hero-scroll::after {
+    content: ''; width: 1px; height: 46px;
+    background: rgba(255,255,255,0.6);
+    animation: scrollLine 2s ease-in-out infinite;
+  }
+  @keyframes scrollLine { 0%,100% { opacity: 0.3; transform: scaleY(0.6); transform-origin: top; } 50% { opacity: 1; transform: scaleY(1); } }
+
+  /* ---------- Section base ---------- */
+  section { padding-block: clamp(4.5rem, 11vw, 8rem); }
+
+  /* ---------- Concept ---------- */
+  .concept { background: var(--cream); }
+  .concept-grid {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: clamp(2.5rem, 6vw, 5rem);
+    align-items: center;
+  }
+  .concept-img { position: relative; }
+  .concept-img img {
+    width: 100%;
+    height: 560px;
+    object-fit: cover;
+    border-radius: 6px;
+    box-shadow: var(--shadow-md);
+  }
+  .concept-img::before {
+    content: '';
+    position: absolute;
+    inset: 18px -18px -18px 18px;
+    border: 1px solid var(--greige);
+    border-radius: 6px;
+    z-index: -1;
+  }
+  .concept-body p { margin-bottom: 1.5rem; color: var(--text-soft); }
+  .concept-body .section-title { margin: 0.5rem 0 1.8rem; }
+  .concept-body .lead {
+    font-family: var(--serif-ja);
+    font-size: 1.25rem;
+    color: var(--charcoal);
+    line-height: 2;
+  }
+  .signature {
+    font-family: var(--serif-en);
+    font-style: italic;
+    font-size: 1.4rem;
+    color: var(--accent);
+    margin-top: 1.5rem;
+  }
+
+  /* ---------- Menu ---------- */
+  .menu-head { text-align: center; margin-bottom: 3.5rem; }
+  .menu-head .eyebrow { display: block; }
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.8rem;
+  }
+  .menu-card {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 2.2rem 2.4rem;
+    transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+  }
+  .menu-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-md); border-color: transparent; }
+  .menu-card h3 {
+    font-family: var(--serif-ja);
+    font-size: 1.3rem;
+    color: var(--charcoal);
+    display: flex; align-items: baseline; gap: 0.7rem;
+    margin-bottom: 0.3rem;
+  }
+  .menu-card h3 .en {
+    font-family: var(--serif-en);
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+  .menu-card > p { color: var(--text-soft); font-size: 0.9rem; margin-bottom: 1.4rem; }
+  .price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 0.7rem 0;
+    border-bottom: 1px dashed var(--line);
+    gap: 1rem;
+  }
+  .price-row:last-child { border-bottom: none; }
+  .price-row .name { font-size: 0.92rem; }
+  .price-row .name small { display: block; color: var(--text-soft); font-size: 0.78rem; letter-spacing: 0.02em; }
+  .price-row .price {
+    font-family: var(--serif-en);
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--charcoal);
+    white-space: nowrap;
+  }
+  .price-row .price span { font-size: 0.7rem; color: var(--text-soft); margin-left: 2px; }
+  .menu-note { text-align: center; margin-top: 2.5rem; font-size: 0.82rem; color: var(--text-soft); letter-spacing: 0.04em; }
+
+  /* ---------- Gallery ---------- */
+  .gallery { background: var(--charcoal); color: var(--white); }
+  .gallery .eyebrow { color: var(--greige); }
+  .gallery .section-title { color: var(--white); }
+  .gallery-head { text-align: center; margin-bottom: 3.5rem; }
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 230px;
+    gap: 14px;
+  }
+  .gallery-item {
+    position: relative;
+    overflow: hidden;
+    border-radius: 6px;
+  }
+  .gallery-item.tall { grid-row: span 2; }
+  .gallery-item.wide { grid-column: span 2; }
+  .gallery-item img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s cubic-bezier(.2,.8,.2,1);
+  }
+  .gallery-item::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, transparent 50%, rgba(40,36,33,0.55));
+    opacity: 0; transition: opacity 0.4s ease;
+  }
+  .gallery-item .cap {
+    position: absolute;
+    left: 18px; bottom: 14px;
+    z-index: 2;
+    font-family: var(--serif-en);
+    font-style: italic;
+    letter-spacing: 0.08em;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  .gallery-item:hover img { transform: scale(1.08); }
+  .gallery-item:hover::after { opacity: 1; }
+  .gallery-item:hover .cap { opacity: 1; transform: translateY(0); }
+
+  /* ---------- Access ---------- */
+  .access-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(2.5rem, 6vw, 4.5rem);
+    align-items: start;
+  }
+  .access-grid .section-title { margin: 0.4rem 0 2rem; }
+  .info-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+  .info-table th, .info-table td {
+    text-align: left;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+    font-size: 0.92rem;
+  }
+  .info-table th {
+    width: 32%;
+    font-weight: 500;
+    color: var(--charcoal);
+    letter-spacing: 0.08em;
+  }
+  .info-table td { color: var(--text-soft); }
+  .hours-table { width: 100%; border-collapse: collapse; }
+  .hours-table caption {
+    text-align: left;
+    font-family: var(--serif-ja);
+    font-size: 1.05rem;
+    color: var(--charcoal);
+    margin-bottom: 0.6rem;
+  }
+  .hours-table th, .hours-table td {
+    padding: 0.6rem 0.4rem;
+    border-bottom: 1px solid var(--line);
+    font-size: 0.9rem;
+    text-align: center;
+  }
+  .hours-table th { color: var(--charcoal); font-weight: 500; }
+  .hours-table td.closed { color: var(--accent-deep); }
+  .map-placeholder {
+    margin-top: 1.6rem;
+    height: 280px;
+    border-radius: 8px;
+    background:
+      repeating-linear-gradient(45deg, var(--cream), var(--cream) 16px, var(--greige-light) 16px, var(--greige-light) 32px);
+    border: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    color: var(--text-soft);
+  }
+  .map-placeholder svg { opacity: 0.5; }
+  .map-placeholder span { font-size: 0.82rem; letter-spacing: 0.1em; }
+
+  /* ---------- CTA band ---------- */
+  .cta-band {
+    position: relative;
+    color: var(--white);
+    text-align: center;
+    background: linear-gradient(rgba(40,36,33,0.78), rgba(40,36,33,0.78)), url('assets/img/style.jpg') center/cover fixed no-repeat;
+  }
+  .cta-band .eyebrow { color: var(--greige-light); display: block; }
+  .cta-band h2 {
+    font-family: var(--serif-ja);
+    font-weight: 500;
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    line-height: 1.5;
+    margin-bottom: 1rem;
+  }
+  .cta-band p { color: rgba(255,255,255,0.85); margin-bottom: 2.2rem; }
+  .cta-band .tel {
+    display: block;
+    margin-top: 1.8rem;
+    font-family: var(--serif-en);
+    font-size: 1.6rem;
+    letter-spacing: 0.12em;
+  }
+  .cta-band .tel small { display:block; font-family: var(--sans-ja); font-size: 0.72rem; letter-spacing: 0.2em; opacity: 0.8; margin-top: 0.3rem; }
+
+  /* ---------- Footer ---------- */
+  footer { background: #2f2b28; color: var(--greige-light); padding-block: 3.5rem; }
+  .footer-grid {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 2rem;
+    padding-bottom: 2.2rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .footer-logo .logo { color: var(--white); }
+  .footer-logo p { font-size: 0.82rem; opacity: 0.7; margin-top: 0.8rem; max-width: 32ch; }
+  .footer-links { display: flex; gap: 1rem; }
+  .footer-links a {
+    width: 40px; height: 40px;
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.3s ease, border-color 0.3s ease;
+  }
+  .footer-links a:hover { background: var(--accent); border-color: var(--accent); }
+  .footer-bottom {
+    padding-top: 1.8rem;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    font-size: 0.74rem;
+    opacity: 0.65;
+    letter-spacing: 0.04em;
+  }
+  .demo-note {
+    margin-top: 1rem;
+    font-size: 0.74rem;
+    color: var(--greige);
+    letter-spacing: 0.04em;
+  }
+
+  /* ---------- Load-in reveal (content always visible; animation never gates display) ---------- */
+  .reveal { animation: revealIn 0.85s cubic-bezier(.2,.7,.2,1) both; }
+  @keyframes revealIn { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .reveal { animation: none; } }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 900px) {
+    .concept-grid { grid-template-columns: 1fr; }
+    .concept-img { order: -1; }
+    .concept-img img { height: 420px; }
+    .concept-img::before { inset: 12px -12px -12px 12px; }
+    .menu-grid { grid-template-columns: 1fr; }
+    .gallery-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 200px; }
+    .access-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    nav { position: fixed; inset: 0 0 0 auto; width: min(78vw, 320px);
+      background: var(--paper); flex-direction: column; justify-content: center;
+      transform: translateX(100%); transition: transform 0.4s ease; box-shadow: -10px 0 40px rgba(0,0,0,0.15); }
+    nav.open { transform: translateX(0); }
+    nav ul { flex-direction: column; gap: 1.8rem; text-align: center; }
+    nav a, header.scrolled nav a { color: var(--charcoal); }
+    .nav-cta { border-color: var(--accent); color: var(--accent) !important; }
+    .menu-toggle { display: block; z-index: 110; }
+    .menu-toggle span { display:block; width: 26px; height: 2px; background: var(--white); margin: 6px 0; transition: 0.3s; }
+    header.scrolled .menu-toggle span, body.nav-open .menu-toggle span { background: var(--charcoal); }
+    body.nav-open .menu-toggle span:nth-child(1){ transform: translateY(8px) rotate(45deg); }
+    body.nav-open .menu-toggle span:nth-child(2){ opacity: 0; }
+    body.nav-open .menu-toggle span:nth-child(3){ transform: translateY(-8px) rotate(-45deg); }
+    .gallery-grid { grid-template-columns: 1fr; grid-auto-rows: 240px; }
+    .gallery-item.wide, .gallery-item.tall { grid-column: auto; grid-row: auto; }
+    .cta-band { background-attachment: scroll; }
+  }
+</style>
+</head>
+<body>
+
+<header id="header">
+  <a href="#top" class="logo" aria-label="hair atelier hibi トップへ">
+    hibi
+    <span class="logo-sub">HAIR ATELIER</span>
+  </a>
+  <button class="menu-toggle" id="menuToggle" aria-label="メニューを開閉" aria-expanded="false" aria-controls="nav">
+    <span></span><span></span><span></span>
+  </button>
+  <nav id="nav">
+    <ul>
+      <li><a href="#concept">CONCEPT</a></li>
+      <li><a href="#menu">MENU</a></li>
+      <li><a href="#gallery">GALLERY</a></li>
+      <li><a href="#access">ACCESS</a></li>
+      <li><a href="#reserve" class="nav-cta">ご予約</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="top">
+
+  <!-- Hero -->
+  <section class="hero" aria-label="メインビジュアル">
+    <img src="assets/img/hero.jpg" alt="" style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none" aria-hidden="true" />
+    <div class="hero-inner">
+      <p class="eyebrow">hair atelier hibi</p>
+      <h1>日々を、整える。</h1>
+      <p class="lede">慌ただしい毎日のなかに、自分を取り戻すひととき。髪を整えることは、心を整えること。</p>
+      <a href="#reserve" class="btn">ご予約はこちら <span class="arrow" aria-hidden="true">→</span></a>
+    </div>
+    <div class="hero-scroll" aria-hidden="true">SCROLL</div>
+  </section>
+
+  <!-- Concept -->
+  <section class="concept" id="concept">
+    <div class="wrap concept-grid">
+      <div class="concept-img reveal">
+        <img src="assets/img/interior.jpg" alt="落ち着いた雰囲気の hair atelier hibi 店内" loading="lazy" />
+      </div>
+      <div class="concept-body reveal">
+        <p class="eyebrow">Concept</p>
+        <h2 class="section-title">あなたらしさに、<br />そっと寄り添う。</h2>
+        <p class="lead">流行を追うだけでなく、その人の骨格や髪質、暮らしのリズムまで見つめて。「明日からの毎日が、少し軽くなる」——そんな髪型をご提案します。</p>
+        <p>木のぬくもりと柔らかな光に包まれた空間で、ゆったりとした時間をお過ごしください。一人ひとりと丁寧に向き合うために、完全予約・少人数制を大切にしています。</p>
+        <p class="signature">— Stylist, Aoi Hibino</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Menu -->
+  <section class="menu" id="menu">
+    <div class="wrap">
+      <div class="menu-head reveal">
+        <span class="eyebrow">Menu &amp; Price</span>
+        <h2 class="section-title">メニュー・料金</h2>
+      </div>
+      <div class="menu-grid">
+        <div class="menu-card reveal">
+          <h3>カット <span class="en">Cut</span></h3>
+          <p>カウンセリング・シャンプー・ブロー込み。</p>
+          <div class="price-row"><span class="name">カット<small>レディース</small></span><span class="price">¥5,500<span>税込</span></span></div>
+          <div class="price-row"><span class="name">カット<small>メンズ</small></span><span class="price">¥4,400<span>税込</span></span></div>
+          <div class="price-row"><span class="name">前髪カット</span><span class="price">¥1,100<span>税込</span></span></div>
+        </div>
+        <div class="menu-card reveal">
+          <h3>カラー <span class="en">Color</span></h3>
+          <p>髪と頭皮にやさしい薬剤を使用。</p>
+          <div class="price-row"><span class="name">おしゃれカラー<small>カット別</small></span><span class="price">¥6,600<span>税込</span></span></div>
+          <div class="price-row"><span class="name">白髪染め</span><span class="price">¥6,050<span>税込</span></span></div>
+          <div class="price-row"><span class="name">イルミナ／ハイライト</span><span class="price">¥9,900<span>税込〜</span></span></div>
+        </div>
+        <div class="menu-card reveal">
+          <h3>パーマ <span class="en">Perm</span></h3>
+          <p>ダメージを抑えた質感重視のデザイン。</p>
+          <div class="price-row"><span class="name">デザインパーマ<small>カット別</small></span><span class="price">¥7,150<span>税込</span></span></div>
+          <div class="price-row"><span class="name">デジタルパーマ</span><span class="price">¥9,900<span>税込〜</span></span></div>
+          <div class="price-row"><span class="name">縮毛矯正</span><span class="price">¥13,200<span>税込〜</span></span></div>
+        </div>
+        <div class="menu-card reveal">
+          <h3>トリートメント <span class="en">Treatment</span></h3>
+          <p>髪質に合わせたオーダーメイド処方。</p>
+          <div class="price-row"><span class="name">クイックトリートメント</span><span class="price">¥2,200<span>税込</span></span></div>
+          <div class="price-row"><span class="name">システムトリートメント</span><span class="price">¥4,400<span>税込</span></span></div>
+          <div class="price-row"><span class="name">ヘッドスパ<small>30分</small></span><span class="price">¥3,850<span>税込</span></span></div>
+        </div>
+      </div>
+      <p class="menu-note reveal">※ 表示価格はすべて税込です。仕上がりの長さ・毛量により別途料金をいただく場合がございます。</p>
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <section class="gallery" id="gallery">
+    <div class="wrap">
+      <div class="gallery-head reveal">
+        <span class="eyebrow">Gallery</span>
+        <h2 class="section-title">ギャラリー</h2>
+      </div>
+      <div class="gallery-grid reveal">
+        <div class="gallery-item tall">
+          <img src="assets/img/style.jpg" alt="スタイリングの仕上げをする施術の様子" loading="lazy" />
+          <span class="cap">Styling</span>
+        </div>
+        <div class="gallery-item wide">
+          <img src="assets/img/gallery1.jpg" alt="ヘアスタイル作品例 その1" loading="lazy" />
+          <span class="cap">Works 01</span>
+        </div>
+        <div class="gallery-item">
+          <img src="assets/img/station.jpg" alt="鏡が並ぶセット面" loading="lazy" />
+          <span class="cap">Seat</span>
+        </div>
+        <div class="gallery-item">
+          <img src="assets/img/gallery2.jpg" alt="ヘアスタイル作品例 その2" loading="lazy" />
+          <span class="cap">Works 02</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Access -->
+  <section class="access" id="access">
+    <div class="wrap access-grid">
+      <div class="reveal">
+        <span class="eyebrow">Access</span>
+        <h2 class="section-title">アクセス・店舗情報</h2>
+        <table class="info-table">
+          <tbody>
+            <tr><th>店名</th><td>hair atelier hibi（ヘアアトリエ ひび）</td></tr>
+            <tr><th>住所</th><td>〒150-0001<br />東京都渋谷区神南 2-14-7 hibi bldg. 2F</td></tr>
+            <tr><th>電話</th><td>03-1234-5678</td></tr>
+            <tr><th>アクセス</th><td>JR渋谷駅 ハチ公口より徒歩8分<br />地下鉄明治神宮前駅より徒歩6分</td></tr>
+            <tr><th>定休日</th><td>毎週月曜日・第3火曜日</td></tr>
+          </tbody>
+        </table>
+        <div class="map-placeholder" role="img" aria-label="地図（デモ用プレースホルダ）">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21s-7-6.5-7-11a7 7 0 1 1 14 0c0 4.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+          <span>MAP — 渋谷区神南</span>
+        </div>
+      </div>
+      <div class="reveal">
+        <table class="hours-table">
+          <caption>営業時間</caption>
+          <thead>
+            <tr><th>　</th><th>月</th><th>火</th><th>水</th><th>木</th><th>金</th><th>土</th><th>日</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>OPEN</th>
+              <td class="closed">―</td><td>10:00</td><td>10:00</td><td>10:00</td><td>10:00</td><td>9:00</td><td>9:00</td>
+            </tr>
+            <tr>
+              <th>CLOSE</th>
+              <td class="closed">休</td><td>20:00</td><td>20:00</td><td>20:00</td><td>20:00</td><td>19:00</td><td>18:00</td>
+            </tr>
+          </tbody>
+        </table>
+        <p style="margin-top:1.2rem;color:var(--text-soft);font-size:0.86rem;">
+          カット最終受付は閉店の90分前、パーマ・カラーは120分前となります。ご予約はお電話またはオンラインにて承っております。
+        </p>
+        <p style="margin-top:1rem;color:var(--text-soft);font-size:0.86rem;">
+          ベビーカーでのご来店、キッズスペースのご利用も可能です。お気軽にご相談ください。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Band -->
+  <section class="cta-band" id="reserve">
+    <div class="wrap">
+      <span class="eyebrow">Reservation</span>
+      <h2>あなたの「整う」を、<br />ご予約ください。</h2>
+      <p>ご希望の日時・メニューをお気軽にお知らせください。</p>
+      <a href="tel:0312345678" class="btn">電話で予約する <span class="arrow" aria-hidden="true">→</span></a>
+      <a href="tel:0312345678" class="tel">03-1234-5678<small>受付 10:00 - 19:00 / 月曜定休</small></a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-logo">
+        <span class="logo">hibi</span>
+        <p>日々の暮らしに寄り添う、渋谷の小さなヘアアトリエ。</p>
+      </div>
+      <div class="footer-links" aria-label="SNS">
+        <a href="#reserve" aria-label="Instagram">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        </a>
+        <a href="#reserve" aria-label="X (Twitter)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 2H22l-7.5 8.6L23 22h-6.8l-5.3-6.9L4.8 22H1.7l8-9.2L1 2h6.9l4.8 6.3L18.9 2zm-1.2 18h1.9L7.1 4H5.1l12.6 16z"/></svg>
+        </a>
+        <a href="#reserve" aria-label="LINE">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 11c0-4.2-4-7.5-9-7.5S3 6.8 3 11c0 3.8 3.2 7 7.6 7.6.9.1.8.6.7 1.1l-.2 1c-.1.5.3.7.8.4C16 18.7 21 15.3 21 11z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 hair atelier hibi</span>
+      <span class="demo-note">※ 本サイトはポートフォリオ用に制作した架空サロンのデモサイトです。実在の店舗・連絡先ではありません。</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Mark that JS is active so reveal animation can run safely.
+  // If JS fails, .reveal stays fully visible (no permanent hiding).
+  document.documentElement.classList.add('js');
+
+  (function () {
+    var header = document.getElementById('header');
+    var toggle = document.getElementById('menuToggle');
+    var nav = document.getElementById('nav');
+
+    // Header background on scroll
+    var onScroll = function () {
+      if (window.scrollY > 40) header.classList.add('scrolled');
+      else header.classList.remove('scrolled');
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    // Mobile nav toggle
+    toggle.addEventListener('click', function () {
+      var open = nav.classList.toggle('open');
+      document.body.classList.toggle('nav-open', open);
+      toggle.setAttribute('aria-expanded', String(open));
+    });
+    nav.addEventListener('click', function (e) {
+      if (e.target.tagName === 'A') {
+        nav.classList.remove('open');
+        document.body.classList.remove('nav-open');
+        toggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    // Scroll reveal via IntersectionObserver (enhancement only)
+    var reveals = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+      reveals.forEach(function (el) { io.observe(el); });
+    } else {
+      // Fallback: show everything
+      reveals.forEach(function (el) { el.classList.add('is-visible'); });
+    }
+
+    // Safety net: if anything is still hidden after load, reveal it.
+    window.addEventListener('load', function () {
+      setTimeout(function () {
+        reveals.forEach(function (el) {
+          var r = el.getBoundingClientRect();
+          if (r.top < window.innerHeight) el.classList.add('is-visible');
+        });
+      }, 300);
+    });
+  })();
+</script>
+
+</body>
+</html>
