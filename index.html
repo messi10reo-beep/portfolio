@@ -200,8 +200,8 @@
         </div>
 
         <div class="stats reveal">
-          <div class="stat"><div class="n">9</div><div class="l">公開プロジェクト</div></div>
-          <div class="stat"><div class="n">190+</div><div class="l">自動テスト</div></div>
+          <div class="stat"><div class="n">5</div><div class="l">公開プロジェクト</div></div>
+          <div class="stat"><div class="n">78</div><div class="l">自動テスト</div></div>
           <div class="stat"><div class="n">100%</div><div class="l">TypeScript strict</div></div>
           <div class="stat"><div class="n">0</div><div class="l">既知の脆弱性</div></div>
         </div>
@@ -225,49 +225,6 @@
               <h3>ローカル文書RAGチャット</h3>
               <p>社内文書を読み込み、その内容だけを根拠に出典つきで回答。埋め込み・検索をローカルで完結し、文書を外部に送信しません。</p>
               <div class="links"><a class="muted">ローカルデモ（要Node環境）</a><a href="https://github.com/messi10reo-beep/rag-chat" target="_blank" rel="noopener">コード ↗</a></div>
-            </div>
-          </article>
-
-          <!-- admin-dashboard -->
-          <article class="card reveal">
-            <div class="thumb"><img src="assets/admin-dashboard.png" alt="問い合わせ管理ダッシュボードの画面" /></div>
-            <div class="card-body">
-              <div class="tags"><span class="tag cat">社内ツール</span><span class="tag">Express</span><span class="tag">TypeScript</span><span class="tag">REST API</span></div>
-              <h3>問い合わせ管理ダッシュボード</h3>
-              <p>顧客からの問い合わせをWebで一元管理。検索・絞り込み・ステータス管理・CSVエクスポートに対応した管理画面。</p>
-              <div class="links"><a class="muted">ローカルデモ（要Node環境）</a><a href="https://github.com/messi10reo-beep/admin-dashboard" target="_blank" rel="noopener">コード ↗</a></div>
-            </div>
-          </article>
-
-          <!-- csv-report -->
-          <article class="card reveal">
-            <div class="thumb">
-              <div class="ph cli">
-                <div class="term">
-                  <div><span class="p">$</span> npm start</div>
-                  <div class="c"># 集計対象 46件 / スキップ 3件</div>
-                  <div>総売上 : <b>¥1,215,120</b></div>
-                  <div class="c">レポートを生成しました →</div>
-                  <div>output/report.md / summary.csv</div>
-                </div>
-              </div>
-            </div>
-            <div class="card-body">
-              <div class="tags"><span class="tag cat">業務自動化</span><span class="tag">CLI</span><span class="tag">TypeScript</span><span class="tag">依存ゼロ</span></div>
-              <h3>CSV売上集計レポート生成</h3>
-              <p>複数のCSVを読み込み、集計してMarkdown/CSVレポートを自動生成。Excelの手作業集計を置換。不正データは理由つきで除外・明示します。</p>
-              <div class="links"><a class="muted">CLIツール</a><a href="https://github.com/messi10reo-beep/csv-report" target="_blank" rel="noopener">コード ↗</a></div>
-            </div>
-          </article>
-
-          <!-- invoice-extractor -->
-          <article class="card reveal">
-            <div class="thumb"><img src="assets/invoice-extractor.png" alt="AI請求書データ抽出ツールの画面" /></div>
-            <div class="card-body">
-              <div class="tags"><span class="tag cat">AI / 自動化</span><span class="tag">Ollama</span><span class="tag">Express</span></div>
-              <h3>AI請求書データ抽出</h3>
-              <p>請求書・領収書から取引先・金額・日付・明細をAIで構造化し、CSV/JSONに出力。機密の請求書をローカルLLMで処理し、外部に出しません。</p>
-              <div class="links"><a class="muted">ローカルデモ（要Node環境）</a><a href="https://github.com/messi10reo-beep/invoice-extractor" target="_blank" rel="noopener">コード ↗</a></div>
             </div>
           </article>
 
@@ -304,24 +261,13 @@
             </div>
           </article>
 
-          <!-- corporate-site -->
+          <!-- clinic-lp : 多ステップ予約フォーム -->
           <article class="card reveal">
-            <div class="thumb"><img src="assets/corporate.png" alt="コーポレートサイト（株式会社ノード）の画面" /></div>
+            <div class="thumb"><img src="assets/clinic.png" alt="WEB予約フォーム（あおぞらクリニック）の画面" /></div>
             <div class="card-body">
-              <div class="tags"><span class="tag cat">コーポレート</span><span class="tag">多セクション</span><span class="tag">お問い合わせ</span></div>
-              <h3>株式会社ノード — コーポレートサイト</h3>
-              <p>小規模企業のコーポレートサイト。事業内容・会社概要・実績・お問い合わせ（バリデーション付きフォーム）を備えた多セクション構成。企業サイト案件向け。</p>
-              <div class="links"><a href="corporate/" target="_blank" rel="noopener">ライブデモ ↗</a><a href="https://github.com/messi10reo-beep/corporate-site" target="_blank" rel="noopener">コード ↗</a></div>
-            </div>
-          </article>
-
-          <!-- clinic-lp -->
-          <article class="card reveal">
-            <div class="thumb"><img src="assets/clinic.png" alt="クリニック予約LP（あおぞらクリニック）の画面" /></div>
-            <div class="card-body">
-              <div class="tags"><span class="tag cat">予約フォーム</span><span class="tag">バリデーション</span><span class="tag">クリニック</span></div>
-              <h3>あおぞらクリニック — 予約フォームLP</h3>
-              <p>クリニックの予約・お問い合わせLP。<strong>動作するフォーム</strong>（必須・メール・電話形式のバリデーション、エラー表示、送信完了画面）を実装。フォーム案件向け。</p>
+              <div class="tags"><span class="tag cat">予約フォーム</span><span class="tag">多ステップ</span><span class="tag">日時選択</span><span class="tag">バリデーション</span></div>
+              <h3>WEB予約フォーム（4ステップ）</h3>
+              <p>メニュー選択 → 日時選択（カレンダー＋空き時間）→ お客様情報 → 確認 → 予約番号発行まで、実際に動く多ステップ予約システム。休診日・満席の制御、入力バリデーション付き。予約/フォーム案件向け。</p>
               <div class="links"><a href="clinic/" target="_blank" rel="noopener">ライブデモ ↗</a><a href="https://github.com/messi10reo-beep/clinic-lp" target="_blank" rel="noopener">コード ↗</a></div>
             </div>
           </article>

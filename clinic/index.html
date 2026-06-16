@@ -1,754 +1,447 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>あおぞらクリニック｜地域のかかりつけ医｜WEB予約</title>
-<meta name="description" content="あおぞらクリニックは内科・小児科・予防接種に対応する地域のかかりつけ医です。WEB予約・お問い合わせはこちらから。">
-<!-- Inline SVG favicon (data URI) -->
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2300a3b5'/%3E%3Cpath d='M28 14h8v14h14v8H36v14h-8V36H14v-8h14z' fill='%23ffffff'/%3E%3C/svg%3E">
-<!-- Google Fonts: 和文に丸みのある Zen Maru Gothic + 見出しの上品さに Shippori Mincho -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600&family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --teal-900: #0c5a64;
-    --teal-700: #0e7c8c;
-    --teal-500: #00a3b5;
-    --teal-300: #6fd0db;
-    --teal-100: #d6f1f4;
-    --teal-50:  #eef9fb;
-    --sky-100:  #e8f4fb;
-    --ink:      #233139;
-    --ink-soft: #4f6068;
-    --line:     #d6e4e8;
-    --white:    #ffffff;
-    --bg:       #f6fbfc;
-    --error:    #c0392b;
-    --success:  #1f8a5b;
-    --shadow-sm: 0 2px 8px rgba(12, 90, 100, 0.06);
-    --shadow-md: 0 10px 30px rgba(12, 90, 100, 0.10);
-    --radius: 16px;
-    --maxw: 1120px;
-  }
-
-  * { box-sizing: border-box; }
-
-  html { scroll-behavior: smooth; scroll-padding-top: 84px; }
-
-  body {
-    margin: 0;
-    font-family: "Zen Maru Gothic", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
-    color: var(--ink);
-    background: var(--bg);
-    line-height: 1.8;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  h1, h2, h3 { font-family: "Shippori Mincho", "Hiragino Mincho ProN", serif; line-height: 1.4; }
-
-  a { color: var(--teal-700); }
-
-  img { max-width: 100%; display: block; }
-
-  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 20px; }
-
-  .skip-link {
-    position: absolute; left: -999px; top: 0; z-index: 1000;
-    background: var(--teal-700); color: #fff; padding: 10px 16px; border-radius: 0 0 8px 0;
-  }
-  .skip-link:focus { left: 0; }
-
-  /* ---------- Header ---------- */
-  .site-header {
-    position: sticky; top: 0; z-index: 100;
-    background: rgba(255,255,255,0.92);
-    backdrop-filter: blur(8px);
-    border-bottom: 1px solid var(--line);
-  }
-  .header-inner {
-    display: flex; align-items: center; justify-content: space-between;
-    gap: 16px; padding: 12px 20px; max-width: var(--maxw); margin: 0 auto;
-  }
-  .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); }
-  .logo-mark {
-    width: 38px; height: 38px; border-radius: 11px; background: var(--teal-500);
-    display: grid; place-items: center; color: #fff; flex: none;
-  }
-  .logo-text { font-family: "Shippori Mincho", serif; font-weight: 600; font-size: 1.15rem; letter-spacing: 0.02em; }
-  .logo-sub { display: block; font-family: "Zen Maru Gothic", sans-serif; font-size: 0.68rem; color: var(--ink-soft); letter-spacing: 0.12em; }
-
-  .nav { display: flex; align-items: center; gap: 6px; }
-  .nav a {
-    text-decoration: none; color: var(--ink); font-size: 0.95rem;
-    padding: 8px 12px; border-radius: 10px; transition: background 0.2s, color 0.2s;
-  }
-  .nav a:hover { background: var(--teal-50); color: var(--teal-700); }
-  .nav .btn-cta { background: var(--teal-500); color: #fff; font-weight: 700; }
-  .nav .btn-cta:hover { background: var(--teal-700); color: #fff; }
-
-  .nav-toggle {
-    display: none; border: 1px solid var(--line); background: #fff; border-radius: 10px;
-    width: 44px; height: 44px; cursor: pointer; align-items: center; justify-content: center;
-  }
-  .nav-toggle span, .nav-toggle span::before, .nav-toggle span::after {
-    content: ""; display: block; width: 20px; height: 2px; background: var(--ink); position: relative;
-  }
-  .nav-toggle span::before { position: absolute; top: -6px; }
-  .nav-toggle span::after { position: absolute; top: 6px; }
-
-  /* ---------- Hero ---------- */
-  .hero { position: relative; }
-  .hero-media { position: relative; }
-  .hero-media img { width: 100%; height: clamp(360px, 56vh, 560px); object-fit: cover; }
-  .hero-overlay {
-    position: absolute; inset: 0;
-    background: linear-gradient(100deg, rgba(12,90,100,0.78) 0%, rgba(14,124,140,0.55) 45%, rgba(0,163,181,0.18) 100%);
-    display: flex; align-items: center;
-  }
-  .hero-content { color: #fff; max-width: 640px; }
-  .hero-eyebrow {
-    display: inline-block; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.35);
-    padding: 4px 14px; border-radius: 999px; font-size: 0.8rem; letter-spacing: 0.14em; margin-bottom: 18px;
-  }
-  .hero h1 { font-size: clamp(1.9rem, 4.4vw, 3rem); margin: 0 0 16px; text-shadow: 0 2px 14px rgba(0,0,0,0.2); }
-  .hero p { font-size: clamp(1rem, 2vw, 1.15rem); margin: 0 0 28px; color: #f0fbfc; }
-  .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
-  .btn {
-    display: inline-flex; align-items: center; gap: 8px; text-decoration: none;
-    padding: 14px 28px; border-radius: 999px; font-weight: 700; font-size: 1rem;
-    transition: transform 0.15s, box-shadow 0.2s, background 0.2s; border: none; cursor: pointer;
-    font-family: inherit;
-  }
-  .btn-primary { background: #fff; color: var(--teal-700); box-shadow: var(--shadow-md); }
-  .btn-primary:hover { transform: translateY(-2px); }
-  .btn-ghost { background: transparent; color: #fff; border: 1.5px solid rgba(255,255,255,0.7); }
-  .btn-ghost:hover { background: rgba(255,255,255,0.12); }
-
-  /* hours quick strip */
-  .hours-strip {
-    background: var(--teal-900); color: #fff;
-  }
-  .hours-strip .wrap {
-    display: flex; flex-wrap: wrap; gap: 10px 32px; align-items: center; padding-top: 14px; padding-bottom: 14px;
-    font-size: 0.92rem;
-  }
-  .hours-strip strong { color: var(--teal-300); }
-
-  /* ---------- Sections ---------- */
-  section { padding: clamp(48px, 8vw, 88px) 0; }
-  .section-head { text-align: center; max-width: 680px; margin: 0 auto 44px; }
-  .section-head .label {
-    display: inline-block; color: var(--teal-700); font-weight: 700; letter-spacing: 0.18em;
-    font-size: 0.78rem; margin-bottom: 8px;
-  }
-  .section-head h2 { font-size: clamp(1.5rem, 3.4vw, 2.1rem); margin: 0 0 12px; }
-  .section-head p { color: var(--ink-soft); margin: 0; }
-
-  /* services */
-  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 22px; }
-  .card {
-    background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
-    padding: 28px 24px; box-shadow: var(--shadow-sm); transition: transform 0.2s, box-shadow 0.2s;
-  }
-  .card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
-  .card-icon {
-    width: 52px; height: 52px; border-radius: 14px; background: var(--teal-100); color: var(--teal-700);
-    display: grid; place-items: center; margin-bottom: 16px;
-  }
-  .card h3 { font-size: 1.18rem; margin: 0 0 8px; }
-  .card p { color: var(--ink-soft); font-size: 0.94rem; margin: 0; }
-
-  /* split (image + text) */
-  .split { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 5vw, 60px); align-items: center; }
-  .split.reverse .split-media { order: 2; }
-  .split-media img { border-radius: var(--radius); box-shadow: var(--shadow-md); width: 100%; height: 100%; object-fit: cover; max-height: 460px; }
-  .split-text h2 { font-size: clamp(1.4rem, 3vw, 1.9rem); margin: 0 0 16px; }
-  .split-text .label { display:inline-block; color: var(--teal-700); font-weight:700; letter-spacing:0.18em; font-size:0.78rem; margin-bottom:8px; }
-  .split-text p { color: var(--ink-soft); }
-  .doctor-name { margin-top: 18px; font-family: "Shippori Mincho", serif; }
-  .doctor-name b { font-size: 1.1rem; }
-
-  .bg-soft { background: linear-gradient(180deg, var(--teal-50), #fff); }
-  .bg-sky { background: var(--sky-100); }
-
-  /* access / hours table */
-  .access-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 5vw, 48px); align-items: start; }
-  table.hours {
-    width: 100%; border-collapse: collapse; background: #fff; border-radius: var(--radius); overflow: hidden;
-    box-shadow: var(--shadow-sm); font-size: 0.95rem;
-  }
-  table.hours th, table.hours td { padding: 12px 10px; text-align: center; border-bottom: 1px solid var(--line); }
-  table.hours thead th { background: var(--teal-700); color: #fff; font-weight: 700; font-family: "Zen Maru Gothic", sans-serif; }
-  table.hours tbody th { background: var(--teal-50); text-align: left; padding-left: 16px; width: 28%; }
-  table.hours .closed { color: var(--ink-soft); }
-  .info-list { list-style: none; padding: 0; margin: 0 0 22px; }
-  .info-list li { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px dashed var(--line); }
-  .info-list .k { font-weight: 700; color: var(--teal-700); flex: none; width: 84px; }
-  .tel-big { font-family: "Shippori Mincho", serif; font-size: 1.6rem; color: var(--teal-900); text-decoration: none; }
-  .map-embed { width: 100%; height: 240px; border: 1px solid var(--line); border-radius: var(--radius); margin-top: 8px; }
-
-  /* ---------- Form (主役) ---------- */
-  .form-section { background: linear-gradient(165deg, var(--teal-700), var(--teal-900)); color: #fff; }
-  .form-section .section-head .label { color: var(--teal-300); }
-  .form-section .section-head h2 { color: #fff; }
-  .form-section .section-head p { color: #d6f1f4; }
-  .form-card {
-    background: #fff; color: var(--ink); border-radius: 22px; box-shadow: var(--shadow-md);
-    padding: clamp(26px, 4vw, 44px); max-width: 760px; margin: 0 auto;
-  }
-  .form-row { margin-bottom: 22px; }
-  .form-row label { display: block; font-weight: 700; margin-bottom: 7px; font-size: 0.96rem; }
-  .req { color: var(--error); font-size: 0.78rem; margin-left: 6px; font-weight: 700; }
-  .opt { color: var(--ink-soft); font-size: 0.74rem; margin-left: 6px; font-weight: 500; }
-  .form-row input, .form-row textarea {
-    width: 100%; padding: 13px 14px; border: 1.5px solid var(--line); border-radius: 12px;
-    font-size: 1rem; font-family: inherit; color: var(--ink); background: #fff; transition: border-color 0.2s, box-shadow 0.2s;
-  }
-  .form-row textarea { resize: vertical; min-height: 130px; }
-  .form-row input:focus, .form-row textarea:focus {
-    outline: none; border-color: var(--teal-500); box-shadow: 0 0 0 4px var(--teal-100);
-  }
-  .form-row input[aria-invalid="true"], .form-row textarea[aria-invalid="true"] {
-    border-color: var(--error); box-shadow: 0 0 0 4px rgba(192,57,43,0.10);
-  }
-  .field-error { color: var(--error); font-size: 0.85rem; margin-top: 6px; min-height: 1px; font-weight: 500; }
-  .field-error:empty { display: none; }
-  .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 22px; }
-  .consent { display: flex; align-items: flex-start; gap: 10px; background: var(--teal-50); padding: 16px; border-radius: 12px; }
-  .consent input { width: 20px; height: 20px; margin-top: 3px; flex: none; accent-color: var(--teal-700); }
-  .consent label { font-weight: 500; margin: 0; font-size: 0.92rem; }
-  .form-submit { text-align: center; margin-top: 28px; }
-  .form-submit .btn { background: var(--teal-500); color: #fff; box-shadow: var(--shadow-md); width: 100%; max-width: 340px; justify-content: center; }
-  .form-submit .btn:hover { background: var(--teal-900); transform: translateY(-2px); }
-  .form-note { font-size: 0.82rem; color: var(--ink-soft); text-align: center; margin-top: 14px; }
-
-  .success-box { text-align: center; padding: 26px 10px; }
-  .success-icon {
-    width: 76px; height: 76px; border-radius: 50%; background: var(--teal-100); color: var(--success);
-    display: grid; place-items: center; margin: 0 auto 20px;
-  }
-  .success-box h3 { font-size: 1.5rem; margin: 0 0 10px; color: var(--teal-900); }
-  .success-box p { color: var(--ink-soft); margin: 0 auto; max-width: 420px; }
-
-  /* ---------- Footer ---------- */
-  .site-footer { background: var(--ink); color: #cdd9dd; padding: 48px 0 28px; }
-  .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 32px; margin-bottom: 30px; }
-  .site-footer h4 { color: #fff; font-family: "Zen Maru Gothic", sans-serif; font-size: 1rem; margin: 0 0 14px; }
-  .site-footer a { color: #cdd9dd; text-decoration: none; }
-  .site-footer a:hover { color: #fff; text-decoration: underline; }
-  .footer-links { list-style: none; padding: 0; margin: 0; }
-  .footer-links li { margin-bottom: 8px; }
-  .footer-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
-  .footer-logo .logo-mark { width: 40px; height: 40px; }
-  .footer-logo .logo-text { color: #fff; font-size: 1.2rem; }
-  .disclaimer {
-    border-top: 1px solid rgba(255,255,255,0.14); padding-top: 18px; text-align: center;
-    font-size: 0.82rem; color: #9fb0b5;
-  }
-
-  /* ---------- Load-in reveal (content always visible; animation never gates display) ---------- */
-  .reveal { animation: revealIn 0.8s cubic-bezier(.2,.7,.2,1) both; }
-  @keyframes revealIn { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
-  @media (prefers-reduced-motion: reduce) {
-    html { scroll-behavior: auto; }
-    .reveal { animation: none; }
-  }
-
-  /* ---------- Responsive ---------- */
-  @media (max-width: 860px) {
-    .nav-toggle { display: inline-flex; }
-    .nav {
-      position: absolute; top: 100%; right: 0; left: 0;
-      flex-direction: column; align-items: stretch; gap: 4px;
-      background: #fff; border-bottom: 1px solid var(--line);
-      padding: 12px 20px; box-shadow: var(--shadow-md);
-      display: none;
-    }
-    .nav.open { display: flex; }
-    .nav a { padding: 12px; }
-    .nav .btn-cta { text-align: center; }
-    .split, .access-grid { grid-template-columns: 1fr; }
-    .split.reverse .split-media { order: 0; }
-    .footer-grid { grid-template-columns: 1fr; gap: 24px; }
-    .form-grid-2 { grid-template-columns: 1fr; }
-  }
-</style>
-</head>
-<body>
-<a href="#form" class="skip-link">予約・お問い合わせフォームへ移動</a>
-
-<!-- ===== Header ===== -->
-<header class="site-header">
-  <div class="header-inner">
-    <a href="#top" class="logo" aria-label="あおぞらクリニック ホーム">
-      <span class="logo-mark" aria-hidden="true">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M11 4h2v7h7v2h-7v7h-2v-7H4v-2h7z" fill="currentColor"/></svg>
-      </span>
-      <span>
-        <span class="logo-text">あおぞらクリニック</span>
-        <span class="logo-sub">AOZORA CLINIC</span>
-      </span>
-    </a>
-    <button class="nav-toggle" id="navToggle" aria-label="メニューを開く" aria-expanded="false" aria-controls="primaryNav">
-      <span aria-hidden="true"></span>
-    </button>
-    <nav class="nav" id="primaryNav" aria-label="メインナビゲーション">
-      <a href="#services">診療案内</a>
-      <a href="#facility">院内</a>
-      <a href="#staff">スタッフ</a>
-      <a href="#access">アクセス</a>
-      <a href="#form" class="btn-cta">WEB予約</a>
-    </nav>
-  </div>
-</header>
-
-<!-- ===== Hero ===== -->
-<main id="top">
-<section class="hero" style="padding:0;" aria-label="ヒーロー">
-  <div class="hero-media">
-    <img src="assets/img/hero.jpg" alt="明るく清潔なあおぞらクリニックの院内待合スペース">
-    <div class="hero-overlay">
-      <div class="wrap">
-        <div class="hero-content">
-          <span class="hero-eyebrow">内科・小児科・予防接種</span>
-          <h1>あなたの「いつもの安心」を、<br>あおぞらの空の下で。</h1>
-          <p>地域のかかりつけ医として、お子さまからご高齢の方まで。丁寧な説明と待たせない診療を心がけています。</p>
-          <div class="hero-actions">
-            <a href="#form" class="btn btn-primary">WEB予約はこちら</a>
-            <a href="#services" class="btn btn-ghost">診療案内を見る</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- hours quick strip -->
-<div class="hours-strip">
-  <div class="wrap">
-    <span><strong>診療時間</strong>　平日 9:00–12:30 / 15:00–18:30</span>
-    <span><strong>土曜</strong>　9:00–13:00</span>
-    <span><strong>休診日</strong>　日曜・祝日・木曜午後</span>
-    <span><strong>TEL</strong>　03-1234-5678</span>
-  </div>
-</div>
-
-<!-- ===== Services ===== -->
-<section id="services">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <span class="label">SERVICES</span>
-      <h2>診療案内</h2>
-      <p>日常のちょっとした不調から、慢性疾患の管理、予防まで。幅広く対応いたします。</p>
-    </div>
-    <div class="card-grid">
-      <div class="card reveal">
-        <div class="card-icon" aria-hidden="true">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-4.3-7-9.5A4 4 0 0 1 12 8a4 4 0 0 1 7 3.5C19 16.7 12 21 12 21z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
-        </div>
-        <h3>内科</h3>
-        <p>かぜ・発熱・腹痛などの急な体調不良から、高血圧・糖尿病・脂質異常症といった生活習慣病の管理まで対応します。</p>
-      </div>
-      <div class="card reveal">
-        <div class="card-icon" aria-hidden="true">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M5 20a7 7 0 0 1 14 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-        </div>
-        <h3>小児科</h3>
-        <p>お子さまの発熱・せき・はなみず・お腹の不調など。不安な気持ちに寄り添い、わかりやすくご説明します。</p>
-      </div>
-      <div class="card reveal">
-        <div class="card-icon" aria-hidden="true">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M9 3h6v4l-1 1v3l4 8a2 2 0 0 1-2 3H8a2 2 0 0 1-2-3l4-8V8L9 7z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
-        </div>
-        <h3>予防接種</h3>
-        <p>インフルエンザをはじめ、各種定期・任意予防接種を実施。スケジュールのご相談もお気軽にどうぞ。</p>
-      </div>
-      <div class="card reveal">
-        <div class="card-icon" aria-hidden="true">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M4 13h4l2 5 4-12 2 7h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <h3>健康診断・検診</h3>
-        <p>各種健康診断や生活習慣病の検診に対応。結果をもとに、これからの過ごし方を一緒に考えます。</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== Facility ===== -->
-<section id="facility" class="bg-soft">
-  <div class="wrap">
-    <div class="split reveal">
-      <div class="split-media">
-        <img src="assets/img/room.jpg" alt="あおぞらクリニックの清潔で落ち着いた診療室">
-      </div>
-      <div class="split-text">
-        <span class="label">FACILITY</span>
-        <h2>院内のご案内</h2>
-        <p>木のぬくもりと自然光を取り入れた、明るく落ち着いた院内。プライバシーに配慮した診療室で、安心してご相談いただける空間を整えています。</p>
-        <p>バリアフリー設計で、ベビーカーや車いすでもスムーズにご来院いただけます。キッズスペースもご用意しております。</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== Staff ===== -->
-<section id="staff">
-  <div class="wrap">
-    <div class="split reverse reveal">
-      <div class="split-media">
-        <img src="assets/img/staff.jpg" alt="あおぞらクリニックの院長とスタッフ">
-      </div>
-      <div class="split-text">
-        <span class="label">STAFF</span>
-        <h2>院長ごあいさつ</h2>
-        <p>はじめまして。あおぞらクリニック院長の青空 太郎（あおぞら たろう）です。私は「気軽に相談できる、街の保健室のような診療所」を目指してこの地に開院しました。</p>
-        <p>体の不調はもちろん、ちょっとした不安も遠慮なくお話しください。患者さま一人ひとりの暮らしに寄り添い、わかりやすい言葉で、納得いただける医療をお届けします。スタッフ一同、笑顔でお迎えいたします。</p>
-        <p class="doctor-name">院長　<b>青空 太郎</b>　医学博士 / 日本内科学会 認定内科医</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== Access & Hours ===== -->
-<section id="access" class="bg-sky">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <span class="label">ACCESS</span>
-      <h2>アクセス・診療時間</h2>
-      <p>お車でお越しの方は提携駐車場をご利用いただけます。</p>
-    </div>
-    <div class="access-grid">
-      <div class="reveal">
-        <table class="hours">
-          <caption class="sr-only">診療時間 曜日別一覧</caption>
-          <thead>
-            <tr>
-              <th scope="col">診療時間</th>
-              <th scope="col">月</th><th scope="col">火</th><th scope="col">水</th>
-              <th scope="col">木</th><th scope="col">金</th><th scope="col">土</th>
-              <th scope="col">日祝</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th scope="row">午前 9:00–12:30</th>
-              <td>○</td><td>○</td><td>○</td><td>○</td><td>○</td><td>○</td><td class="closed">―</td>
-            </tr>
-            <tr>
-              <th scope="row">午後 15:00–18:30</th>
-              <td>○</td><td>○</td><td>○</td><td class="closed">休</td><td>○</td><td class="closed">―</td><td class="closed">―</td>
-            </tr>
-          </tbody>
-        </table>
-        <p style="font-size:0.86rem;color:var(--ink-soft);margin-top:12px;">※土曜の診療は 9:00–13:00 です。休診日：日曜・祝日・木曜午後。</p>
-      </div>
-      <div class="reveal">
-        <ul class="info-list">
-          <li><span class="k">医院名</span><span>あおぞらクリニック</span></li>
-          <li><span class="k">住所</span><span>〒100-0001　東京都千代田区あおぞら町1-2-3　あおぞらビル2F</span></li>
-          <li><span class="k">アクセス</span><span>あおぞら線「青空駅」中央口より徒歩3分</span></li>
-          <li><span class="k">電話</span><span><a class="tel-big" href="tel:0312345678">03-1234-5678</a></span></li>
-        </ul>
-        <iframe class="map-embed" title="あおぞらクリニック周辺の地図（デモ）" loading="lazy"
-          src="https://www.openstreetmap.org/export/embed.html?bbox=139.7654%2C35.6790%2C139.7754%2C35.6850&layer=mapnik"></iframe>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== Form (主役) ===== -->
-<section id="form" class="form-section">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <span class="label">RESERVATION &amp; CONTACT</span>
-      <h2>予約・お問い合わせ</h2>
-      <p>下記フォームよりご予約・ご相談を承ります。内容を確認のうえ、折り返しご連絡いたします。</p>
-    </div>
-
-    <div class="form-card reveal">
-      <form id="reserveForm" novalidate>
-        <div class="form-row">
-          <label for="name">お名前<span class="req">必須</span></label>
-          <input type="text" id="name" name="name" autocomplete="name" aria-required="true" aria-describedby="err-name">
-          <p class="field-error" id="err-name" role="alert" aria-live="polite"></p>
-        </div>
-
-        <div class="form-row">
-          <label for="kana">フリガナ<span class="opt">任意</span></label>
-          <input type="text" id="kana" name="kana" autocomplete="off" aria-describedby="err-kana">
-          <p class="field-error" id="err-kana" role="alert" aria-live="polite"></p>
-        </div>
-
-        <div class="form-grid-2">
-          <div class="form-row">
-            <label for="tel">電話番号<span class="req">必須</span></label>
-            <input type="tel" id="tel" name="tel" inputmode="tel" autocomplete="tel"
-              placeholder="03-1234-5678" aria-required="true" aria-describedby="err-tel">
-            <p class="field-error" id="err-tel" role="alert" aria-live="polite"></p>
-          </div>
-          <div class="form-row">
-            <label for="email">メールアドレス<span class="req">必須</span></label>
-            <input type="email" id="email" name="email" autocomplete="email"
-              placeholder="example@mail.com" aria-required="true" aria-describedby="err-email">
-            <p class="field-error" id="err-email" role="alert" aria-live="polite"></p>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <label for="date">ご希望日<span class="opt">任意</span></label>
-          <input type="date" id="date" name="date" aria-describedby="err-date">
-          <p class="field-error" id="err-date" role="alert" aria-live="polite"></p>
-        </div>
-
-        <div class="form-row">
-          <label for="message">ご相談内容<span class="req">必須</span></label>
-          <textarea id="message" name="message" aria-required="true" aria-describedby="err-message"
-            placeholder="症状やご希望の診療科、お問い合わせ内容などをご記入ください。"></textarea>
-          <p class="field-error" id="err-message" role="alert" aria-live="polite"></p>
-        </div>
-
-        <div class="form-row">
-          <div class="consent">
-            <input type="checkbox" id="consent" name="consent" aria-required="true" aria-describedby="err-consent">
-            <label for="consent">個人情報の取り扱いに同意します（入力内容はご予約・お問い合わせ対応の目的にのみ使用します）。<span class="req">必須</span></label>
-          </div>
-          <p class="field-error" id="err-consent" role="alert" aria-live="polite"></p>
-        </div>
-
-        <div class="form-submit">
-          <button type="submit" class="btn">この内容で送信する</button>
-          <p class="form-note">※ こちらはポートフォリオ用デモのため、実際の送信は行われません。</p>
-        </div>
-      </form>
-
-      <!-- success target (filled by JS via DOM API only) -->
-      <div id="formSuccess" hidden></div>
-    </div>
-  </div>
-</section>
-</main>
-
-<!-- ===== Footer ===== -->
-<footer class="site-footer">
-  <div class="wrap">
-    <div class="footer-grid">
-      <div>
-        <div class="footer-logo">
-          <span class="logo-mark" aria-hidden="true">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M11 4h2v7h7v2h-7v7h-2v-7H4v-2h7z" fill="currentColor"/></svg>
-          </span>
-          <span class="logo-text">あおぞらクリニック</span>
-        </div>
-        <p style="margin:0;font-size:0.9rem;">〒100-0001 東京都千代田区あおぞら町1-2-3 あおぞらビル2F<br>TEL：03-1234-5678</p>
-      </div>
-      <div>
-        <h4>メニュー</h4>
-        <ul class="footer-links">
-          <li><a href="#services">診療案内</a></li>
-          <li><a href="#facility">院内のご案内</a></li>
-          <li><a href="#staff">スタッフ紹介</a></li>
-          <li><a href="#access">アクセス・診療時間</a></li>
-          <li><a href="#form">予約・お問い合わせ</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4>診療時間</h4>
-        <p style="margin:0;font-size:0.9rem;">平日　9:00–12:30 / 15:00–18:30<br>土曜　9:00–13:00<br>休診　日曜・祝日・木曜午後</p>
-      </div>
-    </div>
-    <div class="disclaimer">
-      <p style="margin:0 0 6px;">© 2026 あおぞらクリニック（架空）</p>
-      <p style="margin:0;">※ 本サイトはポートフォリオ用に制作した架空クリニックのデモサイトです。実在の医療機関・団体とは一切関係ありません。</p>
-    </div>
-  </div>
-</footer>
-
-<style>
-  .sr-only {
-    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
-    overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
-  }
-</style>
-
-<script>
-(function () {
-  "use strict";
-
-  // ---- Mobile nav toggle ----
-  var navToggle = document.getElementById("navToggle");
-  var nav = document.getElementById("primaryNav");
-  if (navToggle && nav) {
-    navToggle.addEventListener("click", function () {
-      var open = nav.classList.toggle("open");
-      navToggle.setAttribute("aria-expanded", open ? "true" : "false");
-    });
-    nav.addEventListener("click", function (e) {
-      if (e.target.tagName === "A") {
-        nav.classList.remove("open");
-        navToggle.setAttribute("aria-expanded", "false");
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>あおぞらクリニック｜WEB予約フォーム</title>
+    <meta name="description" content="メニュー選択から日時指定・確認まで、4ステップで完結するWEB予約フォーム（ポートフォリオ用デモ）。" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2300a3b5'/%3E%3Ctext x='16' y='23' font-size='20' font-family='sans-serif' font-weight='bold' fill='%23fff' text-anchor='middle'%3E%2B%3C/text%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700&family=Zen+Maru+Gothic:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --teal: #00a3b5;
+        --teal-d: #0c5a64;
+        --teal-dd: #093f47;
+        --teal-l: #d9f1f4;
+        --teal-ll: #eef9fb;
+        --ink: #1f3a3f;
+        --muted: #5f7a7f;
+        --faint: #9bb3b7;
+        --line: #d7e7e9;
+        --surface: #ffffff;
+        --canvas: #f3f9fa;
+        --danger: #c2453a;
+        --ok: #0b9d6f;
+        --serif: "Shippori Mincho", serif;
+        --sans: "Zen Maru Gothic", system-ui, sans-serif;
+        --shadow: 0 1px 2px rgba(12,90,100,.05), 0 22px 50px -28px rgba(12,90,100,.35);
       }
-    });
-  }
+      * { box-sizing: border-box; }
+      body { margin: 0; font-family: var(--sans); color: var(--ink); background: var(--canvas); -webkit-font-smoothing: antialiased; line-height: 1.7; }
+      .wrap { max-width: 760px; margin: 0 auto; padding: 0 20px; }
 
-  // ---- Scroll reveal (CSS load-in; never permanently hidden) ----
-  var revealEls = document.querySelectorAll(".reveal");
-  if ("IntersectionObserver" in window) {
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("is-visible");
-          io.unobserve(entry.target);
+      /* header */
+      header { background: linear-gradient(120deg, var(--teal-d), var(--teal)); color: #fff; position: relative; overflow: hidden; }
+      header::after { content: ""; position: absolute; inset: 0; background: url("assets/img/hero.jpg") center/cover; opacity: .16; mix-blend-mode: screen; }
+      .head-in { position: relative; z-index: 2; padding: 26px 0 30px; text-align: center; }
+      .logo { display: inline-flex; align-items: center; gap: 10px; font-family: var(--serif); font-weight: 700; font-size: 20px; }
+      .logo .mk { width: 34px; height: 34px; border-radius: 9px; background: #fff; color: var(--teal); display: grid; place-items: center; font-size: 22px; font-weight: 700; }
+      header h1 { font-family: var(--serif); font-weight: 700; font-size: clamp(22px, 4vw, 30px); margin: 16px 0 6px; letter-spacing: .02em; }
+      header p { margin: 0; font-size: 13.5px; color: rgba(255,255,255,.85); }
+      .hours { display: inline-flex; gap: 18px; margin-top: 14px; font-size: 12px; background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.25); padding: 7px 16px; border-radius: 999px; }
+
+      /* stepper */
+      .booking { margin: -22px auto 56px; }
+      .card { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow); padding: clamp(20px, 4vw, 36px); position: relative; z-index: 3; }
+      .steps { display: flex; gap: 6px; margin-bottom: 28px; }
+      .step-pip { flex: 1; text-align: center; font-size: 11.5px; color: var(--faint); font-weight: 700; }
+      .step-pip .dot { display: block; height: 5px; border-radius: 3px; background: var(--line); margin-bottom: 8px; transition: background .3s; }
+      .step-pip.active { color: var(--teal-d); }
+      .step-pip.active .dot, .step-pip.done .dot { background: var(--teal); }
+      .step-pip.done { color: var(--teal); }
+
+      .panel { display: none; animation: fade .35s ease; }
+      .panel.show { display: block; }
+      @keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+      .panel h2 { font-family: var(--serif); font-size: 20px; margin: 0 0 4px; }
+      .panel .sub { color: var(--muted); font-size: 13.5px; margin: 0 0 22px; }
+
+      /* menu選択 */
+      .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+      @media (max-width: 560px) { .menu-grid { grid-template-columns: 1fr; } }
+      .opt { text-align: left; border: 1.5px solid var(--line); background: var(--surface); border-radius: 12px; padding: 16px 18px; cursor: pointer; transition: all .15s; font-family: var(--sans); }
+      .opt:hover { border-color: var(--teal); background: var(--teal-ll); }
+      .opt.sel { border-color: var(--teal); background: var(--teal-ll); box-shadow: 0 0 0 3px var(--teal-l); }
+      .opt .t { font-weight: 700; font-size: 15px; display: flex; align-items: center; justify-content: space-between; }
+      .opt .t .check { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--line); display: inline-grid; place-items: center; }
+      .opt.sel .t .check { background: var(--teal); border-color: var(--teal); }
+      .opt.sel .t .check::after { content: "✓"; color: #fff; font-size: 11px; }
+      .opt .d { font-size: 12.5px; color: var(--muted); margin-top: 5px; }
+
+      /* date */
+      .field-label { font-weight: 700; font-size: 13.5px; margin: 0 0 10px; }
+      .dates { display: grid; grid-template-columns: repeat(7, 1fr); gap: 7px; }
+      @media (max-width: 560px) { .dates { grid-template-columns: repeat(4, 1fr); } }
+      .day { border: 1.5px solid var(--line); background: var(--surface); border-radius: 10px; padding: 9px 2px; text-align: center; cursor: pointer; font-family: var(--sans); transition: all .14s; }
+      .day:hover:not(:disabled) { border-color: var(--teal); }
+      .day.sel { background: var(--teal); border-color: var(--teal); color: #fff; }
+      .day:disabled { opacity: .38; cursor: not-allowed; background: var(--canvas); }
+      .day .dow { font-size: 10.5px; color: var(--muted); }
+      .day.sel .dow { color: rgba(255,255,255,.85); }
+      .day .dnum { font-size: 17px; font-weight: 700; line-height: 1.2; }
+      .day .sat { color: #2f7fd6; } .day .sun { color: #d65f5f; }
+
+      .slots { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 8px; }
+      @media (max-width: 560px) { .slots { grid-template-columns: repeat(3, 1fr); } }
+      .slot { border: 1.5px solid var(--line); background: var(--surface); border-radius: 9px; padding: 10px 2px; text-align: center; cursor: pointer; font-family: var(--sans); font-size: 14px; font-weight: 700; transition: all .14s; }
+      .slot:hover:not(:disabled) { border-color: var(--teal); }
+      .slot.sel { background: var(--teal); border-color: var(--teal); color: #fff; }
+      .slot:disabled { opacity: .4; cursor: not-allowed; }
+      .slot small { display: block; font-size: 9.5px; font-weight: 500; color: var(--faint); }
+      .hint { font-size: 12px; color: var(--muted); margin-top: 14px; }
+
+      /* form fields */
+      .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+      @media (max-width: 560px) { .grid2 { grid-template-columns: 1fr; } }
+      .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+      .field > label { font-size: 13px; font-weight: 700; }
+      .field .req { color: var(--danger); font-size: 11.5px; margin-left: 6px; }
+      .field input, .field textarea, .field select {
+        font-family: var(--sans); font-size: 15px; padding: 11px 13px; border: 1.5px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--ink);
+      }
+      .field input:focus, .field textarea:focus, .field select:focus { outline: none; border-color: var(--teal); box-shadow: 0 0 0 3px var(--teal-l); }
+      .field .err { color: var(--danger); font-size: 12px; min-height: 0; }
+      .field input[aria-invalid="true"], .field textarea[aria-invalid="true"] { border-color: var(--danger); }
+      .consent { display: flex; gap: 10px; align-items: flex-start; background: var(--teal-ll); border: 1px solid var(--line); border-radius: 10px; padding: 13px 15px; font-size: 13.5px; }
+      .consent input { margin-top: 3px; width: 18px; height: 18px; accent-color: var(--teal); }
+
+      /* review */
+      .review { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+      .review .row { display: flex; padding: 13px 16px; border-bottom: 1px solid var(--line); font-size: 14px; }
+      .review .row:last-child { border-bottom: 0; }
+      .review .row .k { width: 38%; color: var(--muted); font-weight: 700; flex: none; }
+      .review .row .v { flex: 1; white-space: pre-wrap; }
+
+      /* nav buttons */
+      .nav { display: flex; gap: 12px; margin-top: 26px; }
+      .btn { font-family: var(--sans); font-weight: 700; font-size: 15px; border-radius: 11px; padding: 13px 22px; cursor: pointer; border: 1.5px solid transparent; transition: all .15s; }
+      .btn-primary { background: var(--teal); color: #fff; flex: 1; }
+      .btn-primary:hover { background: var(--teal-d); }
+      .btn-ghost { background: var(--surface); border-color: var(--line); color: var(--ink); }
+      .btn-ghost:hover { border-color: var(--teal); color: var(--teal-d); }
+
+      /* success */
+      .done-box { text-align: center; padding: 12px 0 8px; }
+      .done-box .mk { width: 64px; height: 64px; border-radius: 50%; background: var(--teal-l); color: var(--teal); display: grid; place-items: center; margin: 0 auto 18px; font-size: 34px; }
+      .done-box h2 { font-family: var(--serif); font-size: 22px; margin: 0 0 8px; }
+      .done-box p { color: var(--muted); font-size: 14px; margin: 0 auto; max-width: 44ch; }
+      .resv-no { display: inline-block; margin: 18px 0; font-family: var(--serif); font-size: 22px; letter-spacing: .12em; color: var(--teal-d); background: var(--teal-ll); border: 1px dashed var(--teal); border-radius: 10px; padding: 10px 22px; }
+
+      footer { text-align: center; padding: 28px 16px 40px; color: var(--faint); font-size: 12px; }
+      .skip { position: absolute; left: -999px; }
+      .skip:focus { left: 16px; top: 16px; z-index: 99; background: #fff; padding: 8px 14px; border-radius: 8px; }
+    </style>
+  </head>
+  <body>
+    <a href="#booking" class="skip">予約フォームへスキップ</a>
+    <header>
+      <div class="head-in wrap">
+        <span class="logo"><span class="mk">+</span>あおぞらクリニック</span>
+        <h1>WEB予約フォーム</h1>
+        <p>4ステップ・最短1分でご予約いただけます。</p>
+        <div class="hours">診療 9:00–12:00 / 14:00–18:00　休診 木・日・祝</div>
+      </div>
+    </header>
+
+    <main class="booking wrap" id="booking">
+      <div class="card">
+        <div class="steps" id="steps" aria-hidden="true">
+          <div class="step-pip" data-s="0"><span class="dot"></span>メニュー</div>
+          <div class="step-pip" data-s="1"><span class="dot"></span>日時</div>
+          <div class="step-pip" data-s="2"><span class="dot"></span>お客様情報</div>
+          <div class="step-pip" data-s="3"><span class="dot"></span>確認</div>
+        </div>
+
+        <!-- Step 0: menu -->
+        <section class="panel" data-panel="0" aria-label="メニュー選択">
+          <h2>ご予約メニュー</h2>
+          <p class="sub">ご希望の診療メニューをお選びください。</p>
+          <div class="menu-grid" id="menuGrid"></div>
+          <div class="nav"><button class="btn btn-primary" data-next>次へ（日時を選ぶ）</button></div>
+        </section>
+
+        <!-- Step 1: datetime -->
+        <section class="panel" data-panel="1" aria-label="日時選択">
+          <h2>ご希望の日時</h2>
+          <p class="sub">空いている日付と時間をお選びください（休診日は選択できません）。</p>
+          <p class="field-label">日付</p>
+          <div class="dates" id="dates"></div>
+          <p class="field-label" style="margin-top:22px">時間</p>
+          <div class="slots" id="slots"></div>
+          <p class="hint" id="slotHint">先に日付をお選びください。</p>
+          <div class="nav">
+            <button class="btn btn-ghost" data-back>戻る</button>
+            <button class="btn btn-primary" data-next>次へ（お客様情報）</button>
+          </div>
+        </section>
+
+        <!-- Step 2: info -->
+        <section class="panel" data-panel="2" aria-label="お客様情報">
+          <h2>お客様情報</h2>
+          <p class="sub">ご連絡先をご入力ください。<span class="req">＊</span>は必須です。</p>
+          <div class="grid2">
+            <div class="field">
+              <label for="f-name">お名前<span class="req">＊</span></label>
+              <input id="f-name" autocomplete="name" />
+              <span class="err" data-err="name"></span>
+            </div>
+            <div class="field">
+              <label for="f-kana">フリガナ</label>
+              <input id="f-kana" autocomplete="off" />
+              <span class="err" data-err="kana"></span>
+            </div>
+          </div>
+          <div class="grid2">
+            <div class="field">
+              <label for="f-tel">電話番号<span class="req">＊</span></label>
+              <input id="f-tel" inputmode="tel" placeholder="090-1234-5678" autocomplete="tel" />
+              <span class="err" data-err="tel"></span>
+            </div>
+            <div class="field">
+              <label for="f-email">メールアドレス<span class="req">＊</span></label>
+              <input id="f-email" inputmode="email" placeholder="example@mail.com" autocomplete="email" />
+              <span class="err" data-err="email"></span>
+            </div>
+          </div>
+          <div class="grid2">
+            <div class="field">
+              <label for="f-birth">生年月日</label>
+              <input id="f-birth" type="date" />
+              <span class="err" data-err="birth"></span>
+            </div>
+            <div class="field">
+              <label for="f-visit">受診区分</label>
+              <select id="f-visit"><option value="初診">初診</option><option value="再診">再診</option></select>
+            </div>
+          </div>
+          <div class="field">
+            <label for="f-note">ご相談内容・症状<span class="req">＊</span></label>
+            <textarea id="f-note" rows="3" placeholder="例）3日前から咳と微熱があります。"></textarea>
+            <span class="err" data-err="note"></span>
+          </div>
+          <label class="consent"><input id="f-agree" type="checkbox" /><span>個人情報の取り扱いに同意します。ご入力内容は予約確認のみに使用します。<span class="req">＊</span></span></label>
+          <span class="err" data-err="agree" style="display:block;margin-top:6px"></span>
+          <div class="nav">
+            <button class="btn btn-ghost" data-back>戻る</button>
+            <button class="btn btn-primary" data-next>確認画面へ</button>
+          </div>
+        </section>
+
+        <!-- Step 3: review -->
+        <section class="panel" data-panel="3" aria-label="確認">
+          <h2>ご予約内容の確認</h2>
+          <p class="sub">内容をご確認のうえ、予約を確定してください。</p>
+          <div class="review" id="review"></div>
+          <div class="nav">
+            <button class="btn btn-ghost" data-back>戻って修正</button>
+            <button class="btn btn-primary" id="submit">この内容で予約する</button>
+          </div>
+        </section>
+
+        <!-- Done -->
+        <section class="panel" data-panel="4" aria-label="完了">
+          <div class="done-box">
+            <div class="mk">✓</div>
+            <h2>ご予約を受け付けました</h2>
+            <div class="resv-no" id="resvNo"></div>
+            <p id="doneMsg"></p>
+            <div class="review" id="reviewDone" style="margin-top:22px;text-align:left"></div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer>© 2026 あおぞらクリニック（架空）｜※ ポートフォリオ用に制作した架空クリニックのWEB予約フォームのデモです。</footer>
+
+    <script>
+      // ---- All DOM writes use textContent / createElement (XSS-safe). No innerHTML. ----
+      "use strict";
+      var MENUS = [
+        { id: "naika", t: "一般内科", d: "発熱・かぜ・生活習慣病のご相談", min: "目安 15分" },
+        { id: "shonika", t: "小児科", d: "お子さまの体調不良・育児相談", min: "目安 15分" },
+        { id: "yobo", t: "予防接種", d: "インフルエンザ・各種ワクチン", min: "目安 10分" },
+        { id: "kenshin", t: "健康診断", d: "雇入れ・特定健診など", min: "目安 30分" },
+      ];
+      var SLOT_TIMES = ["09:00","09:30","10:00","10:30","11:00","11:30","14:00","14:30","15:00","15:30","16:00","16:30","17:00","17:30"];
+      var DOW = ["日","月","火","水","木","金","土"];
+      var CLOSED = [0, 4]; // Sun, Thu
+
+      var state = { menu: null, date: null, time: null };
+      var step = 0;
+
+      function el(tag, cls, text) {
+        var n = document.createElement(tag);
+        if (cls) n.className = cls;
+        if (text !== undefined) n.textContent = text;
+        return n;
+      }
+      function $(sel) { return document.querySelector(sel); }
+      function $all(sel) { return Array.prototype.slice.call(document.querySelectorAll(sel)); }
+
+      // ---- Step 0: menu ----
+      function renderMenu() {
+        var g = $("#menuGrid");
+        g.replaceChildren();
+        MENUS.forEach(function (m) {
+          var b = el("button", "opt");
+          b.type = "button";
+          if (state.menu === m.id) b.classList.add("sel");
+          var t = el("div", "t");
+          t.appendChild(el("span", null, m.t));
+          t.appendChild(el("span", "check"));
+          b.appendChild(t);
+          b.appendChild(el("div", "d", m.d + "（" + m.min + "）"));
+          b.addEventListener("click", function () { state.menu = m.id; renderMenu(); });
+          g.appendChild(b);
+        });
+      }
+
+      // ---- Step 1: dates & slots ----
+      function fmtDate(d) {
+        return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+      }
+      function renderDates() {
+        var box = $("#dates");
+        box.replaceChildren();
+        var today = new Date(); today.setHours(0, 0, 0, 0);
+        for (var i = 1; i <= 14; i++) {
+          var d = new Date(today.getTime() + i * 86400000);
+          var key = fmtDate(d);
+          var closed = CLOSED.indexOf(d.getDay()) !== -1;
+          var b = el("button", "day");
+          b.type = "button";
+          if (closed) b.disabled = true;
+          if (state.date === key) b.classList.add("sel");
+          var dow = el("span", "dow", DOW[d.getDay()]);
+          if (d.getDay() === 6) dow.classList.add("sat");
+          if (d.getDay() === 0) dow.classList.add("sun");
+          b.appendChild(dow);
+          b.appendChild(el("span", "dnum", String(d.getDate())));
+          b.appendChild(el("span", "dow", (d.getMonth() + 1) + "月"));
+          (function (k) { b.addEventListener("click", function () { state.date = k; state.time = null; renderDates(); renderSlots(); }); })(key);
+          box.appendChild(b);
         }
-      });
-    }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
-    revealEls.forEach(function (el) { io.observe(el); });
-  } else {
-    revealEls.forEach(function (el) { el.classList.add("is-visible"); });
-  }
-
-  // ---- Form validation ----
-  var form = document.getElementById("reserveForm");
-  if (!form) { return; }
-
-  // validator functions; return error string ("" === valid)
-  function validateName(v) {
-    return v.trim() === "" ? "お名前を入力してください。" : "";
-  }
-  function validateTel(v) {
-    var t = v.trim();
-    if (t === "") { return "電話番号を入力してください。"; }
-    // 数字とハイフンのみ・数字10〜11桁
-    if (!/^[0-9-]+$/.test(t)) { return "電話番号は数字とハイフンのみで入力してください。"; }
-    var digits = t.replace(/-/g, "");
-    if (digits.length < 10 || digits.length > 11) {
-      return "電話番号は10〜11桁の数字で入力してください。";
-    }
-    return "";
-  }
-  function validateEmail(v) {
-    var t = v.trim();
-    if (t === "") { return "メールアドレスを入力してください。"; }
-    // simple but robust email format check
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(t)) {
-      return "メールアドレスの形式が正しくありません。";
-    }
-    return "";
-  }
-  function validateMessage(v) {
-    return v.trim() === "" ? "ご相談内容を入力してください。" : "";
-  }
-  function validateConsent(checked) {
-    return checked ? "" : "個人情報の取り扱いへの同意が必要です。";
-  }
-
-  var fields = [
-    { id: "name",    errId: "err-name",    type: "text",     fn: validateName },
-    { id: "tel",     errId: "err-tel",     type: "text",     fn: validateTel },
-    { id: "email",   errId: "err-email",   type: "text",     fn: validateEmail },
-    { id: "message", errId: "err-message", type: "text",     fn: validateMessage },
-    { id: "consent", errId: "err-consent", type: "checkbox", fn: validateConsent }
-  ];
-
-  function setError(field, msg) {
-    var input = document.getElementById(field.id);
-    var errEl = document.getElementById(field.errId);
-    // textContent only (no innerHTML)
-    errEl.textContent = msg;
-    if (msg) {
-      input.setAttribute("aria-invalid", "true");
-    } else {
-      input.removeAttribute("aria-invalid");
-    }
-  }
-
-  function getValue(field) {
-    var input = document.getElementById(field.id);
-    return field.type === "checkbox" ? input.checked : input.value;
-  }
-
-  // live re-validation after first error shown
-  fields.forEach(function (field) {
-    var input = document.getElementById(field.id);
-    var evt = field.type === "checkbox" ? "change" : "input";
-    input.addEventListener(evt, function () {
-      if (input.getAttribute("aria-invalid") === "true") {
-        setError(field, field.fn(getValue(field)));
       }
-    });
-  });
-
-  form.addEventListener("submit", function (e) {
-    e.preventDefault();
-    var firstInvalid = null;
-
-    fields.forEach(function (field) {
-      var msg = field.fn(getValue(field));
-      setError(field, msg);
-      if (msg && !firstInvalid) {
-        firstInvalid = document.getElementById(field.id);
+      // Deterministic "満席" so the demo is stable per date+slot.
+      function isFull(dateKey, time) {
+        var s = dateKey + time, h = 0;
+        for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
+        return h % 10 < 3; // ~30% full
       }
-    });
-
-    if (firstInvalid) {
-      // focus + scroll to first error
-      if (typeof firstInvalid.scrollIntoView === "function") {
-        firstInvalid.scrollIntoView({ behavior: "smooth", block: "center" });
+      function renderSlots() {
+        var box = $("#slots");
+        box.replaceChildren();
+        if (!state.date) { $("#slotHint").textContent = "先に日付をお選びください。"; return; }
+        $("#slotHint").textContent = "△は残りわずか、満席は選択できません。";
+        SLOT_TIMES.forEach(function (t) {
+          var full = isFull(state.date, t);
+          var b = el("button", "slot");
+          b.type = "button";
+          if (full) b.disabled = true;
+          if (state.time === t) b.classList.add("sel");
+          b.appendChild(document.createTextNode(t));
+          b.appendChild(el("small", null, full ? "満席" : "○"));
+          (function (tt) { b.addEventListener("click", function () { state.time = tt; renderSlots(); }); })(t);
+          box.appendChild(b);
+        });
       }
-      firstInvalid.focus({ preventScroll: true });
-      return;
-    }
 
-    showSuccess();
-  });
+      // ---- validation (step 2) ----
+      function setErr(name, msg) {
+        var e = document.querySelector('[data-err="' + name + '"]');
+        if (e) e.textContent = msg || "";
+        var input = ({ name: "#f-name", kana: "#f-kana", tel: "#f-tel", email: "#f-email", note: "#f-note" })[name];
+        if (input) { var n = $(input); if (n) n.setAttribute("aria-invalid", msg ? "true" : "false"); }
+      }
+      function validateInfo() {
+        var ok = true, firstBad = null;
+        function fail(name, sel, msg) { setErr(name, msg); if (!firstBad) firstBad = $(sel); ok = false; }
+        var name = $("#f-name").value.trim();
+        var tel = $("#f-tel").value.trim();
+        var email = $("#f-email").value.trim();
+        var note = $("#f-note").value.trim();
+        var agree = $("#f-agree").checked;
+        setErr("name"); setErr("tel"); setErr("email"); setErr("note"); setErr("agree");
+        if (!name) fail("name", "#f-name", "お名前を入力してください。");
+        if (!tel) fail("tel", "#f-tel", "電話番号を入力してください。");
+        else if (!/^[0-9\-]{10,13}$/.test(tel) || tel.replace(/\D/g, "").length < 10) fail("tel", "#f-tel", "電話番号は数字とハイフンで正しく入力してください。");
+        if (!email) fail("email", "#f-email", "メールアドレスを入力してください。");
+        else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) fail("email", "#f-email", "メールアドレスの形式が正しくありません。");
+        if (!note) fail("note", "#f-note", "ご相談内容をご入力ください。");
+        if (!agree) { setErr("agree", "同意のうえお進みください。"); if (!firstBad) firstBad = $("#f-agree"); ok = false; }
+        if (firstBad) { firstBad.focus(); firstBad.scrollIntoView({ behavior: "smooth", block: "center" }); }
+        return ok;
+      }
 
-  // ---- Success view: built entirely via DOM API (no innerHTML) ----
-  function showSuccess() {
-    form.hidden = true;
+      function menuName() { var m = MENUS.find(function (x) { return x.id === state.menu; }); return m ? m.t : ""; }
+      function prettyDate(key) {
+        if (!key) return "";
+        var p = key.split("-"); var d = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+        return Number(p[1]) + "月" + Number(p[2]) + "日（" + DOW[d.getDay()] + "）";
+      }
+      function reviewData() {
+        return [
+          ["メニュー", menuName()],
+          ["日時", prettyDate(state.date) + "　" + (state.time || "")],
+          ["お名前", $("#f-name").value.trim() + ($("#f-kana").value.trim() ? "（" + $("#f-kana").value.trim() + "）" : "")],
+          ["電話番号", $("#f-tel").value.trim()],
+          ["メール", $("#f-email").value.trim()],
+          ["生年月日", $("#f-birth").value || "—"],
+          ["受診区分", $("#f-visit").value],
+          ["ご相談内容", $("#f-note").value.trim()],
+        ];
+      }
+      function renderReview(target) {
+        var box = $(target);
+        box.replaceChildren();
+        reviewData().forEach(function (r) {
+          var row = el("div", "row");
+          row.appendChild(el("div", "k", r[0]));
+          row.appendChild(el("div", "v", r[1]));
+          box.appendChild(row);
+        });
+      }
 
-    var box = document.getElementById("formSuccess");
-    while (box.firstChild) { box.removeChild(box.firstChild); }
-    box.hidden = false;
-    box.className = "success-box";
+      // ---- step navigation ----
+      function canLeave(s) {
+        if (s === 0 && !state.menu) { alert("メニューをお選びください。"); return false; }
+        if (s === 1) {
+          if (!state.date) { alert("日付をお選びください。"); return false; }
+          if (!state.time) { alert("時間をお選びください。"); return false; }
+        }
+        if (s === 2) return validateInfo();
+        return true;
+      }
+      function goto(s) {
+        step = s;
+        $all(".panel").forEach(function (p) { p.classList.toggle("show", Number(p.dataset.panel) === s); });
+        $all(".step-pip").forEach(function (p) {
+          var n = Number(p.dataset.s);
+          p.classList.toggle("active", n === s);
+          p.classList.toggle("done", n < s);
+        });
+        if (s === 3) renderReview("#review");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
 
-    var iconWrap = document.createElement("div");
-    iconWrap.className = "success-icon";
-    var NS = "http://www.w3.org/2000/svg";
-    var svg = document.createElementNS(NS, "svg");
-    svg.setAttribute("width", "38");
-    svg.setAttribute("height", "38");
-    svg.setAttribute("viewBox", "0 0 24 24");
-    svg.setAttribute("fill", "none");
-    svg.setAttribute("aria-hidden", "true");
-    var path = document.createElementNS(NS, "path");
-    path.setAttribute("d", "M5 13l4 4L19 7");
-    path.setAttribute("stroke", "currentColor");
-    path.setAttribute("stroke-width", "2.4");
-    path.setAttribute("stroke-linecap", "round");
-    path.setAttribute("stroke-linejoin", "round");
-    svg.appendChild(path);
-    iconWrap.appendChild(svg);
+      function submit() {
+        var no = "AZ-" + new Date().getFullYear() + "-" + String(Math.floor(1000 + Math.random() * 9000));
+        $("#resvNo").textContent = "予約番号　" + no;
+        $("#doneMsg").textContent = "確認のご連絡を、ご登録の電話番号またはメールにてお送りします。当日は受付にてお名前をお伝えください。";
+        renderReview("#reviewDone");
+        goto(4);
+      }
 
-    var heading = document.createElement("h3");
-    heading.textContent = "ご予約ありがとうございます。確認のご連絡をいたします。";
-
-    var msg = document.createElement("p");
-    msg.textContent = "担当者が内容を確認のうえ、ご入力いただいた電話番号またはメールアドレス宛に折り返しご連絡いたします。お急ぎの場合は 03-1234-5678 までお電話ください。";
-
-    box.appendChild(iconWrap);
-    box.appendChild(heading);
-    box.appendChild(msg);
-
-    // move focus to success message for screen readers
-    box.setAttribute("tabindex", "-1");
-    box.setAttribute("role", "status");
-    if (typeof box.scrollIntoView === "function") {
-      box.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
-    box.focus({ preventScroll: true });
-  }
-})();
-</script>
-</body>
+      // wire up
+      renderMenu(); renderDates(); renderSlots(); goto(0);
+      $all("[data-next]").forEach(function (b) { b.addEventListener("click", function () { if (canLeave(step)) goto(step + 1); }); });
+      $all("[data-back]").forEach(function (b) { b.addEventListener("click", function () { goto(step - 1); }); });
+      $("#submit").addEventListener("click", submit);
+    </script>
+  </body>
 </html>
