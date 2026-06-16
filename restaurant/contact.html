@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ご予約・お問い合わせ | 和食 結 -yui-</title>
+  <meta name="description" content="和食 結 -yui- のご予約・お問い合わせフォーム。お名前・電話・メール・ご来店人数・ご希望日時・ご要望をご入力ください。" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='5' fill='%231c1a17'/%3E%3Ctext x='16' y='22' font-family='serif' font-size='18' fill='%23d8a93a' text-anchor='middle'%3E結%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700&family=Zen+Old+Mincho:wght@600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">本文へスキップ</a>
+
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="brand" href="index.html" aria-label="和食 結 -yui- トップへ">
+        <svg class="brand__mark" viewBox="0 0 40 40" aria-hidden="true">
+          <rect width="40" height="40" rx="6" fill="#26231f" stroke="#b8860b" stroke-width="1" />
+          <text x="20" y="27" font-family="serif" font-size="22" fill="#d8a93a" text-anchor="middle">結</text>
+        </svg>
+        <span class="brand__name">和食 結 -yui-<small>YUI DINING</small></span>
+      </a>
+      <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav" aria-label="メニューを開く">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="main-nav" id="primary-nav" aria-label="メインメニュー">
+        <ul>
+          <li><a href="index.html">トップ</a></li>
+          <li><a href="menu.html">お品書き</a></li>
+          <li><a href="about.html">こだわり</a></li>
+          <li><a href="access.html">アクセス</a></li>
+          <li class="nav-cta"><a href="contact.html" aria-current="page">ご予約</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="page-hero">
+      <img class="page-hero__bg" src="assets/img/dish4.jpg" alt="季節の料理の盛り付け" />
+      <div class="container">
+        <span class="en">RESERVATION</span>
+        <h1>ご予約・お問い合わせ</h1>
+      </div>
+    </section>
+
+    <div class="container breadcrumb">
+      <nav aria-label="パンくず">
+        <ol>
+          <li><a href="index.html">トップ</a></li>
+          <li aria-current="page">ご予約・お問い合わせ</li>
+        </ol>
+      </nav>
+    </div>
+
+    <section class="section">
+      <div class="container form-wrap">
+        <div class="section-head reveal" style="margin-bottom:32px;">
+          <span class="en">CONTACT</span>
+          <h2>ご予約フォーム</h2>
+          <p class="lead">下記フォームよりご希望をお知らせください。お急ぎの場合は <a href="tel:0312345678">03-1234-5678</a> までお電話ください。</p>
+        </div>
+
+        <!-- 送信結果表示エリア（JSが createElement で内容を挿入） -->
+        <div id="form-status" class="form-status" hidden></div>
+
+        <form id="reservation-form" class="contact-form reveal" novalidate>
+          <div class="field">
+            <label for="name">お名前<span class="req">必須</span></label>
+            <input type="text" id="name" name="name" autocomplete="name" required aria-required="true" aria-describedby="name-error" placeholder="結城 花子" />
+            <span class="field__error" id="name-error" aria-live="polite"></span>
+          </div>
+
+          <div class="field-grid">
+            <div class="field">
+              <label for="tel">電話番号<span class="req">必須</span></label>
+              <input type="tel" id="tel" name="tel" autocomplete="tel" required aria-required="true" aria-describedby="tel-error" placeholder="090-1234-5678" />
+              <span class="field__error" id="tel-error" aria-live="polite"></span>
+            </div>
+            <div class="field">
+              <label for="email">メールアドレス<span class="req">必須</span></label>
+              <input type="email" id="email" name="email" autocomplete="email" required aria-required="true" aria-describedby="email-error" placeholder="example@mail.com" />
+              <span class="field__error" id="email-error" aria-live="polite"></span>
+            </div>
+          </div>
+
+          <div class="field-grid">
+            <div class="field">
+              <label for="guests">ご来店人数<span class="req">必須</span></label>
+              <select id="guests" name="guests" required aria-required="true" aria-describedby="guests-error">
+                <option value="">選択してください</option>
+                <option value="1">1名</option>
+                <option value="2">2名</option>
+                <option value="3">3名</option>
+                <option value="4">4名</option>
+                <option value="5">5名</option>
+                <option value="6">6名</option>
+                <option value="7+">7名以上（応相談）</option>
+              </select>
+              <span class="field__error" id="guests-error" aria-live="polite"></span>
+            </div>
+            <div class="field">
+              <label for="datetime">ご希望日時<span class="req">必須</span></label>
+              <input type="datetime-local" id="datetime" name="datetime" required aria-required="true" aria-describedby="datetime-error" />
+              <span class="field__error" id="datetime-error" aria-live="polite"></span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="message">ご要望<span class="opt">任意</span></label>
+            <textarea id="message" name="message" aria-describedby="message-error" placeholder="アレルギー、記念日のサプライズ、苦手な食材など、ご要望をお書きください。"></textarea>
+            <span class="field__error" id="message-error" aria-live="polite"></span>
+          </div>
+
+          <div class="btn-row">
+            <button type="submit" class="btn btn--primary">この内容で予約をリクエスト</button>
+          </div>
+          <p class="menu-note" style="margin-top:18px;">※ 当フォームは「リクエスト」です。ご予約の確定は当店からのご連絡をもって完了となります。</p>
+        </form>
+
+        <!-- 補足情報 -->
+        <div class="contact-aside">
+          <article class="value">
+            <h3 style="font-size:1.1rem;margin-bottom:10px;">お電話</h3>
+            <p style="margin:0;"><a href="tel:0312345678">03-1234-5678</a><br />17:00 - 22:00 受付</p>
+          </article>
+          <article class="value">
+            <h3 style="font-size:1.1rem;margin-bottom:10px;">定休日</h3>
+            <p style="margin:0;">毎週火曜日<br />（祝日の場合は営業）</p>
+          </article>
+          <article class="value">
+            <h3 style="font-size:1.1rem;margin-bottom:10px;">アクセス</h3>
+            <p style="margin:0;">結町駅 A2出口 徒歩5分<br /><a href="access.html">地図を見る</a></p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="site-footer__grid">
+        <div>
+          <a class="brand" href="index.html">
+            <svg class="brand__mark" viewBox="0 0 40 40" aria-hidden="true">
+              <rect width="40" height="40" rx="6" fill="#26231f" stroke="#b8860b" stroke-width="1" />
+              <text x="20" y="27" font-family="serif" font-size="22" fill="#d8a93a" text-anchor="middle">結</text>
+            </svg>
+            <span class="brand__name">和食 結 -yui-<small>YUI DINING</small></span>
+          </a>
+          <p>旬を結ぶ和食ダイニング。季節の一皿と、心ほどけるおもてなしを。</p>
+        </div>
+        <nav class="footer-nav" aria-label="フッターメニュー">
+          <h4>MENU</h4>
+          <ul>
+            <li><a href="index.html">トップ</a></li>
+            <li><a href="menu.html">お品書き</a></li>
+            <li><a href="about.html">こだわり</a></li>
+            <li><a href="access.html">アクセス</a></li>
+            <li><a href="contact.html">ご予約・お問い合わせ</a></li>
+          </ul>
+        </nav>
+        <div class="footer-info">
+          <h4>INFORMATION</h4>
+          <dl>
+            <dt>営業時間</dt>
+            <dd>17:00 - 23:00（火曜定休）</dd>
+            <dt>電話</dt>
+            <dd>03-1234-5678</dd>
+            <dt>住所</dt>
+            <dd>東京都千代田区結町1-2-3</dd>
+          </dl>
+        </div>
+      </div>
+      <div class="site-footer__bottom">
+        <p class="demo-note">※ ポートフォリオ用に制作した架空飲食店のデモサイトです</p>
+        <p>&copy; 2026 和食 結 -yui- DEMO</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var toggle = document.querySelector(".nav-toggle");
+      var nav = document.getElementById("primary-nav");
+      if (!toggle || !nav) return;
+      toggle.addEventListener("click", function () {
+        var open = nav.getAttribute("data-open") === "true";
+        nav.setAttribute("data-open", String(!open));
+        toggle.setAttribute("aria-expanded", String(!open));
+        toggle.setAttribute("aria-label", !open ? "メニューを閉じる" : "メニューを開く");
+      });
+    })();
+  </script>
+  <script src="assets/js/contact.js"></script>
+</body>
+</html>
