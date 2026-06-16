@@ -13,6 +13,7 @@
 </head>
 <body>
   <a class="skip-link" href="#main">本文へスキップ</a>
+  <div class="grain" aria-hidden="true"></div>
 
   <header class="site-header">
     <div class="container site-header__inner">
@@ -40,10 +41,12 @@
 
   <main id="main">
     <section class="page-hero">
-      <img class="page-hero__bg" src="assets/img/dish4.jpg" alt="季節の料理の盛り付け" />
+      <img class="page-hero__bg" src="assets/img/dish4.jpg" alt="季節の料理の盛り付け" data-parallax="0.1" />
       <div class="container">
         <span class="en">RESERVATION</span>
-        <h1>ご予約・お問い合わせ</h1>
+        <h1>
+          <span class="line-mask"><span>ご予約・お問い合わせ</span></span>
+        </h1>
       </div>
     </section>
 
@@ -182,19 +185,8 @@
     </div>
   </footer>
 
-  <script>
-    (function () {
-      var toggle = document.querySelector(".nav-toggle");
-      var nav = document.getElementById("primary-nav");
-      if (!toggle || !nav) return;
-      toggle.addEventListener("click", function () {
-        var open = nav.getAttribute("data-open") === "true";
-        nav.setAttribute("data-open", String(!open));
-        toggle.setAttribute("aria-expanded", String(!open));
-        toggle.setAttribute("aria-label", !open ? "メニューを閉じる" : "メニューを開く");
-      });
-    })();
-  </script>
+  <!-- 共通演出スクリプト（contact.js より先に読み込む） -->
+  <script src="assets/js/site.js"></script>
   <script src="assets/js/contact.js"></script>
 </body>
 </html>

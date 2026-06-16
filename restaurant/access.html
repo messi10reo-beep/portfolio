@@ -13,6 +13,7 @@
 </head>
 <body>
   <a class="skip-link" href="#main">本文へスキップ</a>
+  <div class="grain" aria-hidden="true"></div>
 
   <header class="site-header">
     <div class="container site-header__inner">
@@ -40,10 +41,12 @@
 
   <main id="main">
     <section class="page-hero">
-      <img class="page-hero__bg" src="assets/img/hero.jpg" alt="夜の和食 結 -yui- の店内" />
+      <img class="page-hero__bg" src="assets/img/hero.jpg" alt="夜の和食 結 -yui- の店内" data-parallax="0.1" />
       <div class="container">
         <span class="en">ACCESS</span>
-        <h1>アクセス・営業時間</h1>
+        <h1>
+          <span class="line-mask"><span>アクセス・営業時間</span></span>
+        </h1>
       </div>
     </section>
 
@@ -151,18 +154,7 @@
     </div>
   </footer>
 
-  <script>
-    (function () {
-      var toggle = document.querySelector(".nav-toggle");
-      var nav = document.getElementById("primary-nav");
-      if (!toggle || !nav) return;
-      toggle.addEventListener("click", function () {
-        var open = nav.getAttribute("data-open") === "true";
-        nav.setAttribute("data-open", String(!open));
-        toggle.setAttribute("aria-expanded", String(!open));
-        toggle.setAttribute("aria-label", !open ? "メニューを閉じる" : "メニューを開く");
-      });
-    })();
-  </script>
+  <!-- 共通演出スクリプト -->
+  <script src="assets/js/site.js"></script>
 </body>
 </html>

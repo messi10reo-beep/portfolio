@@ -13,6 +13,7 @@
 </head>
 <body>
   <a class="skip-link" href="#main">本文へスキップ</a>
+  <div class="grain" aria-hidden="true"></div>
 
   <header class="site-header">
     <div class="container site-header__inner">
@@ -40,12 +41,27 @@
 
   <main id="main">
     <section class="page-hero">
-      <img class="page-hero__bg" src="assets/img/dish1.jpg" alt="季節の前菜の盛り合わせ" />
+      <img class="page-hero__bg" src="assets/img/dish1.jpg" alt="季節の前菜の盛り合わせ" data-parallax="0.1" />
       <div class="container">
         <span class="en">MENU</span>
-        <h1>お品書き・コース</h1>
+        <h1>
+          <span class="line-mask"><span>お品書き・コース</span></span>
+        </h1>
       </div>
     </section>
+
+    <!-- ===== Marquee band ===== -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee__track">
+        <span>先付け</span><span class="sep">・</span>
+        <span>お造り</span><span class="sep">・</span>
+        <span>炭火焼き</span><span class="sep">・</span>
+        <span>煮物椀</span><span class="sep">・</span>
+        <span>土鍋ご飯</span><span class="sep">・</span>
+        <span>日本酒</span><span class="sep">・</span>
+        <span>甘味</span><span class="sep">・</span>
+      </div>
+    </div>
 
     <div class="container breadcrumb">
       <nav aria-label="パンくず">
@@ -298,18 +314,7 @@
     </div>
   </footer>
 
-  <script>
-    (function () {
-      var toggle = document.querySelector(".nav-toggle");
-      var nav = document.getElementById("primary-nav");
-      if (!toggle || !nav) return;
-      toggle.addEventListener("click", function () {
-        var open = nav.getAttribute("data-open") === "true";
-        nav.setAttribute("data-open", String(!open));
-        toggle.setAttribute("aria-expanded", String(!open));
-        toggle.setAttribute("aria-label", !open ? "メニューを閉じる" : "メニューを開く");
-      });
-    })();
-  </script>
+  <!-- 共通演出スクリプト -->
+  <script src="assets/js/site.js"></script>
 </body>
 </html>

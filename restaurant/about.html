@@ -13,6 +13,7 @@
 </head>
 <body>
   <a class="skip-link" href="#main">本文へスキップ</a>
+  <div class="grain" aria-hidden="true"></div>
 
   <header class="site-header">
     <div class="container site-header__inner">
@@ -40,10 +41,12 @@
 
   <main id="main">
     <section class="page-hero">
-      <img class="page-hero__bg" src="assets/img/interior.jpg" alt="落ち着いた照明の和食 結 -yui- の店内" />
+      <img class="page-hero__bg" src="assets/img/interior.jpg" alt="落ち着いた照明の和食 結 -yui- の店内" data-parallax="0.1" />
       <div class="container">
         <span class="en">ABOUT</span>
-        <h1>こだわり・店主あいさつ</h1>
+        <h1>
+          <span class="line-mask"><span>こだわり・店主あいさつ</span></span>
+        </h1>
       </div>
     </section>
 
@@ -87,7 +90,7 @@
     <!-- ===== Owner message ===== -->
     <section class="section section--alt">
       <div class="container message">
-        <div class="message__media reveal">
+        <div class="message__media reveal reveal-clip">
           <img src="assets/img/counter.jpg" alt="店主が立つ一枚板のカウンター" />
         </div>
         <div class="message__body reveal reveal--d1">
@@ -110,10 +113,10 @@
           <p class="lead">カウンター席とテーブル個室をご用意。少人数のお食事から、ご接待・記念日まで。</p>
         </div>
         <div class="gallery reveal">
-          <img src="assets/img/interior.jpg" alt="木のぬくもりが感じられるテーブル席" />
-          <img src="assets/img/counter.jpg" alt="職人の手元を望むカウンター席" />
-          <img src="assets/img/dish4.jpg" alt="季節の料理の盛り付け" />
-          <img src="assets/img/hero.jpg" alt="ほの暗い照明に包まれた店内" />
+          <div class="gallery__item"><img src="assets/img/interior.jpg" alt="木のぬくもりが感じられるテーブル席" /></div>
+          <div class="gallery__item"><img src="assets/img/counter.jpg" alt="職人の手元を望むカウンター席" /></div>
+          <div class="gallery__item"><img src="assets/img/dish4.jpg" alt="季節の料理の盛り付け" /></div>
+          <div class="gallery__item"><img src="assets/img/hero.jpg" alt="ほの暗い照明に包まれた店内" /></div>
         </div>
         <div class="btn-row" style="margin-top:36px;">
           <a class="btn btn--primary" href="contact.html">席を予約する</a>
@@ -165,18 +168,7 @@
     </div>
   </footer>
 
-  <script>
-    (function () {
-      var toggle = document.querySelector(".nav-toggle");
-      var nav = document.getElementById("primary-nav");
-      if (!toggle || !nav) return;
-      toggle.addEventListener("click", function () {
-        var open = nav.getAttribute("data-open") === "true";
-        nav.setAttribute("data-open", String(!open));
-        toggle.setAttribute("aria-expanded", String(!open));
-        toggle.setAttribute("aria-label", !open ? "メニューを閉じる" : "メニューを開く");
-      });
-    })();
-  </script>
+  <!-- 共通演出スクリプト -->
+  <script src="assets/js/site.js"></script>
 </body>
 </html>

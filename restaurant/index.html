@@ -13,6 +13,7 @@
 </head>
 <body>
   <a class="skip-link" href="#main">本文へスキップ</a>
+  <div class="grain" aria-hidden="true"></div>
 
   <!-- ===== Header ===== -->
   <header class="site-header">
@@ -44,22 +45,42 @@
   <main id="main">
     <!-- ===== Hero ===== -->
     <section class="hero">
-      <img class="hero__bg" src="assets/img/hero.jpg" alt="ほの暗い照明に照らされた和食 結 -yui- の落ち着いた店内" />
-      <div class="container hero__inner reveal">
-        <p class="hero__eyebrow">和の薫り、ひとときの贅</p>
-        <h1>旬を結ぶ、<br /><span class="accent">和食のおもてなし</span></h1>
-        <p class="hero__lead">四季のうつろいを映した一皿と、心ほどける静かな空間。職人がしつらえる季節の和食を、ゆるりとお愉しみください。</p>
-        <div class="btn-row">
+      <img class="hero__bg" src="assets/img/hero.jpg" alt="ほの暗い照明に照らされた和食 結 -yui- の落ち着いた店内" data-parallax="0.12" />
+      <div class="container hero__inner">
+        <p class="hero__eyebrow hero-enter hero-enter--1">和の薫り、ひとときの贅</p>
+        <h1>
+          <span class="line-mask"><span>旬を結ぶ、</span></span>
+          <span class="line-mask"><span class="accent">和食のおもてなし</span></span>
+        </h1>
+        <p class="hero__lead hero-enter hero-enter--2">四季のうつろいを映した一皿と、心ほどける静かな空間。職人がしつらえる季節の和食を、ゆるりとお愉しみください。</p>
+        <div class="btn-row hero-enter hero-enter--3">
           <a class="btn btn--primary" href="contact.html">ご予約はこちら</a>
           <a class="btn btn--ghost" href="menu.html">お品書きを見る</a>
         </div>
       </div>
+      <div class="scroll-cue" aria-hidden="true">
+        <span>SCROLL</span>
+        <span class="scroll-cue__line"></span>
+      </div>
     </section>
+
+    <!-- ===== Marquee band ===== -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee__track">
+        <span>OMOTENASHI</span><span class="sep">・</span>
+        <span>旬</span><span class="sep">・</span>
+        <span>炭火</span><span class="sep">・</span>
+        <span>日本酒</span><span class="sep">・</span>
+        <span>和食</span><span class="sep">・</span>
+        <span>一番出汁</span><span class="sep">・</span>
+        <span>SEASONAL</span><span class="sep">・</span>
+      </div>
+    </div>
 
     <!-- ===== Intro ===== -->
     <section class="section">
       <div class="container split">
-        <div class="split__media reveal">
+        <div class="split__media reveal reveal-clip">
           <img src="assets/img/interior.jpg" alt="木のぬくもりが感じられる和食 結 -yui- のテーブル席" />
         </div>
         <div class="split__body reveal reveal--d1">
@@ -112,7 +133,7 @@
     <!-- ===== Signature dishes ===== -->
     <section class="section">
       <div class="container split split--reverse">
-        <div class="split__media reveal">
+        <div class="split__media reveal reveal-clip">
           <img src="assets/img/dish2.jpg" alt="旬の食材を使った主菜の盛り付け" />
         </div>
         <div class="split__body reveal reveal--d1">
@@ -123,6 +144,16 @@
             <a class="btn btn--primary" href="contact.html">席を予約する</a>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- ===== Kinetic typography ===== -->
+    <section class="kinetic">
+      <div class="container reveal">
+        <p class="kinetic__text">
+          四季を、<span class="accent">一皿</span>に。<br />
+          <span class="muted">結ぶ</span>、おもてなし。
+        </p>
       </div>
     </section>
 
@@ -183,19 +214,7 @@
     </div>
   </footer>
 
-  <!-- Navigation toggle (hamburger) -->
-  <script>
-    (function () {
-      var toggle = document.querySelector(".nav-toggle");
-      var nav = document.getElementById("primary-nav");
-      if (!toggle || !nav) return;
-      toggle.addEventListener("click", function () {
-        var open = nav.getAttribute("data-open") === "true";
-        nav.setAttribute("data-open", String(!open));
-        toggle.setAttribute("aria-expanded", String(!open));
-        toggle.setAttribute("aria-label", !open ? "メニューを閉じる" : "メニューを開く");
-      });
-    })();
-  </script>
+  <!-- 共通演出スクリプト（ナビ・スクロールリビール・ヘッダー・パララックス等） -->
+  <script src="assets/js/site.js"></script>
 </body>
 </html>
