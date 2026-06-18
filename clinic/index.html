@@ -257,13 +257,25 @@
     <script>
       // All DOM writes use textContent / createElement (XSS-safe). No innerHTML.
       "use strict";
-      var MENUS = [
+      // Supabase backend (shared with 管理画面 /admin/). Menus are loaded live,
+      // so editing menus in the admin updates this form automatically.
+      var SB_URL = "https://ysgyhijsrwrzrawfceba.supabase.co/rest/v1";
+      var SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlzZ3loaWpzcndyenJhd2ZjZWJhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3Nzg0OTIsImV4cCI6MjA5NzM1NDQ5Mn0.LJ0K_RpQJ6CYPaas-cN59olZwCcUy6Y-mZA6OgVYD1Q";
+      var FALLBACK_MENUS = [
         { id: "cut", t: "カット", d: "シャンプー・ブロー込み", price: "¥5,500", min: "約60分" },
         { id: "color", t: "カット + カラー", d: "リタッチ〜フルカラー", price: "¥11,000", min: "約120分" },
-        { id: "treat", t: "カット + トリートメント", d: "髪質改善トリートメント", price: "¥9,900", min: "約100分" },
         { id: "spa", t: "ヘッドスパ", d: "リラクゼーション", price: "¥4,400", min: "約45分" },
-        { id: "perm", t: "縮毛矯正", d: "カット込み", price: "¥16,500", min: "約180分" },
       ];
+      var MENUS = [];
+      function mapMenu(m) {
+        return { id: m.id, t: m.name, d: m.description || "", price: "¥" + Number(m.price).toLocaleString(), min: m.duration_min ? "約" + m.duration_min + "分" : "" };
+      }
+      function loadMenus() {
+        fetch(SB_URL + "/menus?select=*&active=eq.true&order=sort_order.asc", { headers: { apikey: SB_KEY, Authorization: "Bearer " + SB_KEY } })
+          .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
+          .then(function (rows) { MENUS = (rows && rows.length) ? rows.map(mapMenu) : FALLBACK_MENUS; renderMenu(); })
+          .catch(function () { MENUS = FALLBACK_MENUS; renderMenu(); });
+      }
       var SLOT_TIMES = ["10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00"];
       var DOW = ["日","月","火","水","木","金","土"];
       var CLOSED = [1]; // 定休: 月曜
@@ -377,14 +389,36 @@
         if (s === 3) renderReview("#review");
         window.scrollTo({ top: 0, behavior: "smooth" });
       }
-      function submit() {
-        var no = "R-" + new Date().getFullYear() + "-" + String(Math.floor(1000 + Math.random() * 9000));
-        $("#resvNo").textContent = "予約番号　" + no;
-        $("#doneMsg").textContent = "確認のご連絡を「" + $("#f-contact").value + "」でお送りします。少々お待ちください。";
-        renderReview("#reviewDone");
-        goto(4);
+      function pickContact() {
+        var method = $("#f-contact").value, ig = $("#f-ig").value.trim();
+        if (method === "Instagram DM") return ig ? "@" + ig : "";
+        if (method === "メール") return $("#f-email").value.trim();
+        return $("#f-tel").value.trim();
       }
-      renderMenu(); renderDates(); renderSlots(); goto(0);
+      function selectedMenuName() { var m = MENUS.find(function (x) { return x.id === state.menu; }); return m ? m.t : ""; }
+      function submit() {
+        var btn = $("#submit"); btn.disabled = true;
+        var no = "R-" + new Date().getFullYear() + "-" + String(Math.floor(1000 + Math.random() * 9000));
+        var iso = (state.date && state.time) ? new Date(state.date + "T" + state.time + ":00").toISOString() : null;
+        var ig = $("#f-ig").value.trim();
+        var body = {
+          customer_name: $("#f-name").value.trim(),
+          contact_method: $("#f-contact").value,
+          contact_value: pickContact(),
+          menu_name: selectedMenuName(),
+          reserved_at: iso,
+          status: "新規",
+          note: [$("#f-note").value.trim(), ig ? "IG:@" + ig : "", "受付番号 " + no].filter(Boolean).join(" / "),
+        };
+        function done() {
+          $("#resvNo").textContent = "予約番号　" + no;
+          $("#doneMsg").textContent = "確認のご連絡を「" + $("#f-contact").value + "」でお送りします。少々お待ちください。";
+          renderReview("#reviewDone"); goto(4); btn.disabled = false;
+        }
+        fetch(SB_URL + "/reservations", { method: "POST", headers: { apikey: SB_KEY, Authorization: "Bearer " + SB_KEY, "Content-Type": "application/json" }, body: JSON.stringify(body) })
+          .then(done).catch(done);
+      }
+      loadMenus(); renderDates(); renderSlots(); goto(0);
       $all("[data-next]").forEach(function (b) { b.addEventListener("click", function () { if (canLeave(step)) goto(step + 1); }); });
       $all("[data-back]").forEach(function (b) { b.addEventListener("click", function () { goto(step - 1); }); });
       $("#submit").addEventListener("click", submit);
