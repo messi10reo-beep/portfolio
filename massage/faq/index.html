@@ -43,6 +43,7 @@
 
     <script src="../assets/data.js"></script>
     <script src="../assets/ai.js"></script>
+    <script src="../assets/llm.js"></script>
     <script src="../assets/chrome.js"></script>
     <script>
       "use strict";
@@ -121,9 +122,11 @@
               src.appendChild(it);
             });
             b.appendChild(src);
-            var conf = document.createElement("div"); conf.className = "conf";
-            conf.textContent = "信頼度: " + ({ high: "高", medium: "中", low: "低" }[res.confidence] || "—") + "（デモ回答 / 最終確認はスタッフ）";
-            b.appendChild(conf);
+            if (!res.llm) {
+              var conf = document.createElement("div"); conf.className = "conf";
+              conf.textContent = "信頼度: " + ({ high: "高", medium: "中", low: "低" }[res.confidence] || "—") + "（デモ回答 / 最終確認はスタッフ）";
+              b.appendChild(conf);
+            }
           }
           var rel2 = chipRow(res.related, "こちらもよく聞かれます");
           if (rel2) b.appendChild(rel2);
@@ -152,6 +155,50 @@
           })();
         }
 
+        var llm = { ok: false, model: null };
+        var liveEl = document.querySelector(".chat-top .live");
+        function setMode() {
+          if (!liveEl) return;
+          if (llm.ok) { liveEl.textContent = "ローカルLLM: " + (llm.model || "接続中"); liveEl.title = "Ollamaに接続して回答を生成します"; }
+          else { liveEl.textContent = "FAQ検索モード"; liveEl.title = "Ollama未接続のためFAQ検索で回答します"; }
+        }
+
+        // ローカルLLM（Ollama）で回答を生成。RAG: 関連FAQを文脈として渡す。
+        function respondLLM(text) {
+          var faqs = window.NagiAI.retrieve(text, 4);
+          var typing = addTyping();
+          var started = false, finished = false, bubble = null, p = null, acc = "";
+          function ensureBubble() {
+            if (started) return; started = true;
+            if (typing && typing.parentNode) typing.parentNode.removeChild(typing);
+            var m = document.createElement("div"); m.className = "msg bot";
+            var av = document.createElement("div"); av.className = "ava"; av.insertAdjacentHTML("beforeend", ICON_BOT);
+            bubble = document.createElement("div"); bubble.className = "bubble";
+            p = document.createElement("p"); p.style.margin = "0"; bubble.appendChild(p);
+            m.appendChild(av); m.appendChild(bubble); log.appendChild(m); scrollDown();
+          }
+          window.NagiLLM.chatStream(window.NagiLLM.buildMessages(text, faqs), {
+            onToken: function (tok) { ensureBubble(); acc += tok; p.textContent = acc; scrollDown(); },
+            onDone: function () {
+              if (finished) return; finished = true; // done行とHTTP終端で二重発火するのを防ぐ
+              if (!acc.trim()) { // トークンが来なかった → FAQ検索にフォールバック
+                if (typing && typing.parentNode) typing.parentNode.removeChild(typing);
+                if (bubble && bubble.parentNode) bubble.parentNode.parentNode.removeChild(bubble.parentNode);
+                addBot(window.NagiAI.answer(text), true); return;
+              }
+              buildExtras(bubble, { fallback: false, llm: true, sources: faqs.slice(0, 3),
+                related: faqs.slice(1, 4) });
+              var tag = document.createElement("div"); tag.className = "conf";
+              tag.textContent = "🧠 ローカルLLM（" + (window.NagiLLM.getModel() || "") + "）が上記FAQを根拠に生成（外部送信なし）";
+              bubble.appendChild(tag); scrollDown();
+            },
+            onError: function () {
+              if (typing && typing.parentNode) typing.parentNode.removeChild(typing);
+              if (!started) { llm.ok = false; setMode(); addBot(window.NagiAI.answer(text), true); }
+            }
+          });
+        }
+
         function respond(text) {
           var typing = addTyping();
           window.setTimeout(function () {
@@ -162,7 +209,8 @@
 
         function ask(text) {
           text = (text || "").trim(); if (!text) return;
-          addUser(text); input.value = ""; respond(text);
+          addUser(text); input.value = "";
+          if (llm.ok) respondLLM(text); else respond(text);
         }
 
         form.addEventListener("submit", function (e) { e.preventDefault(); ask(input.value); });
@@ -178,6 +226,12 @@
           fallback: false,
           text: "こんにちは。凪 NAGI のAIアシスタントです。営業時間・料金・服装・予約の変更など、よくあるご質問にお答えします。下のボタンから選ぶか、自由にご質問ください。",
           sources: [], confidence: "high"
+        });
+
+        // ローカルLLM（Ollama）が起動していれば接続。無ければFAQ検索モードのまま。
+        setMode();
+        window.NagiLLM.detect().then(function (r) {
+          llm.ok = !!r.ok; llm.model = r.model || null; setMode();
         });
       })();
     </script>

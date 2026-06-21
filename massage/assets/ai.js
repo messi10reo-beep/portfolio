@@ -122,6 +122,23 @@
     };
   }
 
+  /* ---------------- RAG用：関連FAQを上位k件取得（しきい値ゆるめ） ----------------
+     ローカルLLMに渡す「根拠」候補。answer() より閾値を緩め、文脈を広めに拾う。 */
+  function retrieve(query, k) {
+    const q = normalize(query);
+    if (!q) return [];
+    const qx = expandQuery(q);
+    const qg = bigrams(qx);
+    const scored = (window.NAGI_FAQ || []).map((faq) => {
+      let score = 0;
+      faq.keywords.forEach((kw) => { const kk = normalize(kw); if (kk && qx.indexOf(kk) !== -1) score += Math.min(kk.length, 4); });
+      if (qx.indexOf(normalize(faq.category)) !== -1) score += 3;
+      score += cosine(qg, bigrams(normalize(faq.question + faq.keywords.join("") + faq.category))) * 5;
+      return { faq, score };
+    }).filter((x) => x.score > 0.25).sort((a, b) => b.score - a.score);
+    return scored.slice(0, k || 4).map((x) => x.faq);
+  }
+
   /* ---------------- 予約の事前整理（分類＋確認ポイント） ---------------- */
   const BOOKING_RULES = [
     { cat: "腰痛相談", test: /(腰|ぎっくり|坐骨|ヘルニア)/,
@@ -201,5 +218,5 @@
     return { category, reply: tpl.reply, checks: tpl.checks };
   }
 
-  window.NagiAI = { normalize, searchFAQ, answer, classifyBooking, classifyInquiry };
+  window.NagiAI = { normalize, searchFAQ, retrieve, answer, classifyBooking, classifyInquiry };
 })();

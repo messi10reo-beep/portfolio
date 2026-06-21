@@ -101,6 +101,22 @@ open http://localhost:8000/massage/
 - AIの提案精度のログ計測と、確認・修正内容の学習による改善
 - 実際の小規模事業者での導入検証
 
+## ローカルLLM（Ollama）で動かす
+
+AI FAQチャット（`faq/`）は、**ローカルLLM（Ollama）が起動していれば本物のLLMが回答を生成**します（RAG：関連FAQを文脈として渡す）。起動していなければ自動でFAQ検索モードにフォールバックするため、公開デモは誰でも閲覧できます。**APIキー不要・外部送信なし**（ブラウザ↔localhostのOllamaのみ）。
+
+```bash
+# 1) Ollama を導入（https://ollama.com）
+# 2) 軽量モデルを取得（日本語可。お好みのモデルでOK）
+ollama pull qwen2.5:1.5b
+# 3) ブラウザからの接続を許可して起動
+OLLAMA_ORIGINS=* ollama serve
+```
+
+その後、サイトを**ローカル（http://localhost…）で開いて** `faq/` にアクセスすると、チャット右上が「ローカルLLM: <model>」表示になり、LLMが回答をストリーミング生成します。接続先・モデルは `localStorage.nagi_llm_cfg`（`{"endpoint","model"}`）で上書き可能。
+
+> メモ: https の公開URLからは、ブラウザの mixed-content 制限で localhost の Ollama に届かない場合があります。ローカルLLMはローカル配信での利用を推奨します。
+
 ---
 
 © 2026 凪 NAGI（架空）— 受託・就活ポートフォリオ用デモ
