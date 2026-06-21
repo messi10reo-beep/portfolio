@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>予約台帳 | 和食 結 -yui-（予約管理・デモ）</title>
+<meta name="description" content="和食 結 -yui- の予約台帳。予約フォームから届いた予約を日付ごとに管理し、席種・人数・コース・ステータスを把握できる架空飲食店のポートフォリオデモ。" />
+<meta name="robots" content="noindex" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='5' fill='%231c1a17'/%3E%3Ctext x='16' y='22' font-family='serif' font-size='18' fill='%23d8a93a' text-anchor='middle'%3E結%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --sumi: #1c1a17; --sumi-soft: #26231f; --sumi-card: #2c2823; --sumi-line: #36312a;
+    --kinari: #ece4d6; --kinari-dim: #b8af9f; --kin: #b8860b; --kin-bright: #d8a93a; --shu: #b4452f;
+    --line: rgba(184,134,11,.28); --green: #7a9a6a;
+    --mincho: "Shippori Mincho", serif; --gothic: "Zen Kaku Gothic New", sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--gothic); background: var(--sumi); color: var(--kinari); line-height: 1.7; font-size: 15px; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; }
+  .mincho { font-family: var(--mincho); }
+
+  /* gate */
+  #gate { min-height: 100vh; display: grid; place-items: center; padding: 1.5rem; }
+  .gate-card { width: min(400px,100%); background: var(--sumi-card); border: 1px solid var(--line); border-radius: 6px; padding: 2.4rem 2rem; text-align: center; box-shadow: 0 18px 48px rgba(0,0,0,.5); }
+  .gate-card .logo { font-family: var(--mincho); font-size: 2rem; color: var(--kin-bright); }
+  .gate-card .sub { font-size: .68rem; letter-spacing: .34em; color: var(--kinari-dim); margin-bottom: 1.6rem; }
+  .gate-card h1 { font-family: var(--mincho); font-size: 1.3rem; margin-bottom: .4rem; }
+  .gate-card p { font-size: .82rem; color: var(--kinari-dim); margin-bottom: 1.4rem; }
+  .gate-card input { width: 100%; text-align: center; letter-spacing: .5em; font-size: 1.2rem; padding: .7rem; border: 1px solid var(--sumi-line); border-radius: 4px; background: var(--sumi); color: var(--kinari); }
+  .gate-card input:focus { outline: none; border-color: var(--kin); }
+  .gate-err { color: #e08a72; font-size: .8rem; min-height: 1.2em; margin-top: .5rem; }
+  .gate-hint { font-size: .74rem; color: var(--kinari-dim); margin-top: 1rem; }
+  .gate-hint b { color: var(--kin-bright); letter-spacing: .2em; }
+
+  #app { display: none; }
+  .topbar { background: var(--sumi-soft); border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; padding: .9rem clamp(1rem,4vw,2rem); position: sticky; top: 0; z-index: 20; flex-wrap: wrap; gap: .6rem; }
+  .topbar .brand { display: flex; align-items: baseline; gap: .7rem; }
+  .topbar .brand .logo { font-family: var(--mincho); font-size: 1.35rem; color: var(--kin-bright); }
+  .topbar .brand .tag { font-size: .72rem; letter-spacing: .12em; color: var(--kinari-dim); }
+  .topbar nav { display: flex; gap: .4rem; flex-wrap: wrap; }
+  .tbtn { background: transparent; border: 1px solid var(--line); color: var(--kinari); font-size: .75rem; letter-spacing: .04em; padding: .42rem .8rem; border-radius: 4px; transition: .15s; }
+  .tbtn:hover { background: rgba(184,134,11,.12); border-color: var(--kin); }
+
+  main { width: min(1040px,94vw); margin: 0 auto; padding: clamp(1.3rem,4vw,2.2rem) 0 4rem; }
+  .page-head { margin-bottom: 1.3rem; }
+  .page-head h2 { font-family: var(--mincho); font-size: 1.5rem; }
+  .page-head h2 .en { font-family: var(--gothic); font-size: .7rem; letter-spacing: .3em; color: var(--kin); display: block; margin-bottom: .2rem; }
+  .page-head p { font-size: .82rem; color: var(--kinari-dim); }
+
+  .kpis { display: grid; grid-template-columns: repeat(4,1fr); gap: 13px; margin-bottom: 1.5rem; }
+  .kpi { background: var(--sumi-card); border: 1px solid var(--sumi-line); border-radius: 6px; padding: 1rem 1.1rem; }
+  .kpi.accent { border-color: var(--kin); }
+  .kpi .l { font-size: .74rem; color: var(--kinari-dim); }
+  .kpi .n { font-family: var(--mincho); font-size: 1.9rem; line-height: 1.2; margin-top: .15rem; color: var(--kin-bright); }
+  .kpi .n small { font-family: var(--gothic); font-size: .78rem; margin-left: 2px; color: var(--kinari); }
+  .kpi .s { font-size: .71rem; color: var(--kinari-dim); margin-top: .15rem; }
+
+  .filterbar { display: flex; flex-wrap: wrap; gap: 9px; align-items: center; margin-bottom: 1.3rem; }
+  .filterbar input, .filterbar select { font-family: inherit; font-size: .85rem; color: var(--kinari); background: var(--sumi-card); border: 1px solid var(--sumi-line); border-radius: 4px; padding: .52rem .8rem; }
+  .filterbar input::placeholder { color: var(--kinari-dim); }
+  .filterbar input:focus, .filterbar select:focus { outline: none; border-color: var(--kin); }
+  .filterbar .search { flex: 1; min-width: 160px; }
+  .seg { display: inline-flex; background: var(--sumi-card); border: 1px solid var(--sumi-line); border-radius: 999px; padding: 3px; }
+  .seg button { background: transparent; border: none; font-size: .77rem; color: var(--kinari-dim); padding: .35rem .8rem; border-radius: 999px; }
+  .seg button.active { background: var(--kin); color: var(--sumi); }
+
+  /* ledger */
+  .daygroup { margin-bottom: 1.6rem; }
+  .dayhead { display: flex; align-items: baseline; gap: .8rem; padding: .5rem 0 .6rem; border-bottom: 1px solid var(--line); margin-bottom: .8rem; flex-wrap: wrap; }
+  .dayhead .d { font-family: var(--mincho); font-size: 1.15rem; color: var(--kin-bright); }
+  .dayhead .today { font-size: .66rem; background: var(--shu); color: #fff; padding: .12rem .55rem; border-radius: 999px; }
+  .dayhead .sum { font-size: .78rem; color: var(--kinari-dim); margin-left: auto; }
+  .dayhead .sum b { font-family: var(--mincho); color: var(--kinari); }
+
+  .rrow { background: var(--sumi-card); border: 1px solid var(--sumi-line); border-radius: 6px; padding: .85rem 1rem; margin-bottom: 9px; transition: border-color .15s; }
+  .rrow:hover { border-color: var(--line); }
+  .rrow.s-new { border-left: 3px solid var(--kin); }
+  .rrow.s-confirmed { border-left: 3px solid var(--green); }
+  .rrow.s-done { border-left: 3px solid var(--sumi-line); opacity: .82; }
+  .rrow.s-canceled { border-left: 3px solid var(--shu); opacity: .6; }
+  .rmain { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .rtime { font-family: var(--mincho); font-size: 1.15rem; color: var(--kinari); min-width: 52px; }
+  .rname { font-size: 1rem; font-weight: 500; }
+  .badge { font-size: .72rem; padding: .14rem .6rem; border-radius: 999px; border: 1px solid var(--sumi-line); color: var(--kinari-dim); }
+  .badge.seat { border-color: var(--line); color: var(--kin-bright); }
+  .badge.guests { color: var(--kinari); }
+  .rcourse { font-size: .82rem; color: var(--kinari-dim); }
+  .rright { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+  .status-pill { font-size: .72rem; font-weight: 500; padding: .16rem .65rem; border-radius: 999px; }
+  .sp-new { background: rgba(184,134,11,.18); color: var(--kin-bright); }
+  .sp-confirmed { background: rgba(122,154,106,.2); color: #a8c596; }
+  .sp-done { background: var(--sumi-line); color: var(--kinari-dim); }
+  .sp-canceled { background: rgba(180,69,47,.2); color: #e0907a; }
+  .expand { font-size: .76rem; color: var(--kin-bright); background: none; border: none; }
+
+  .rbody { display: none; margin-top: .8rem; padding-top: .8rem; border-top: 1px dashed var(--sumi-line); }
+  .rrow.open .rbody { display: block; }
+  .detail { font-size: .84rem; margin-bottom: .35rem; }
+  .detail .k { color: var(--kinari-dim); }
+  .note { background: var(--sumi); border: 1px solid var(--sumi-line); border-radius: 4px; padding: .6rem .8rem; font-size: .84rem; margin: .5rem 0; }
+  .note.allergy { border-color: rgba(180,69,47,.5); }
+  .ractions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: .8rem; }
+  .abtn { font-size: .78rem; padding: .42rem .9rem; border-radius: 4px; border: 1px solid var(--sumi-line); background: transparent; color: var(--kinari); transition: .15s; }
+  .abtn:hover { border-color: var(--kin); color: var(--kin-bright); }
+  .abtn.go { background: var(--kin); border-color: var(--kin); color: var(--sumi); }
+  .abtn.go:hover { color: var(--sumi); filter: brightness(1.08); }
+  .abtn.danger:hover { border-color: var(--shu); color: #e0907a; }
+
+  .empty { background: var(--sumi-card); border: 1px dashed var(--sumi-line); border-radius: 6px; padding: 3rem 1rem; text-align: center; color: var(--kinari-dim); }
+  .empty .big { font-family: var(--mincho); color: var(--kinari); font-size: 1.05rem; margin-bottom: .3rem; }
+  #toast { position: fixed; left: 50%; bottom: 1.4rem; transform: translateX(-50%) translateY(20px); background: var(--kin); color: var(--sumi); font-size: .82rem; font-weight: 500; padding: .7rem 1.3rem; border-radius: 999px; opacity: 0; pointer-events: none; transition: .3s; z-index: 60; }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  @media (max-width: 760px) { .kpis { grid-template-columns: repeat(2,1fr); } }
+</style>
+</head>
+<body>
+
+<div id="gate">
+  <div class="gate-card">
+    <div class="logo mincho">結</div>
+    <div class="sub">YUI — RESERVATION LEDGER</div>
+    <h1 class="mincho">予約台帳</h1>
+    <p>店舗スタッフ用のデモ管理画面です。パスコードを入力してください。</p>
+    <input id="passInput" type="password" inputmode="numeric" maxlength="4" placeholder="••••" aria-label="パスコード" />
+    <div class="gate-err" id="passErr"></div>
+    <button class="abtn go" id="passBtn" style="width:100%;padding:.7rem;">ログイン</button>
+    <p class="gate-hint">デモ用パスコード： <b>2026</b></p>
+  </div>
+</div>
+
+<div id="app">
+  <div class="topbar">
+    <div class="brand"><span class="logo mincho">結</span><span class="tag">予約台帳 / Ledger</span></div>
+    <nav>
+      <button class="tbtn" id="reloadBtn">最新に更新</button>
+      <button class="tbtn" id="resetBtn">デモを初期化</button>
+      <a class="tbtn" href="../contact.html" target="_blank" rel="noopener">予約フォーム ↗</a>
+      <a class="tbtn" href="../" target="_blank" rel="noopener">サイト ↗</a>
+      <button class="tbtn" id="logoutBtn">ログアウト</button>
+    </nav>
+  </div>
+
+  <main>
+    <div class="page-head">
+      <h2 class="mincho"><span class="en">RESERVATION LEDGER</span>予約台帳</h2>
+      <p>予約フォームから届いたご予約を日付ごとに管理します。席種・人数・コースをひと目で把握できます。</p>
+    </div>
+
+    <div class="kpis" id="kpis"></div>
+
+    <div class="filterbar">
+      <input class="search" id="search" type="search" placeholder="お名前・コース・ご要望で検索" aria-label="検索" />
+      <div class="seg" id="statusSeg">
+        <button data-s="" class="active">すべて</button>
+        <button data-s="new">未確認</button>
+        <button data-s="confirmed">確定</button>
+        <button data-s="done">来店済</button>
+      </div>
+      <select id="seatFilter" aria-label="席種で絞り込み">
+        <option value="">すべての席</option>
+        <option value="カウンター">カウンター</option>
+        <option value="テーブル席">テーブル席</option>
+        <option value="個室">個室</option>
+      </select>
+    </div>
+
+    <div id="ledger"></div>
+  </main>
+</div>
+
+<div id="toast"></div>
+
+<script src="../assets/js/data.js"></script>
+<script src="../assets/js/store.js"></script>
+<script>
+"use strict";
+(function () {
+  var PASSCODE = "2026";
+  var S = window.YuiStore;
+  var STATUS_LABEL = { new: "未確認", confirmed: "確定", done: "来店済", canceled: "取消" };
+  var state = { items: [], status: "", seat: "", search: "" };
+  var $ = function (s) { return document.querySelector(s); };
+  function el(t, c, x) { var e = document.createElement(t); if (c) e.className = c; if (x !== undefined) e.textContent = x; return e; }
+  function toast(m) { var t = $("#toast"); t.textContent = m; t.classList.add("show"); clearTimeout(toast._t); toast._t = setTimeout(function () { t.classList.remove("show"); }, 2000); }
+  function todayKey() { var d = new Date(); return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
+
+  function load() { state.items = S.getReservations(); render(); }
+  function passFilter(b) {
+    if (state.status && b.status !== state.status) return false;
+    if (state.seat && b.seat !== state.seat) return false;
+    if (state.search) { var q = state.search.toLowerCase(); if ([b.name, b.course, b.message, b.seat].join(" ").toLowerCase().indexOf(q) === -1) return false; }
+    return true;
+  }
+  function render() { renderKpis(); renderLedger(); }
+
+  function renderKpis() {
+    var tk = todayKey();
+    var today = state.items.filter(function (b) { return S.dateKey(b.datetime) === tk && b.status !== "canceled"; });
+    var todayGuests = today.reduce(function (s, b) { return s + S.partySize(b.guests); }, 0);
+    var nNew = state.items.filter(function (b) { return b.status === "new"; }).length;
+    var nConf = state.items.filter(function (b) { return b.status === "confirmed"; }).length;
+    var k = $("#kpis"); k.replaceChildren();
+    k.append(
+      kpi("本日の組数", String(today.length), "組", "本日のご予約", true),
+      kpi("本日の総人数", String(todayGuests), "名", "席の準備に", false),
+      kpi("未確認", String(nNew), "件", "確認が必要", false),
+      kpi("確定済", String(nConf), "件", "受け入れ準備", false)
+    );
+  }
+  function kpi(label, n, unit, sub, accent) {
+    var c = el("div", "kpi" + (accent ? " accent" : "")); c.appendChild(el("div", "l", label));
+    var nn = el("div", "n"); nn.appendChild(document.createTextNode(n)); if (unit) nn.appendChild(el("small", null, unit));
+    c.appendChild(nn); c.appendChild(el("div", "s", sub)); return c;
+  }
+
+  function renderLedger() {
+    var box = $("#ledger"); box.replaceChildren();
+    var visible = state.items.filter(passFilter);
+    if (visible.length === 0) {
+      var e = el("div", "empty"); e.appendChild(el("div", "big", "該当する予約がありません"));
+      e.appendChild(document.createTextNode("検索・絞り込みを変更してください。")); box.appendChild(e); return;
+    }
+    var tk = todayKey();
+    var groups = [];
+    var map = {};
+    visible.forEach(function (b) { var key = S.dateKey(b.datetime); if (!map[key]) { map[key] = []; groups.push(key); } map[key].push(b); });
+    groups.forEach(function (key) {
+      var items = map[key];
+      var guests = items.filter(function (b) { return b.status !== "canceled"; }).reduce(function (s, b) { return s + S.partySize(b.guests); }, 0);
+      var g = el("div", "daygroup");
+      var head = el("div", "dayhead");
+      head.appendChild(el("span", "d", S.dateLabel(items[0].datetime)));
+      if (key === tk) head.appendChild(el("span", "today", "本日"));
+      var sum = el("div", "sum");
+      var b1 = el("b", null, String(items.length)); sum.appendChild(b1); sum.appendChild(document.createTextNode("組 / 計 "));
+      var b2 = el("b", null, String(guests)); sum.appendChild(b2); sum.appendChild(document.createTextNode("名"));
+      head.appendChild(sum); g.appendChild(head);
+      items.forEach(function (b) { g.appendChild(row(b)); });
+      box.appendChild(g);
+    });
+  }
+
+  function row(b) {
+    var r = el("div", "rrow s-" + b.status);
+    var main = el("div", "rmain");
+    main.appendChild(el("span", "rtime mincho", S.timeLabel(b.datetime)));
+    main.appendChild(el("span", "rname", b.name + " 様"));
+    main.appendChild(el("span", "badge guests", S.guestsLabel(b.guests)));
+    main.appendChild(el("span", "badge seat", b.seat));
+    main.appendChild(el("span", "rcourse", b.course));
+    var right = el("div", "rright");
+    right.appendChild(el("span", "status-pill sp-" + b.status, STATUS_LABEL[b.status]));
+    var exp = el("button", "expand", "詳細 ▾"); right.appendChild(exp);
+    main.appendChild(right); r.appendChild(main);
+
+    var body = el("div", "rbody");
+    var d1 = el("div", "detail"); d1.appendChild(el("span", "k", "連絡先：")); d1.appendChild(document.createTextNode(b.tel + " / " + b.email)); body.appendChild(d1);
+    var d2 = el("div", "detail"); d2.appendChild(el("span", "k", "申込：")); d2.appendChild(document.createTextNode(new Date(b.createdAt).toLocaleString("ja-JP", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" }))); body.appendChild(d2);
+    if (b.message) {
+      var allergy = /アレルギ|甲殻|そば|卵|乳|苦手/.test(b.message);
+      var n = el("div", "note" + (allergy ? " allergy" : "")); n.textContent = (allergy ? "⚠ " : "") + "ご要望：" + b.message; body.appendChild(n);
+    }
+    body.appendChild(actions(b)); r.appendChild(body);
+    exp.onclick = function () { var open = r.classList.toggle("open"); exp.textContent = open ? "閉じる ▴" : "詳細 ▾"; };
+    return r;
+  }
+
+  function actions(b) {
+    var w = el("div", "ractions");
+    if (b.status === "new") w.appendChild(actBtn("確定にする", "go", b, "confirmed"));
+    if (b.status === "confirmed") w.appendChild(actBtn("来店済にする", "go", b, "done"));
+    if (b.status === "done") w.appendChild(actBtn("未確認に戻す", "", b, "new"));
+    if (b.status !== "canceled" && b.status !== "done") w.appendChild(actBtn("取消", "danger", b, "canceled"));
+    if (b.status === "canceled") w.appendChild(actBtn("未確認に戻す", "", b, "new"));
+    return w;
+  }
+  function actBtn(label, cls, b, next) {
+    var btn = el("button", "abtn " + cls, label);
+    btn.onclick = function () { S.setStatus(b.id, next); load(); toast("「" + b.name + " 様」を" + STATUS_LABEL[next] + "にしました"); };
+    return btn;
+  }
+
+  function start() { $("#gate").style.display = "none"; $("#app").style.display = "block"; load(); }
+  function tryLogin() {
+    if ($("#passInput").value === PASSCODE) { sessionStorage.setItem("yui_admin", "1"); start(); }
+    else { $("#passErr").textContent = "パスコードが違います"; $("#passInput").value = ""; }
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    $("#passBtn").onclick = tryLogin;
+    $("#passInput").addEventListener("keydown", function (e) { if (e.key === "Enter") tryLogin(); });
+    $("#reloadBtn").onclick = function () { load(); toast("最新の状態に更新しました"); };
+    $("#resetBtn").onclick = function () { if (!confirm("デモデータを初期状態に戻しますか？\nフォームから追加した予約は削除されます。")) return; S.resetDemo(); load(); toast("デモデータを初期化しました"); };
+    $("#logoutBtn").onclick = function () { sessionStorage.removeItem("yui_admin"); location.reload(); };
+    $("#search").addEventListener("input", function (e) { state.search = e.target.value.trim(); renderLedger(); });
+    $("#seatFilter").addEventListener("change", function (e) { state.seat = e.target.value; renderLedger(); });
+    document.querySelectorAll("#statusSeg button").forEach(function (btn) {
+      btn.onclick = function () { document.querySelectorAll("#statusSeg button").forEach(function (x) { x.classList.toggle("active", x === btn); }); state.status = btn.dataset.s; renderLedger(); };
+    });
+    if (sessionStorage.getItem("yui_admin") === "1") start(); else $("#passInput").focus();
+  });
+})();
+</script>
+</body>
+</html>
