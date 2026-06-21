@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>凪 NAGI｜東京・中目黒の整体・もみほぐし・オイルトリートメント</title>
+    <meta name="description" content="東京・中目黒のリラクゼーションサロン 凪（NAGI）。もみほぐし・オイルトリートメント・ヘッドスパ。完全予約制・個室・マンツーマンで、都市の喧騒のなかに静けさを。" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231b1814'/%3E%3Ctext x='16' y='23' font-size='19' font-family='Georgia,serif' fill='%23f2eee6' text-anchor='middle'%3E凪%3C/text%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Shippori+Mincho:wght@400;500;600;700;800&family=Zen+Kaku+Gothic+New:wght@300;400;500;700&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --paper: #f2eee5;
+        --paper-2: #eae4d8;
+        --washi: #f6f3ec;
+        --sumi: #1c1813;
+        --sumi-soft: #4a4339;
+        --muted: #8c8474;
+        --line: #ddd6c7;
+        --line-dark: rgba(242,238,229,.16);
+        --dark: #211c16;
+        --dark-2: #181410;
+        --shu: #b0452e;       /* 朱 vermilion accent */
+        --shu-soft: #c56a4f;
+        --gold: #93764e;
+        --mincho: "Shippori Mincho", serif;
+        --latin: "Cormorant Garamond", serif;
+        --body: "Zen Kaku Gothic New", system-ui, sans-serif;
+      }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html { scroll-behavior: smooth; }
+      body {
+        font-family: var(--body); font-weight: 400; background: var(--paper); color: var(--sumi);
+        line-height: 1.95; -webkit-font-smoothing: antialiased; overflow-x: hidden;
+        font-feature-settings: "palt"; letter-spacing: .02em;
+      }
+      img { display: block; max-width: 100%; }
+      a { color: inherit; text-decoration: none; }
+      ::selection { background: var(--sumi); color: var(--paper); }
+      .wrap { width: min(1200px, 88vw); margin: 0 auto; }
+      .mincho { font-family: var(--mincho); }
+
+      /* labels */
+      .label { font-size: 11px; letter-spacing: .34em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+
+      /* ---------- nav ---------- */
+      nav {
+        position: fixed; inset: 0 0 auto 0; z-index: 100;
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 24px clamp(20px, 5vw, 54px); transition: all .45s ease;
+        color: var(--paper);
+      }
+      nav .brand { display: flex; align-items: baseline; gap: 11px; }
+      nav .brand .k { font-family: var(--mincho); font-weight: 700; font-size: 26px; line-height: 1; }
+      nav .brand .en { font-family: var(--latin); font-size: 16px; letter-spacing: .22em; }
+      nav .links { display: flex; gap: 32px; align-items: center; }
+      nav .links a { font-size: 12.5px; letter-spacing: .14em; position: relative; opacity: .92; }
+      nav .links a:not(.pill)::after { content: ""; position: absolute; left: 0; bottom: -5px; width: 0; height: 1px; background: currentColor; transition: width .3s ease; }
+      nav .links a:not(.pill):hover::after { width: 100%; }
+      nav .links .pill { border: 1px solid currentColor; border-radius: 2px; padding: 9px 20px; letter-spacing: .18em; transition: background .25s, color .25s; }
+      nav.scrolled {
+        background: rgba(242,238,229,.9); backdrop-filter: blur(16px) saturate(140%);
+        color: var(--sumi); padding-top: 15px; padding-bottom: 15px; border-bottom: 1px solid var(--line);
+      }
+      nav.scrolled .links .pill:hover { background: var(--sumi); color: var(--paper); }
+      nav:not(.scrolled) .links .pill:hover { background: var(--paper); color: var(--sumi); }
+      @media (max-width: 860px) { nav .links a:not(.pill) { display: none; } }
+      @media (max-width: 600px) { .scroll-cue { display: none; } .hero .vtitle { font-size: 13px; top: 92px; } }
+
+      /* ---------- hero ---------- */
+      .hero { position: relative; min-height: 100svh; display: flex; align-items: flex-end; overflow: hidden; }
+      .hero .bg { position: absolute; inset: 0; }
+      .hero .bg img { width: 100%; height: 100%; object-fit: cover; object-position: center; transform: scale(1.08); animation: kb 16s ease-out forwards; }
+      @keyframes kb { to { transform: scale(1); } }
+      .hero .bg::after {
+        content: ""; position: absolute; inset: 0;
+        background: linear-gradient(180deg, rgba(20,16,12,.45) 0%, rgba(20,16,12,.1) 32%, rgba(20,16,12,.5) 78%, rgba(20,16,12,.82) 100%);
+      }
+      .hero .inner { position: relative; z-index: 2; color: var(--paper); width: 100%; padding: 0 clamp(20px, 5vw, 54px) clamp(46px, 8vh, 86px); }
+      .hero .vline { position: absolute; top: 0; right: clamp(26px, 6vw, 84px); width: 1px; height: 38vh; background: linear-gradient(rgba(242,238,229,.55), transparent); }
+      .hero .vtitle {
+        position: absolute; top: clamp(110px, 17vh, 190px); right: clamp(20px, 5vw, 54px); z-index: 2;
+        writing-mode: vertical-rl; font-family: var(--mincho); color: var(--paper);
+        font-size: clamp(15px, 1.7vw, 19px); font-weight: 500; letter-spacing: .42em; line-height: 2.2;
+        text-shadow: 0 2px 20px rgba(0,0,0,.4);
+      }
+      .hero .kanji {
+        font-family: var(--mincho); font-weight: 800; font-size: clamp(120px, 22vw, 300px); line-height: .8;
+        letter-spacing: 0; text-shadow: 0 6px 50px rgba(0,0,0,.45); margin-bottom: 6px;
+      }
+      .hero .en-name { font-family: var(--latin); font-size: clamp(20px, 2.4vw, 30px); letter-spacing: .42em; margin-bottom: clamp(20px, 3vh, 34px); opacity: .94; }
+      .hero .role {
+        display: block; max-width: 44ch;
+        font-family: var(--mincho); font-size: clamp(17px, 2vw, 23px); font-weight: 500; line-height: 1.6;
+        border-top: 1px solid rgba(242,238,229,.32); padding-top: 22px;
+      }
+      .hero .role .dot { color: var(--shu-soft); padding: 0 4px; }
+      .hero .sub { display: block; font-family: var(--body); font-weight: 400; font-size: 13px; letter-spacing: .08em; line-height: 1.9; opacity: .85; margin-top: 12px; }
+      .scroll-cue { position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 3; color: var(--paper); font-family: var(--latin); font-size: 12px; letter-spacing: .3em; opacity: .8; display: flex; flex-direction: column; align-items: center; gap: 9px; }
+      .scroll-cue .bar { width: 1px; height: 40px; background: rgba(242,238,229,.7); animation: cue 2.4s ease-in-out infinite; transform-origin: top; }
+      @keyframes cue { 0%,100% { transform: scaleY(.35); opacity: .35; } 50% { transform: scaleY(1); opacity: 1; } }
+      .hero .kanji, .hero .en-name, .hero .role, .hero .vtitle { opacity: 0; transform: translateY(24px); animation: rise 1.2s cubic-bezier(.2,.7,.2,1) forwards; }
+      .hero .en-name { animation-delay: .15s; } .hero .role { animation-delay: .3s; } .hero .vtitle { animation: rise 1.2s cubic-bezier(.2,.7,.2,1) .5s forwards; }
+      @keyframes rise { to { opacity: 1; transform: none; } }
+
+      /* ---------- intro band (clear what we are) ---------- */
+      .intro { background: var(--washi); border-bottom: 1px solid var(--line); padding: clamp(46px, 7vh, 78px) clamp(20px, 5vw, 54px); }
+      .intro .in { display: flex; gap: clamp(20px, 5vw, 64px); align-items: center; justify-content: space-between; flex-wrap: wrap; }
+      .intro .lead { font-family: var(--mincho); font-size: clamp(19px, 2.5vw, 30px); font-weight: 500; line-height: 1.9; }
+      .intro .lead em { font-style: normal; color: var(--shu); }
+      .intro .services { display: flex; gap: 26px; flex-wrap: wrap; }
+      .intro .svc { text-align: center; }
+      .intro .svc .jp { font-family: var(--mincho); font-size: 17px; font-weight: 600; }
+      .intro .svc .en { font-family: var(--latin); font-size: 13px; letter-spacing: .14em; color: var(--muted); font-style: italic; }
+
+      /* ---------- section base ---------- */
+      section { padding: clamp(74px, 12vh, 150px) clamp(20px, 5vw, 54px); }
+      .sec-head { display: flex; align-items: baseline; gap: 18px; margin-bottom: clamp(40px, 6vh, 64px); }
+      .sec-head .no { font-family: var(--latin); font-style: italic; font-size: 22px; color: var(--shu); }
+      .sec-head .jp { font-family: var(--mincho); font-weight: 700; font-size: clamp(24px, 3.4vw, 40px); letter-spacing: .04em; }
+      .sec-head .en { font-family: var(--latin); font-size: 14px; letter-spacing: .24em; color: var(--muted); text-transform: uppercase; }
+      .sec-head .rule { flex: 1; height: 1px; background: var(--line); align-self: center; }
+
+      .reveal { opacity: 0; transform: translateY(36px); transition: opacity 1.1s cubic-bezier(.2,.7,.2,1), transform 1.1s cubic-bezier(.2,.7,.2,1); }
+      .reveal.in { opacity: 1; transform: none; }
+      .img-mask img { transition: transform 1.4s cubic-bezier(.2,.7,.2,1); }
+      .img-mask.in img { }
+
+      /* ---------- concept ---------- */
+      .concept { display: grid; grid-template-columns: 1.05fr .95fr; gap: clamp(30px, 6vw, 84px); align-items: center; }
+      .concept .ph { position: relative; }
+      .concept .ph img { width: 100%; aspect-ratio: 4/5; object-fit: cover; border-radius: 2px; }
+      .concept .ph .cap { position: absolute; left: -1px; bottom: 22px; background: var(--paper); padding: 9px 16px; font-family: var(--mincho); font-size: 13px; letter-spacing: .1em; border-left: 2px solid var(--shu); }
+      .concept .tx .big { font-family: var(--mincho); font-weight: 600; font-size: clamp(24px, 3.4vw, 44px); line-height: 1.75; margin-bottom: 28px; }
+      .concept .tx .big em { font-style: normal; color: var(--shu); }
+      .concept .tx p { color: var(--sumi-soft); font-size: 15px; margin-bottom: 1.4em; }
+      .concept .tx .sig { font-family: var(--latin); font-style: italic; font-size: 19px; color: var(--sumi); }
+      @media (max-width: 820px) { .concept { grid-template-columns: 1fr; gap: 34px; } .concept .ph img { aspect-ratio: 3/2; } }
+
+      /* ---------- 空間 gallery ---------- */
+      #space { background: var(--dark); color: var(--paper); }
+      #space .sec-head .jp { color: var(--paper); } #space .sec-head .en { color: rgba(242,238,229,.55); } #space .sec-head .rule { background: var(--line-dark); } #space .sec-head .no { color: var(--shu-soft); }
+      .gal { display: grid; grid-template-columns: repeat(12, 1fr); gap: clamp(12px, 1.6vw, 20px); }
+      .gal figure { position: relative; overflow: hidden; border-radius: 2px; }
+      .gal figure img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.6s cubic-bezier(.2,.7,.2,1); }
+      .gal figure:hover img { transform: scale(1.05); }
+      .gal figure figcaption { position: absolute; left: 16px; bottom: 14px; font-family: var(--mincho); font-size: 14px; letter-spacing: .08em; text-shadow: 0 2px 14px rgba(0,0,0,.6); }
+      .gal figure figcaption small { display: block; font-family: var(--latin); font-style: italic; font-size: 12px; letter-spacing: .12em; opacity: .8; }
+      .gal .g-a { grid-column: span 7; aspect-ratio: 7/5; }
+      .gal .g-b { grid-column: span 5; aspect-ratio: 5/5; }
+      .gal .g-c { grid-column: span 5; aspect-ratio: 5/5; }
+      .gal .g-d { grid-column: span 7; aspect-ratio: 7/5; }
+      .space-note { margin-top: 34px; font-family: var(--mincho); font-size: 15px; color: rgba(242,238,229,.7); max-width: 46ch; line-height: 1.95; }
+      @media (max-width: 720px) {
+        .gal { grid-template-columns: 1fr 1fr; }
+        .gal .g-a, .gal .g-b, .gal .g-c, .gal .g-d { grid-column: span 1; aspect-ratio: 1; }
+      }
+
+      /* ---------- menu ---------- */
+      #menu { background: var(--washi); }
+      .menu-top { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 16px; margin-bottom: 46px; }
+      .menu-top .lead { font-family: var(--mincho); font-weight: 600; font-size: clamp(26px, 4vw, 50px); line-height: 1.3; }
+      .menu-top .note { font-size: 13px; color: var(--muted); max-width: 30ch; line-height: 1.9; }
+      .menu-cat { margin-bottom: 46px; }
+      .menu-cat .ch { display: flex; align-items: baseline; gap: 13px; padding-bottom: 13px; border-bottom: 1px solid var(--sumi); margin-bottom: 4px; }
+      .menu-cat .ch .jp { font-family: var(--mincho); font-weight: 700; font-size: 19px; letter-spacing: .06em; }
+      .menu-cat .ch .en { font-family: var(--latin); font-style: italic; font-size: 14px; letter-spacing: .1em; color: var(--shu); }
+      .m-item { display: grid; grid-template-columns: 1fr auto; gap: 4px 26px; align-items: baseline; padding: 22px 2px; border-bottom: 1px solid var(--line); transition: padding-left .35s ease; }
+      .m-item:hover { padding-left: 14px; }
+      .m-item .nm { font-family: var(--mincho); font-weight: 500; font-size: clamp(18px, 2.1vw, 24px); }
+      .m-item .dur { font-family: var(--latin); font-style: italic; font-size: 14px; color: var(--gold); margin-left: 12px; }
+      .m-item .desc { grid-column: 1; font-size: 13.5px; color: var(--sumi-soft); max-width: 58ch; margin-top: 2px; }
+      .m-item .price { grid-row: 1 / 3; grid-column: 2; align-self: center; font-family: var(--mincho); font-weight: 600; font-size: clamp(20px, 2.6vw, 30px); white-space: nowrap; }
+      .m-item .price small { font-family: var(--body); font-weight: 400; font-size: 11px; color: var(--muted); margin-left: 3px; }
+      #menuLoading { padding: 26px 0; color: var(--muted); font-family: var(--latin); font-style: italic; font-size: 16px; }
+      .menu-foot { margin-top: 30px; font-size: 12px; color: var(--muted); }
+      @media (max-width: 560px) { .m-item { grid-template-columns: 1fr; } .m-item .price { grid-row: auto; grid-column: 1; align-self: start; margin-top: 6px; } }
+
+      /* ---------- flow ---------- */
+      .flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(22px, 3vw, 44px); }
+      .flow .st .n { font-family: var(--latin); font-style: italic; font-size: 40px; color: var(--shu); }
+      .flow .st .bar { width: 28px; height: 1px; background: var(--sumi); margin: 14px 0 16px; }
+      .flow .st h3 { font-family: var(--mincho); font-weight: 700; font-size: 18px; margin-bottom: 8px; }
+      .flow .st p { font-size: 13px; color: var(--sumi-soft); }
+      @media (max-width: 820px) { .flow { grid-template-columns: 1fr 1fr; gap: 34px 26px; } }
+      @media (max-width: 460px) { .flow { grid-template-columns: 1fr; } }
+
+      /* ---------- access ---------- */
+      #access { background: var(--paper-2); }
+      .acc { display: grid; grid-template-columns: 1.1fr 1fr; gap: clamp(34px, 6vw, 78px); align-items: start; }
+      .acc .map { aspect-ratio: 4/3; border-radius: 2px; position: relative; overflow: hidden; border: 1px solid var(--line); background: radial-gradient(circle at 32% 34%, rgba(176,69,46,.12), transparent 56%), linear-gradient(135deg, #d8d0bf, #c2b9a6); }
+      .acc .map .pin { position: absolute; inset: 0; display: grid; place-items: center; }
+      .acc .map .pin .k { font-family: var(--mincho); font-weight: 700; font-size: 30px; }
+      .acc .map .pin small { display: block; text-align: center; font-family: var(--latin); font-style: italic; letter-spacing: .14em; color: var(--sumi-soft); margin-top: 4px; }
+      .info dt { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
+      .info dd { font-size: 15px; padding: 6px 0 18px; border-bottom: 1px solid var(--line); margin-bottom: 16px; }
+      .info dd .s { font-size: 12.5px; color: var(--muted); }
+      @media (max-width: 820px) { .acc { grid-template-columns: 1fr; } }
+
+      /* ---------- footer ---------- */
+      footer { background: var(--dark-2); color: var(--paper); padding: clamp(56px, 8vh, 96px) clamp(20px, 5vw, 54px) 36px; }
+      footer .top { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 30px; align-items: flex-end; border-bottom: 1px solid var(--line-dark); padding-bottom: 34px; }
+      footer .top .k { font-family: var(--mincho); font-weight: 800; font-size: clamp(56px, 12vw, 130px); line-height: .85; }
+      footer .top .k .en { display: block; font-family: var(--latin); font-style: italic; font-size: 18px; letter-spacing: .3em; font-weight: 400; margin-top: 8px; opacity: .8; }
+      footer .cols { display: flex; gap: 38px; flex-wrap: wrap; }
+      footer .cols .c h4 { font-family: var(--latin); font-style: italic; font-size: 15px; color: var(--shu-soft); margin-bottom: 10px; }
+      footer .cols .c a, footer .cols .c p { display: block; font-size: 13px; color: rgba(242,238,229,.74); line-height: 2; }
+      footer .cols .c a:hover { color: var(--paper); }
+      footer .legal { margin-top: 40px; font-size: 11.5px; color: rgba(242,238,229,.42); line-height: 1.9; }
+      footer .legal a { text-decoration: underline; text-underline-offset: 3px; }
+      .credit { margin-top: 8px; font-size: 10.5px; color: rgba(242,238,229,.3); }
+    </style>
+  </head>
+  <body>
+    <nav id="nav">
+      <a href="#top" class="brand"><span class="k">凪</span><span class="en">NAGI</span></a>
+      <div class="links">
+        <a href="#worries">お悩み</a>
+        <a href="#menu">MENU</a>
+        <a href="faq/">AI FAQ</a>
+        <a href="case-study/">業務改善デモ</a>
+        <a href="booking/" class="pill">ご予約</a>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <header class="hero" id="top">
+      <div class="bg"><img src="assets/img/hero.jpg" alt="薄明かりの個室で行うマッサージ施術の様子" /></div>
+      <div class="vline" aria-hidden="true"></div>
+      <div class="vtitle">都市の喧騒のなかに、凪のような静けさを。</div>
+      <div class="inner">
+        <div class="kanji">凪</div>
+        <div class="en-name">NAGI</div>
+        <div class="role">
+          東京・中目黒のリラクゼーションサロン<span class="sub">もみほぐし<span class="dot"> ・ </span>オイルトリートメント<span class="dot"> ・ </span>ヘッドスパ ／ 完全予約制・個室</span>
+        </div>
+      </div>
+      <div class="scroll-cue"><span>SCROLL</span><span class="bar"></span></div>
+    </header>
+
+    <!-- INTRO : 一目で業態が伝わる -->
+    <div class="intro">
+      <div class="in">
+        <div style="flex-basis:100%; margin-bottom:6px;">
+          <span style="display:inline-flex; align-items:center; gap:8px; border:1px solid #cfe0d8; background:#eef3f0; color:#3f6457; border-radius:999px; padding:7px 15px; font-size:12px; letter-spacing:.06em; font-family:var(--body); line-height:1.5;">
+            <span style="width:7px; height:7px; border-radius:50%; background:#5f8a7d;"></span>AI予約サポート導入デモ（架空案件・ポートフォリオ）
+          </span>
+        </div>
+        <p class="lead">指先で、こわばりをほどく。<br /><em>もみほぐし・整体・オイル</em>の、大人のための隠れ家。</p>
+        <div class="services">
+          <div class="svc"><div class="jp">もみほぐし</div><div class="en">Bodywork</div></div>
+          <div class="svc"><div class="jp">オイル</div><div class="en">Aroma Oil</div></div>
+          <div class="svc"><div class="jp">ヘッドスパ</div><div class="en">Head Spa</div></div>
+          <div class="svc"><div class="jp">リフレ</div><div class="en">Reflexology</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 課題提示 / AI業務改善デモ 追加スタイル -->
+    <style>
+      :root { --seiji: #5f8a7d; --seiji-bg: #eef3f0; --seiji-line: #cfe0d8; }
+      #worries { background: var(--washi); }
+      .worry-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+      .worry { background: var(--paper); border: 1px solid var(--line); border-radius: 3px; padding: 26px 22px; transition: transform .3s ease, box-shadow .3s ease; }
+      .worry:hover { transform: translateY(-3px); box-shadow: 0 18px 40px -24px rgba(28,24,19,.4); }
+      .worry .q { font-family: var(--latin); font-style: italic; font-size: 30px; color: var(--shu); line-height: 1; }
+      .worry h3 { font-family: var(--mincho); font-size: 16px; font-weight: 700; margin: 14px 0 8px; }
+      .worry p { font-size: 13px; color: var(--sumi-soft); line-height: 1.85; }
+      .worry-foot { margin-top: 30px; }
+      .worry-foot .x { font-family: var(--mincho); font-size: clamp(18px, 2.4vw, 24px); line-height: 1.7; }
+      .worry-foot .x em { font-style: normal; color: var(--shu); }
+      @media (max-width: 820px) { .worry-grid { grid-template-columns: 1fr 1fr; gap: 14px; } }
+      @media (max-width: 460px) { .worry-grid { grid-template-columns: 1fr; } }
+      /* AI band */
+      .ai-band { background: var(--dark); color: var(--paper); }
+      .ai-band .ai-in { display: grid; grid-template-columns: 1.15fr .85fr; gap: clamp(28px, 5vw, 56px); align-items: center; }
+      .ai-band .label { color: rgba(242,238,229,.5); }
+      .ai-band h2 { font-family: var(--mincho); font-weight: 700; font-size: clamp(24px, 3.6vw, 38px); line-height: 1.5; margin: 14px 0 0; }
+      .ai-band .ai-in > div > p { color: rgba(242,238,229,.7); font-size: 14px; margin: 18px 0 26px; max-width: 44ch; }
+      .ai-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+      .ai-cta { display: inline-flex; align-items: center; gap: 10px; border: 1px solid rgba(242,238,229,.4); border-radius: 3px; padding: 13px 24px; font-size: 13.5px; letter-spacing: .08em; transition: all .25s; }
+      .ai-cta.solid { background: var(--paper); color: var(--sumi); border-color: var(--paper); }
+      .ai-cta:hover { background: var(--shu); color: #fff; border-color: var(--shu); }
+      .chat-prev { background: rgba(242,238,229,.05); border: 1px solid rgba(242,238,229,.16); border-radius: 12px; padding: 20px; }
+      .chat-prev .cp-top { display: flex; align-items: center; gap: 10px; padding-bottom: 14px; border-bottom: 1px solid rgba(242,238,229,.12); margin-bottom: 14px; }
+      .chat-prev .cp-av { width: 32px; height: 32px; border-radius: 8px; background: var(--seiji); display: grid; place-items: center; font-family: var(--mincho); font-size: 15px; color: #fff; }
+      .chat-prev .cp-top-t b { font-family: var(--mincho); font-size: 14px; }
+      .chat-prev .cp-top-t small { display: block; font-size: 11px; opacity: .6; }
+      .cp-msg { font-size: 13px; line-height: 1.8; border-radius: 10px; padding: 11px 14px; margin-bottom: 10px; max-width: 88%; }
+      .cp-msg.u { background: var(--paper); color: var(--sumi); margin-left: auto; border-bottom-right-radius: 3px; }
+      .cp-msg.b { background: rgba(242,238,229,.1); border-bottom-left-radius: 3px; }
+      .cp-msg.b .src { margin-top: 8px; font-size: 11px; opacity: .7; border-top: 1px dashed rgba(242,238,229,.2); padding-top: 7px; }
+      @media (max-width: 820px) { .ai-band .ai-in { grid-template-columns: 1fr; gap: 28px; } }
+      /* demo strip */
+      .demo-strip { background: var(--washi); border-top: 1px solid var(--line); }
+      .ds-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+      .ds-card { display: block; background: var(--paper); border: 1px solid var(--line); border-radius: 4px; padding: 24px 22px; transition: all .3s; }
+      .ds-card:hover { border-color: var(--shu); transform: translateY(-3px); box-shadow: 0 18px 40px -24px rgba(28,24,19,.4); }
+      .ds-card .n { font-family: var(--latin); font-style: italic; color: var(--shu); font-size: 18px; }
+      .ds-card h3 { font-family: var(--mincho); font-size: 18px; font-weight: 700; margin: 8px 0; }
+      .ds-card p { font-size: 13px; color: var(--sumi-soft); line-height: 1.8; }
+      .ds-card .go { margin-top: 14px; font-size: 12.5px; color: var(--shu); letter-spacing: .06em; }
+      @media (max-width: 760px) { .ds-grid { grid-template-columns: 1fr; } }
+    </style>
+    <section id="worries">
+      <div class="wrap">
+        <div class="sec-head reveal"><span class="no">·</span><span class="jp">予約前の、こんな不安。</span><span class="en">Before booking</span><span class="rule"></span></div>
+        <div class="worry-grid">
+          <div class="worry reveal"><div class="q">?</div><h3>料金が分かりにくい</h3><p>初回の総額が見えないと、予約に踏み切れない。</p></div>
+          <div class="worry reveal"><div class="q">?</div><h3>施術内容が分からない</h3><p>何をされるのか、自分の症状に合うのか不安。</p></div>
+          <div class="worry reveal"><div class="q">?</div><h3>予約方法が分散</h3><p>電話・DM・フォーム、どこから予約すればいいか迷う。</p></div>
+          <div class="worry reveal"><div class="q">?</div><h3>返信待ちが不安</h3><p>質問しても返事に時間がかかり、そのまま離脱。</p></div>
+        </div>
+        <div class="worry-foot reveal"><p class="x">その不安を、<em>サイト・予約フォーム・AI FAQ</em>で先回りして解消します。</p></div>
+      </div>
+    </section>
+
+    <!-- CONCEPT -->
+    <section id="concept">
+      <div class="wrap">
+        <div class="sec-head reveal"><span class="no">01</span><span class="jp">概念</span><span class="en">Concept</span><span class="rule"></span></div>
+        <div class="concept">
+          <div class="ph reveal img-mask"><img src="assets/img/concept.jpg" alt="アロマオイルを手にとる施術者の手元" /><span class="cap">凪 オリジナルブレンド</span></div>
+          <div class="tx">
+            <p class="big reveal">ただ、ほぐすだけではない。<br /><em>呼吸が深くなる</em>、その瞬間まで。</p>
+            <p class="reveal">NAGI は、東京・中目黒の路地裏にひっそりと佇む、完全予約制のリラクゼーションサロンです。デスクワークで固まった肩・腰・首を、植物の香りと熟練の手技でゆっくりと解いていきます。</p>
+            <p class="reveal">施術はすべて個室・マンツーマン。お身体の状態とその日の気分にあわせて、圧も時間も丁寧に調整します。あわただしい時間の流れから、ほんの少し降りるための場所。</p>
+            <p class="sig reveal">— that's the quiet you deserve.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 空間 GALLERY -->
+    <section id="space">
+      <div class="wrap">
+        <div class="sec-head reveal"><span class="no">02</span><span class="jp">空間と施術</span><span class="en">Atmosphere</span><span class="rule"></span></div>
+        <div class="gal">
+          <figure class="g-a reveal img-mask"><img src="assets/img/g1.jpg" alt="オイルトリートメントで背中をほぐす施術" /><figcaption>オイルトリートメント<small>Aroma Oil</small></figcaption></figure>
+          <figure class="g-b reveal img-mask"><img src="assets/img/g2.jpg" alt="首と肩を丁寧にほぐすもみほぐし" /><figcaption>首・肩のもみほぐし<small>Neck &amp; Shoulder</small></figcaption></figure>
+          <figure class="g-c reveal img-mask"><img src="assets/img/g3.jpg" alt="キャンドルの灯りの中で行うヘッドスパ" /><figcaption>ヘッドスパ<small>Head Spa</small></figcaption></figure>
+          <figure class="g-d reveal img-mask"><img src="assets/img/g4.jpg" alt="自然光の差し込む個室での施術" /><figcaption>静かな個室<small>Private Room</small></figcaption></figure>
+        </div>
+        <p class="space-note reveal">照明を落とした個室、ほのかに香るアロマ、静かな音楽。施術が始まる前から、すでに少しずつ、肩の力が抜けていきます。</p>
+      </div>
+    </section>
+
+    <!-- MENU -->
+    <section id="menu">
+      <div class="wrap">
+        <div class="sec-head reveal"><span class="no">03</span><span class="jp">お品書き</span><span class="en">Menu &amp; Price</span><span class="rule"></span></div>
+        <div class="menu-top reveal">
+          <p class="lead">すべて税込・完全予約制。<br />お身体にあわせて調整します。</p>
+          <p class="note">ご予約時にコースをお選びいただけます。延長・オプションも承ります。</p>
+        </div>
+        <div id="menuLoading">お品書きを読み込んでいます…</div>
+        <div id="menuList"></div>
+        <p class="menu-foot reveal">※ 表示価格はすべて税込です。メニューは予告なく変更となる場合があります。</p>
+      </div>
+    </section>
+
+    <!-- FLOW -->
+    <section id="flow">
+      <div class="wrap">
+        <div class="sec-head reveal"><span class="no">04</span><span class="jp">ご来店の流れ</span><span class="en">Flow</span><span class="rule"></span></div>
+        <div class="flow">
+          <div class="st reveal"><div class="n">壱</div><div class="bar"></div><h3>ご予約</h3><p>お電話またはWEBから。ご希望のコースと時間をお伝えください。完全予約制です。</p></div>
+          <div class="st reveal"><div class="n">弐</div><div class="bar"></div><h3>カウンセリング</h3><p>当日のお身体の状態・気になる部位・圧の強さを丁寧にお伺いします。</p></div>
+          <div class="st reveal"><div class="n">参</div><div class="bar"></div><h3>施術</h3><p>静かな個室で、マンツーマンの施術。香りと手技で深いリラックスへ。</p></div>
+          <div class="st reveal"><div class="n">四</div><div class="bar"></div><h3>アフター</h3><p>温かいお茶とともに、ゆっくりと。セルフケアのご提案もいたします。</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- AI FAQ BAND -->
+    <section class="ai-band">
+      <div class="wrap">
+        <div class="ai-in">
+          <div class="reveal">
+            <span class="label">AI FAQ Assistant</span>
+            <h2>よくある質問は、<br />AIがすぐお答えします。</h2>
+            <p>営業時間・料金・服装・予約の変更など。AIが根拠つきで即回答し、答えきれないときはスタッフにおつなぎします。最終確認は必ず人が行います。</p>
+            <div class="ai-ctas">
+              <a href="faq/" class="ai-cta solid">AIに質問する →</a>
+              <a href="booking/" class="ai-cta">予約する</a>
+            </div>
+          </div>
+          <div class="chat-prev reveal">
+            <div class="cp-top"><span class="cp-av">凪</span><div class="cp-top-t"><b>凪 AIアシスタント</b><small>よくある質問の自動回答（デモ）</small></div></div>
+            <div class="cp-msg u">初回はいくらですか？</div>
+            <div class="cp-msg b">初回カウンセリング＋整体（70分）は6,800円です。問診と姿勢チェックを行ってから施術に入ります。<div class="src">根拠：［料金］［初回カウンセリング］</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ACCESS -->
+    <section id="access">
+      <div class="wrap">
+        <div class="sec-head reveal"><span class="no">05</span><span class="jp">アクセス</span><span class="en">Access</span><span class="rule"></span></div>
+        <div class="acc">
+          <div class="map reveal"><div class="pin"><div><div class="k">凪</div><small>Nakameguro, Tokyo</small></div></div></div>
+          <dl class="info reveal">
+            <dt>Salon</dt><dd>凪 NAGI — Tokyo Bodywork Studio<br /><span class="s">（架空のリラクゼーションサロンです）</span></dd>
+            <dt>Address</dt><dd>東京都目黒区青葉台 2-XX-XX NAGI bldg. 3F<br /><span class="s">東急東横線・日比谷線「中目黒」駅 徒歩6分</span></dd>
+            <dt>Open</dt><dd>11:00 – 21:00（最終受付 20:00）／ 不定休</dd>
+            <dt>Tel</dt><dd>03-XXXX-XXXX<br /><span class="s">完全予約制・個室・マンツーマン</span></dd>
+            <dt>Reserve</dt><dd><a href="booking/" style="text-decoration:underline;text-underline-offset:3px;color:var(--shu);">WEBで予約する</a> ／ <a href="faq/" style="text-decoration:underline;text-underline-offset:3px;color:var(--shu);">AIに質問する</a></dd>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- 業務改善デモ / Case -->
+    <section class="demo-strip">
+      <div class="wrap">
+        <div class="sec-head reveal"><span class="no">·</span><span class="jp">この案件について</span><span class="en">Portfolio / Case study</span><span class="rule"></span></div>
+        <p class="reveal" style="max-width:62ch; color:var(--sumi-soft); font-size:14px; margin-bottom:28px;">本サイトは、<b>架空のボディケアサロン「凪 NAGI」</b>を題材にしたAI業務改善デモです。予約・FAQ・問い合わせ対応を一体化し、小規模事業者の運用負担を減らす提案を形にしています。</p>
+        <div class="ds-grid">
+          <a class="ds-card reveal" href="case-study/"><span class="n">01</span><h3>ケーススタディ</h3><p>課題 → 提案 → 制作物 → 成果の流れで、この案件のねらいを解説します。</p><div class="go">読む →</div></a>
+          <a class="ds-card reveal" href="dashboard/"><span class="n">02</span><h3>管理ダッシュボード</h3><p>予約・問い合わせを集約し、AIが分類・返信たたき台を提示する管理画面。</p><div class="go">触れる →</div></a>
+          <a class="ds-card reveal" href="implementation/"><span class="n">03</span><h3>実装解説</h3><p>仕組み・データ保存・FAQ検索・APIなしで動く理由を、非エンジニア向けに。</p><div class="go">読む →</div></a>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="top">
+        <div class="k">凪<span class="en">NAGI — Tokyo Bodywork Studio</span></div>
+        <div class="cols">
+          <div class="c"><h4>Salon</h4><p>東京都目黒区青葉台 2-XX-XX 3F</p><p>中目黒駅 徒歩6分</p><p>11:00 – 21:00 / 不定休</p></div>
+          <div class="c"><h4>予約 &amp; AI</h4><a href="booking/">予約フォーム</a><a href="faq/">AI FAQ チャット</a><a href="contact/">お問い合わせ</a><a href="dashboard/">管理ダッシュボード</a></div>
+          <div class="c"><h4>Case</h4><a href="case-study/">ケーススタディ</a><a href="implementation/">実装解説</a><a href="../">ポートフォリオ TOP</a></div>
+        </div>
+      </div>
+      <p class="legal">
+        © 2026 凪 NAGI（架空のリラクゼーションサロン）. 受託制作ポートフォリオ用のデモサイトです。
+        メニューは管理画面（Supabase連携）からリアルタイムに更新されます。 · <a href="admin/">管理画面</a>
+      </p>
+      <p class="credit">Photos: Unsplash（商用利用可・帰属任意のフリー写真）</p>
+    </footer>
+
+    <script>
+      // All DOM writes use textContent / createElement (XSS-safe). No innerHTML.
+      "use strict";
+      var SB_URL = "https://ysgyhijsrwrzrawfceba.supabase.co/rest/v1";
+      var SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlzZ3loaWpzcndyenJhd2ZjZWJhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3Nzg0OTIsImV4cCI6MjA5NzM1NDQ5Mn0.LJ0K_RpQJ6CYPaas-cN59olZwCcUy6Y-mZA6OgVYD1Q";
+
+      var CAT_ORDER = ["ボディ", "ヘッド", "フット", "ウェルネス", "スペシャル"];
+      var CAT_EN = { "ボディ": "Body", "ヘッド": "Head", "フット": "Foot", "ウェルネス": "Wellness", "スペシャル": "Special" };
+      var FALLBACK = [
+        { name: "シグネチャー アロマトリートメント", category: "ボディ", price: 14300, duration_min: 90, description: "凪オリジナルブレンドのアロマオイルで全身を巡らせる、当店の代名詞。" },
+        { name: "ディープティシュー", category: "ボディ", price: 12100, duration_min: 60, description: "凝りの芯まで届く強圧アプローチ。" },
+        { name: "ヘッドスパ ＆ 頭蓋リリース", category: "ヘッド", price: 8800, duration_min: 45, description: "眼精疲労と思考疲れに。" }
+      ];
+
+      function el(tag, cls, text) { var n = document.createElement(tag); if (cls) n.className = cls; if (text !== undefined) n.textContent = text; return n; }
+      function $(s) { return document.querySelector(s); }
+      function yen(n) { return "¥" + Number(n).toLocaleString("ja-JP"); }
+
+      function renderMenu(rows) {
+        var list = $("#menuList"); list.replaceChildren();
+        var groups = {};
+        rows.forEach(function (m) { var c = (m.category || "その他").trim() || "その他"; (groups[c] = groups[c] || []).push(m); });
+        var cats = Object.keys(groups).sort(function (a, b) {
+          var ia = CAT_ORDER.indexOf(a), ib = CAT_ORDER.indexOf(b);
+          if (ia === -1) ia = 99; if (ib === -1) ib = 99; return ia - ib;
+        });
+        cats.forEach(function (cat) {
+          var block = el("div", "menu-cat reveal");
+          var ch = el("div", "ch");
+          ch.appendChild(el("span", "jp", cat));
+          ch.appendChild(el("span", "en", CAT_EN[cat] || ""));
+          block.appendChild(ch);
+          groups[cat].forEach(function (m) {
+            var item = el("div", "m-item");
+            var nm = el("div", "nm"); nm.appendChild(document.createTextNode(m.name));
+            if (m.duration_min) nm.appendChild(el("span", "dur", m.duration_min + " min"));
+            item.appendChild(nm);
+            var price = el("div", "price"); price.appendChild(document.createTextNode(yen(m.price))); price.appendChild(el("small", null, "税込"));
+            item.appendChild(price);
+            if (m.description) item.appendChild(el("div", "desc", m.description));
+            block.appendChild(item);
+          });
+          list.appendChild(block);
+        });
+        observeReveals();
+      }
+      function loadMenus() {
+        fetch(SB_URL + "/massage_menus?select=*&active=eq.true&order=sort_order.asc", { headers: { apikey: SB_KEY, Authorization: "Bearer " + SB_KEY } })
+          .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
+          .then(function (rows) { $("#menuLoading").style.display = "none"; renderMenu(rows && rows.length ? rows : FALLBACK); })
+          .catch(function () { $("#menuLoading").style.display = "none"; renderMenu(FALLBACK); });
+      }
+
+      var io;
+      function observeReveals() {
+        if (!io) {
+          io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
+          }, { threshold: 0.12, rootMargin: "0px 0px -7% 0px" });
+        }
+        document.querySelectorAll(".reveal:not(.in)").forEach(function (n) { io.observe(n); });
+      }
+      var nav = $("#nav");
+      function onScroll() { nav.classList.toggle("scrolled", window.scrollY > window.innerHeight * 0.7); }
+      window.addEventListener("scroll", onScroll, { passive: true });
+      document.addEventListener("DOMContentLoaded", function () { onScroll(); observeReveals(); loadMenus(); });
+    </script>
+  </body>
+</html>

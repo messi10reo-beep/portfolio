@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ケーススタディ｜整体・ボディケアサロン向けAI業務改善デモ | 凪 NAGI</title>
+    <meta name="description" content="予約・FAQ・問い合わせ対応を一体化したAI業務改善デモのケーススタディ。課題→提案→制作物→成果の流れで解説。就活・受託営業向けポートフォリオ。" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231b1814'/%3E%3Ctext x='16' y='23' font-size='19' font-family='Georgia,serif' fill='%23f2eee6' text-anchor='middle'%3E凪%3C/text%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Shippori+Mincho:wght@400;500;600;700;800&family=Zen+Kaku+Gothic+New:wght@300;400;500;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../assets/app.css" />
+    <style>
+      .cs-lead { font-family: var(--mincho); font-size: clamp(18px, 2.4vw, 24px); line-height: 1.95; color: var(--sumi); }
+      .cs-block { max-width: 760px; }
+      .cs-block p { color: var(--sumi-soft); font-size: 15px; margin-bottom: 1em; }
+      .cs-list { list-style: none; display: grid; gap: 12px; margin-top: 6px; }
+      .cs-list li { display: flex; gap: 12px; font-size: 14.5px; color: var(--sumi-soft); line-height: 1.85; }
+      .cs-list li svg { width: 18px; height: 18px; color: var(--shu); flex-shrink: 0; margin-top: 4px; }
+      .cs-list.ok li svg { color: var(--seiji); }
+      .flow-prop { display: grid; gap: 12px; }
+      .flow-prop .fp { display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: start; background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 16px 20px; }
+      .flow-prop .fp .n { font-family: var(--latin); font-style: italic; font-size: 22px; color: var(--shu); line-height: 1.4; }
+      .flow-prop .fp h4 { font-family: var(--mincho); font-size: 16px; margin-bottom: 4px; }
+      .flow-prop .fp p { font-size: 13.5px; color: var(--sumi-soft); }
+      .stat { text-align: center; padding: 24px 18px; }
+      .stat .big { font-family: var(--mincho); font-weight: 700; font-size: clamp(26px, 4vw, 38px); color: var(--shu); }
+      .stat .lbl { font-size: 13px; color: var(--sumi-soft); margin-top: 6px; line-height: 1.7; }
+      .chips { display: flex; gap: 8px; flex-wrap: wrap; }
+      .chip-tag { border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: 7px 15px; font-size: 13px; color: var(--sumi-soft); }
+      .deliver { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      @media (max-width: 640px){ .deliver { grid-template-columns: 1fr; } }
+      .deliver a { display: flex; align-items: center; gap: 12px; background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 15px 18px; transition: all .25s; }
+      .deliver a:hover { border-color: var(--seiji); transform: translateY(-2px); box-shadow: var(--shadow); }
+      .deliver a .di { width: 36px; height: 36px; border-radius: 9px; background: var(--seiji-bg); color: var(--seiji); display: grid; place-items: center; flex-shrink: 0; }
+      .deliver a .di svg { width: 18px; height: 18px; }
+      .deliver a b { display: block; font-family: var(--mincho); font-size: 15px; }
+      .deliver a small { color: var(--muted); font-size: 11.5px; }
+      .deliver a .arrow { margin-left: auto; color: var(--muted); }
+      .closing { background: var(--dark); color: var(--paper); border-radius: 12px; padding: clamp(28px, 5vw, 48px); }
+      .closing .label { color: var(--seiji-soft); }
+      .closing p { font-family: var(--mincho); font-size: clamp(16px, 2.2vw, 21px); line-height: 2; margin-top: 16px; }
+    </style>
+  </head>
+  <body data-page="case">
+    <section class="phero">
+      <div class="wrap">
+        <span class="kicker"><span class="dot"></span><span class="label">Case Study</span></span>
+        <h1>整体・ボディケアサロン向け<br />AI業務改善デモ<span class="en">Booking × FAQ × Inbox, unified by AI</span></h1>
+        <p class="lead">予約・FAQ・問い合わせ対応を一体化し、小規模事業者の「対応の分散」と「返信負担」を減らすことを狙ったデモ案件です。<b>課題 → 提案 → 制作物 → 成果</b>の流れで解説します。</p>
+        <div class="chips" style="margin-top:22px;">
+          <span class="chip-tag">架空案件</span>
+          <span class="chip-tag">小規模事業者DX</span>
+          <span class="chip-tag">AI活用（半自動）</span>
+          <span class="chip-tag">予約導線設計</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 概要 -->
+    <section class="section">
+      <div class="wrap cs-block">
+        <div class="sec-head reveal"><span class="no">01</span><h2>概要</h2></div>
+        <p class="cs-lead reveal">架空のボディケアサロン「凪 NAGI」を題材に、<em style="color:var(--shu);font-style:normal;">Webサイト・予約フォーム・AI FAQ・問い合わせ対応・管理ダッシュボード</em>を一体で設計した業務改善デモです。</p>
+        <p class="reveal" style="margin-top:18px;">小規模事業者では、予約や問い合わせが電話・DM・フォームに分散し、よくある質問への返信に時間がかかりがちです。本デモは「集める → AIで整理する → 人が確認して返す」という現実的な運用フローを、APIキーなしで動く形に落とし込みました。</p>
+      </div>
+    </section>
+
+    <!-- 想定課題 -->
+    <section class="section alt">
+      <div class="wrap cs-block">
+        <div class="sec-head reveal"><span class="no">02</span><h2>想定課題</h2><p>ヒアリングを想定した、小規模サロンにありがちな5つの課題。</p></div>
+        <ul class="cs-list reveal">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>予約や問い合わせが電話・DM・フォームに<b>分散</b>していて管理しづらい</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>よくある質問（料金・服装・予約変更など）への<b>返信負担</b>が大きい</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>初回来店前の<b>不安</b>（料金・施術内容・流れ）が解消されにくい</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>SNSから来た人が<b>予約まで進みにくい</b></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>問い合わせ内容が<b>蓄積・分析されていない</b></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 提案内容 -->
+    <section class="section">
+      <div class="wrap cs-block">
+        <div class="sec-head reveal"><span class="no">03</span><h2>提案内容</h2><p>「情報整理 → 事前取得 → 即時回答 → 集約・分類 → 半自動返信」の一気通貫。</p></div>
+        <div class="flow-prop reveal">
+          <div class="fp"><span class="n">01</span><div><h4>LPで情報を整理</h4><p>サービス・料金・施術の流れを1ページで把握でき、来店前の不安を減らす。</p></div></div>
+          <div class="fp"><span class="n">02</span><div><h4>予約フォームで事前情報を取得</h4><p>希望日時・症状・来院目的を事前に取得し、当日の準備をスムーズに。</p></div></div>
+          <div class="fp"><span class="n">03</span><div><h4>AI FAQで即時回答</h4><p>営業時間・料金・服装・予約変更などに、根拠つきで24時間自動回答。</p></div></div>
+          <div class="fp"><span class="n">04</span><div><h4>ダッシュボードで集約・分類</h4><p>予約と問い合わせを一箇所に集め、AIがカテゴリへ自動仕分け。</p></div></div>
+          <div class="fp"><span class="n">05</span><div><h4>AI返信文を人が確認して使う</h4><p>たたき台をAIが生成し、事実確認のうえスタッフが送信する半自動運用。</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 制作物 -->
+    <section class="section alt">
+      <div class="wrap cs-block">
+        <div class="sec-head reveal"><span class="no">04</span><h2>制作物（ライブデモ）</h2><p>実際に触れる5つの画面。フォーム送信やAI回答が動作します。</p></div>
+        <div class="deliver reveal">
+          <a href="../"><span class="di"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></span><div><b>サイト（LP）</b><small>サービス・料金・流れ</small></div><span class="arrow">↗</span></a>
+          <a href="../booking/"><span class="di"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span><div><b>予約フォーム</b><small>AI事前整理つき</small></div><span class="arrow">↗</span></a>
+          <a href="../faq/"><span class="di"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span><div><b>AI FAQ チャット</b><small>根拠つき自動回答</small></div><span class="arrow">↗</span></a>
+          <a href="../contact/"><span class="di"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 6L2 7"/></svg></span><div><b>問い合わせフォーム</b><small>AI分類＋返信たたき台</small></div><span class="arrow">↗</span></a>
+          <a href="../dashboard/"><span class="di"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg></span><div><b>管理ダッシュボード</b><small>集約・分類・対応管理</small></div><span class="arrow">↗</span></a>
+          <a href="../implementation/"><span class="di"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg></span><div><b>実装解説</b><small>仕組みを非エンジニアにも</small></div><span class="arrow">↗</span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 使用技術 -->
+    <section class="section">
+      <div class="wrap cs-block">
+        <div class="sec-head reveal"><span class="no">05</span><h2>使用技術</h2><p>APIキー不要・外部依存を抑え、誰でもすぐ動かせる構成。</p></div>
+        <div class="chips reveal">
+          <span class="chip-tag">HTML / CSS</span>
+          <span class="chip-tag">Vanilla JS（TypeScript設計に準拠）</span>
+          <span class="chip-tag">localStorage（簡易データ保存）</span>
+          <span class="chip-tag">簡易RAG風FAQ検索</span>
+          <span class="chip-tag">ルールベース分類</span>
+          <span class="chip-tag">レスポンシブ（モバイル最優先）</span>
+        </div>
+        <p class="reveal" style="margin-top:18px;">※ 本デモは静的フロントのみで完結します。同ポートフォリオ内には Next.js / TypeScript / Supabase を用いた実装（予約管理・RAGチャット等）も別途用意しています。</p>
+      </div>
+    </section>
+
+    <!-- 工夫した点 -->
+    <section class="section alt">
+      <div class="wrap cs-block">
+        <div class="sec-head reveal"><span class="no">06</span><h2>工夫した点</h2></div>
+        <ul class="cs-list ok reveal">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>AIを「完全自動返信」ではなく<b>人間の確認を前提にした補助</b>として設計</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>医療的な断定を避け、<b>安全なFAQ支援</b>に範囲を限定</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>小規模事業者でも運用しやすい<b>シンプルな画面設計</b></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>予約前の不安を減らす<b>導線設計</b>（料金・流れ・FAQを近くに配置）</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>採用・受託の双方が評価しやすいよう<b>課題・提案・制作物・成果を明確化</b></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 想定成果 -->
+    <section class="section">
+      <div class="wrap">
+        <div class="sec-head reveal cs-block"><span class="no">07</span><h2>想定成果（架空の参考値）</h2><p>実データではなく、改善の方向性を示す目安です。</p></div>
+        <div class="grid grid-4 reveal">
+          <div class="card stat"><div class="big">−60<small style="font-size:16px;">%</small></div><div class="lbl">よくある質問への<br />対応時間（FAQ自動化）</div></div>
+          <div class="card stat"><div class="big">24<small style="font-size:16px;">h</small></div><div class="lbl">FAQの<br />自動応答カバー</div></div>
+          <div class="card stat"><div class="big">1<small style="font-size:16px;">画面</small></div><div class="lbl">予約・問い合わせを<br />集約</div></div>
+          <div class="card stat"><div class="big">±0</div><div class="lbl">返信品質のばらつき<br />（たたき台で平準化）</div></div>
+        </div>
+        <ul class="cs-list reveal cs-block" style="margin-top:24px;">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>よくある質問への対応時間を削減し、施術に集中できる</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>料金・流れの可視化で、初回来店前の不安を解消</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>問い合わせ内容が分類されて蓄積され、後から振り返れる</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>返信たたき台により、担当者による品質のばらつきを平準化</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>事前情報の取得で、初回カウンセリングの効率が向上</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 学び -->
+    <section class="section alt">
+      <div class="wrap cs-block">
+        <div class="sec-head reveal"><span class="no">08</span><h2>学び</h2></div>
+        <ul class="cs-list ok reveal">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1h6c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2z"/></svg>AIは完全自動化より、<b>業務フローの一部に組み込む</b>方が現実的</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1h6c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2z"/></svg>小規模事業者には、高機能すぎるものより<b>分かりやすく運用できるもの</b>が重要</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1h6c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2z"/></svg>AIの回答範囲を制限することで、<b>安全性と信頼性</b>を高められる</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 今後の改善 -->
+    <section class="section">
+      <div class="wrap cs-block">
+        <div class="sec-head reveal"><span class="no">09</span><h2>今後の改善</h2></div>
+        <div class="chips reveal">
+          <span class="chip-tag">Google Calendar連携</span>
+          <span class="chip-tag">LINE連携</span>
+          <span class="chip-tag">Supabase等での永続DB化</span>
+          <span class="chip-tag">OpenAI / Claude APIによる高精度FAQ</span>
+          <span class="chip-tag">問い合わせのCSV出力</span>
+          <span class="chip-tag">実事業者での導入検証</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- closing -->
+    <section class="section">
+      <div class="wrap cs-block">
+        <div class="closing reveal">
+          <span class="label">Closing</span>
+          <p>このデモは、AIを単体の技術としてではなく、事業者の<b>予約・問い合わせ・顧客対応フローに組み込む</b>ことを意識して制作しました。将来的には、AIコンサル・DX推進・AI企画領域で、現場の課題整理からプロトタイプ制作、運用改善まで一貫して担える人材を目指しています。</p>
+        </div>
+        <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:24px;">
+          <a href="../" class="btn btn-primary">サイト（LP）を見る</a>
+          <a href="../dashboard/" class="btn btn-ghost">管理ダッシュボードを見る</a>
+          <a href="../implementation/" class="btn btn-ghost">実装解説を読む</a>
+        </div>
+      </div>
+    </section>
+
+    <script src="../assets/chrome.js"></script>
+  </body>
+</html>

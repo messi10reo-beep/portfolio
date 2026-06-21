@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>管理ダッシュボード | 凪 NAGI（予約・問い合わせをAIが整理・デモ）</title>
+    <meta name="description" content="予約と問い合わせを一箇所に集約し、AIが分類・返信たたき台を提示。未対応件数や今日の対応リストもひと目で。架空サロン凪 NAGIのポートフォリオデモ。" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231b1814'/%3E%3Ctext x='16' y='23' font-size='19' font-family='Georgia,serif' fill='%23f2eee6' text-anchor='middle'%3E凪%3C/text%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Shippori+Mincho:wght@400;500;600;700;800&family=Zen+Kaku+Gothic+New:wght@300;400;500;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../assets/app.css" />
+  </head>
+  <body data-page="dashboard">
+    <section class="phero">
+      <div class="wrap">
+        <span class="kicker"><span class="dot"></span><span class="label">Staff Dashboard</span></span>
+        <h1>管理ダッシュボード<span class="en">One inbox, sorted by AI</span></h1>
+        <p class="lead">DMや電話に分散していた予約・問い合わせを一箇所に集約。AIが内容を分類し、返信のたたき台まで用意します。<b>送信・確定の最終判断は人が行う</b>半自動運用です。</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <!-- KPI -->
+        <div class="kpi-grid reveal" id="kpiGrid"></div>
+
+        <!-- toolbar -->
+        <div class="dash-toolbar" style="margin-top:24px;">
+          <div class="tabs" id="tabs">
+            <button data-tab="all" class="active">すべて</button>
+            <button data-tab="booking">予約</button>
+            <button data-tab="inquiry">問い合わせ</button>
+          </div>
+          <span class="muted" id="countLabel" style="font-size:12.5px;"></span>
+          <a class="btn btn-ghost" href="../admin/" target="_blank" rel="noopener" style="margin-left:auto; padding:9px 16px; font-size:13px;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+            メニュー・料金を編集 ↗
+          </a>
+          <button class="btn btn-ghost" id="resetBtn" style="padding:9px 16px; font-size:13px;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 2v6h6"/><path d="M3 13a9 9 0 1 0 3-7.7L3 8"/></svg>
+            デモデータをリセット
+          </button>
+        </div>
+
+        <div class="dash-cols">
+          <div id="ticketList"></div>
+          <aside>
+            <div class="side-card reveal">
+              <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>今日見るべき対応</h3>
+              <div id="todoList"></div>
+            </div>
+            <div class="side-card reveal">
+              <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><rect x="7" y="10" width="3" height="8"/><rect x="12" y="6" width="3" height="12"/><rect x="17" y="13" width="3" height="5"/></svg>カテゴリ別件数</h3>
+              <div id="catList"></div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <script src="../assets/data.js"></script>
+    <script src="../assets/ai.js"></script>
+    <script src="../assets/store.js"></script>
+    <script src="../assets/chrome.js"></script>
+    <script>
+      "use strict";
+      (function () {
+        var ICON_AI = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4"/><circle cx="12" cy="12" r="3"/></svg>';
+        var ICON_CAL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>';
+        var ICON_MAIL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 6L2 7"/></svg>';
+        var ICON_BELL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>';
+        var ICON_SUM = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg>';
+
+        var STATUS = { "new": "未対応", "progress": "対応中", "done": "完了" };
+        var STCLS = { "new": "st-new", "progress": "st-progress", "done": "st-done" };
+        var state = { tab: "all" };
+
+        function el(tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
+        function relTime(ts) {
+          var diff = Date.now() - ts; var min = Math.floor(diff / 60000);
+          if (min < 1) return "たった今"; if (min < 60) return min + "分前";
+          var h = Math.floor(min / 60); if (h < 24) return h + "時間前";
+          return Math.floor(h / 24) + "日前";
+        }
+        function catBadge(cat) {
+          var meta = (window.NAGI_CAT_META || {})[cat] || { cls: "gray" };
+          return el("span", "badge badge-cat " + meta.cls, cat);
+        }
+        function isToday(ts) { var d = new Date(ts), n = new Date(); return d.toDateString() === n.toDateString(); }
+
+        function allItems() {
+          var b = window.NagiStore.getBookings().map(function (x) { return Object.assign({ kind: "booking" }, x); });
+          var i = window.NagiStore.getInquiries().map(function (x) { return Object.assign({ kind: "inquiry" }, x); });
+          return b.concat(i).sort(function (a, c) { return c.createdAt - a.createdAt; });
+        }
+
+        function renderKPI(items) {
+          var grid = document.getElementById("kpiGrid"); grid.textContent = "";
+          var bookings = items.filter(function (x) { return x.kind === "booking"; });
+          var inquiries = items.filter(function (x) { return x.kind === "inquiry"; });
+          var open = items.filter(function (x) { return x.status !== "done"; }).length;
+          var todayB = bookings.filter(function (x) { return isToday(x.createdAt); }).length;
+
+          var cards = [
+            { k: "未対応", icon: ICON_BELL, v: open, sub: "予約＋問い合わせ", alert: open > 0 },
+            { k: "本日の新規予約", icon: ICON_CAL, v: todayB, sub: "今日届いた予約" },
+            { k: "予約 合計", icon: ICON_CAL, v: bookings.length, sub: "累計（デモ）" },
+            { k: "問い合わせ 合計", icon: ICON_MAIL, v: inquiries.length, sub: "累計（デモ）" }
+          ];
+          cards.forEach(function (c) {
+            var card = el("div", "kpi" + (c.alert ? " alert" : ""));
+            var kEl = el("div", "k"); kEl.insertAdjacentHTML("beforeend", c.icon); kEl.appendChild(document.createTextNode(c.k));
+            var vEl = el("div", "v", String(c.v));
+            card.appendChild(kEl); card.appendChild(vEl); card.appendChild(el("div", "sub", c.sub));
+            grid.appendChild(card);
+          });
+        }
+
+        function renderCats(items) {
+          var box = document.getElementById("catList"); box.textContent = "";
+          var counts = {};
+          items.forEach(function (x) { counts[x.category] = (counts[x.category] || 0) + 1; });
+          var entries = Object.keys(counts).map(function (k) { return [k, counts[k]]; }).sort(function (a, b) { return b[1] - a[1]; });
+          if (!entries.length) { box.appendChild(el("p", "muted", "データがありません")); return; }
+          var max = entries[0][1];
+          entries.forEach(function (e) {
+            var row = el("div", "cat-row");
+            var name = el("span", null, e[0]); name.style.cssText = "min-width:118px; font-size:12.5px;";
+            var bar = el("div", "bar"); var i = el("i"); i.style.width = Math.round((e[1] / max) * 100) + "%"; bar.appendChild(i);
+            row.appendChild(name); row.appendChild(bar); row.appendChild(el("span", "cnt", String(e[1])));
+            box.appendChild(row);
+          });
+        }
+
+        function renderTodo(items) {
+          var box = document.getElementById("todoList"); box.textContent = "";
+          var open = items.filter(function (x) { return x.status !== "done"; }).slice(0, 6);
+          if (!open.length) { box.appendChild(el("p", "muted", "未対応はありません。お疲れさまでした。")); return; }
+          open.forEach(function (x) {
+            var item = el("div", "todo-item");
+            var ic = el("div", "ti-ic");
+            ic.style.cssText = x.kind === "booking" ? "background:#f6e8e3; color:var(--shu);" : "background:var(--info-bg); color:var(--info);";
+            ic.insertAdjacentHTML("beforeend", x.kind === "booking" ? ICON_CAL : ICON_MAIL);
+            var body = el("div"); body.style.flex = "1";
+            var top = el("div"); top.style.cssText = "display:flex; gap:7px; align-items:center; flex-wrap:wrap;";
+            top.appendChild(el("b", null, x.name)); top.appendChild(catBadge(x.category));
+            var sub = el("div", "muted", (x.kind === "booking" ? "予約" : "問い合わせ") + " ・ " + relTime(x.createdAt));
+            sub.style.fontSize = "11.5px"; sub.style.marginTop = "2px";
+            body.appendChild(top); body.appendChild(sub);
+            item.appendChild(ic); item.appendChild(body); box.appendChild(item);
+          });
+        }
+
+        function ticketCard(x) {
+          var card = el("div", "ticket");
+          var top = el("div", "tk-top");
+          var ic = el("span"); ic.style.cssText = "width:30px;height:30px;border-radius:8px;display:grid;place-items:center;flex-shrink:0;" +
+            (x.kind === "booking" ? "background:#f6e8e3;color:var(--shu);" : "background:var(--info-bg);color:var(--info);");
+          ic.insertAdjacentHTML("beforeend", x.kind === "booking" ? ICON_CAL : ICON_MAIL);
+          top.appendChild(ic);
+          top.appendChild(el("span", "who", x.name + " 様"));
+          top.appendChild(catBadge(x.category));
+          var st = el("span", "st-badge " + STCLS[x.status], STATUS[x.status]); top.appendChild(st);
+          top.appendChild(el("span", "when", relTime(x.createdAt)));
+          card.appendChild(top);
+
+          // meta line
+          var meta = el("div", "tk-meta");
+          if (x.kind === "booking") {
+            meta.appendChild(metaPair("メニュー", x.menu));
+            meta.appendChild(metaPair("希望", fmtDT(x.firstChoice)));
+            meta.appendChild(metaPair("区分", x.isFirstVisit ? "初回" : "再来"));
+          } else {
+            meta.appendChild(metaPair("種別", x.type));
+            meta.appendChild(metaPair("連絡先", x.email));
+          }
+          card.appendChild(meta);
+
+          var body = el("div", "tk-body");
+          body.style.marginTop = "8px";
+          body.textContent = "「" + (x.kind === "booking" ? x.symptoms : x.message) + "」";
+          card.appendChild(body);
+
+          // AI mini
+          var ai = el("div", "ai-mini");
+          var mh = el("div", "mh"); mh.insertAdjacentHTML("beforeend", ICON_AI);
+          mh.appendChild(document.createTextNode(x.kind === "booking" ? "AI事前整理" : "AI返信たたき台"));
+          ai.appendChild(mh);
+          ai.appendChild(el("p", null, x.kind === "booking" ? x.aiSummary : x.aiSuggestedReply));
+          card.appendChild(ai);
+
+          // actions
+          var acts = el("div", "tk-actions");
+          if (x.status !== "progress" && x.status !== "done") acts.appendChild(actBtn("対応中にする", function () { update(x, "progress"); }));
+          if (x.status !== "done") { var d = actBtn("完了にする", function () { update(x, "done"); }); acts.appendChild(d); }
+          if (x.status === "done") acts.appendChild(actBtn("未対応に戻す", function () { update(x, "new"); }));
+          card.appendChild(acts);
+          return card;
+        }
+
+        function metaPair(k, v) { var s = el("span"); var b = el("b", null, k + "："); s.appendChild(b); s.appendChild(document.createTextNode(v || "—")); return s; }
+        function actBtn(label, fn) { var b = el("button", null, label); if (label === "完了にする") b.className = "done"; b.addEventListener("click", fn); return b; }
+        function update(x, status) { window.NagiStore.setStatus(x.kind, x.id, status); render(); }
+
+        function fmtDT(v) {
+          if (!v) return "—"; var d = new Date(v); if (isNaN(d.getTime())) return v;
+          var w = ["日","月","火","水","木","金","土"][d.getDay()];
+          return (d.getMonth() + 1) + "/" + d.getDate() + "(" + w + ") " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
+        }
+
+        function renderList(items) {
+          var box = document.getElementById("ticketList"); box.textContent = "";
+          var filtered = items.filter(function (x) { return state.tab === "all" || x.kind === state.tab; });
+          document.getElementById("countLabel").textContent = filtered.length + " 件を表示";
+          if (!filtered.length) { box.appendChild(el("div", "empty", "該当するデータがありません。")); return; }
+          filtered.forEach(function (x) { box.appendChild(ticketCard(x)); });
+        }
+
+        function render() {
+          var items = allItems();
+          renderKPI(items); renderList(items); renderTodo(items); renderCats(items);
+        }
+
+        document.getElementById("tabs").addEventListener("click", function (e) {
+          var btn = e.target.closest("button[data-tab]"); if (!btn) return;
+          state.tab = btn.dataset.tab;
+          Array.prototype.forEach.call(this.querySelectorAll("button"), function (b) { b.classList.toggle("active", b === btn); });
+          renderList(allItems());
+        });
+        document.getElementById("resetBtn").addEventListener("click", function () {
+          if (window.confirm("デモデータを初期状態にリセットしますか？（あなたが送信した予約・問い合わせは消えます）")) {
+            window.NagiStore.resetDemo(); state.tab = "all";
+            Array.prototype.forEach.call(document.querySelectorAll("#tabs button"), function (b) { b.classList.toggle("active", b.dataset.tab === "all"); });
+            render();
+          }
+        });
+
+        render();
+      })();
+    </script>
+  </body>
+</html>

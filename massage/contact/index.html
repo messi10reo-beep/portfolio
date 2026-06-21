@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>お問い合わせ | 凪 NAGI（AI分類＋返信たたき台・デモ）</title>
+    <meta name="description" content="お問い合わせを送信すると、AIが種別を分類し、スタッフ向けの返信たたき台を生成します。送信は人が最終確認。架空サロン凪 NAGIのポートフォリオデモ。" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231b1814'/%3E%3Ctext x='16' y='23' font-size='19' font-family='Georgia,serif' fill='%23f2eee6' text-anchor='middle'%3E凪%3C/text%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Shippori+Mincho:wght@400;500;600;700;800&family=Zen+Kaku+Gothic+New:wght@300;400;500;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../assets/app.css" />
+  </head>
+  <body data-page="contact">
+    <section class="phero">
+      <div class="wrap">
+        <span class="kicker"><span class="dot"></span><span class="label">Contact</span></span>
+        <h1>お問い合わせ<span class="en">Get in touch</span></h1>
+        <p class="lead">ご予約・料金・症状などのご質問はこちらから。送信すると、AIが内容を分類し、スタッフ向けに<b>返信文のたたき台</b>を生成します。<b>実際の返信は、スタッフが内容を確認してから送ります。</b></p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap-narrow">
+        <div class="panel reveal" id="formPanel">
+          <form id="contactForm" novalidate>
+            <div class="row2">
+              <div class="field">
+                <label for="ct-name">お名前<span class="req">必須</span></label>
+                <input class="input" id="ct-name" name="name" autocomplete="name" placeholder="凪 花子" />
+                <p class="err-msg" data-for="ct-name">お名前をご入力ください。</p>
+              </div>
+              <div class="field">
+                <label for="ct-email">メールアドレス<span class="req">必須</span></label>
+                <input class="input" id="ct-email" name="email" type="email" autocomplete="email" placeholder="hanako@example.com" />
+                <p class="err-msg" data-for="ct-email">正しいメールアドレスをご入力ください。</p>
+              </div>
+            </div>
+            <div class="field">
+              <label for="ct-type">お問い合わせ種別<span class="req">必須</span></label>
+              <select class="select" id="ct-type" name="type"><option value="">選択してください</option></select>
+              <p class="err-msg" data-for="ct-type">種別をお選びください。</p>
+            </div>
+            <div class="field">
+              <label for="ct-message">お問い合わせ内容<span class="req">必須</span></label>
+              <textarea class="textarea" id="ct-message" name="message" style="min-height:140px" placeholder="例）回数券の有効期限はどれくらいですか？家族と一緒に使えますか？"></textarea>
+              <p class="err-msg" data-for="ct-message">お問い合わせ内容をご入力ください。</p>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block btn-lg">この内容で問い合わせる</button>
+            <p class="ai-note" style="margin-top:14px">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4M12 16h.01"/><circle cx="12" cy="12" r="10"/></svg>
+              これはデモです。入力内容はお使いのブラウザ内（localStorage）にのみ保存され、外部には送信されません。
+            </p>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <script src="../assets/data.js"></script>
+    <script src="../assets/ai.js"></script>
+    <script src="../assets/store.js"></script>
+    <script src="../assets/chrome.js"></script>
+    <script>
+      "use strict";
+      (function () {
+        var ICON_AI = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4"/><circle cx="12" cy="12" r="3"/></svg>';
+        var ICON_CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>';
+        var ICON_INFO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4M12 16h.01"/><circle cx="12" cy="12" r="10"/></svg>';
+        var ICON_COPY = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+
+        var sel = document.getElementById("ct-type");
+        (window.NAGI_INQUIRY_TYPES || []).forEach(function (t) {
+          var o = document.createElement("option"); o.value = t; o.textContent = t; sel.appendChild(o);
+        });
+
+        var form = document.getElementById("contactForm");
+        function setBad(id, bad) {
+          var el = document.getElementById(id); var field = el ? el.closest(".field") : null;
+          if (el) el.classList.toggle("bad", bad); if (field) field.classList.toggle("bad", bad);
+        }
+        function val(id) { return (document.getElementById(id).value || "").trim(); }
+
+        function validate() {
+          var ok = true;
+          if (!val("ct-name")) { setBad("ct-name", true); ok = false; } else setBad("ct-name", false);
+          if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val("ct-email"))) { setBad("ct-email", true); ok = false; } else setBad("ct-email", false);
+          if (!val("ct-type")) { setBad("ct-type", true); ok = false; } else setBad("ct-type", false);
+          if (!val("ct-message")) { setBad("ct-message", true); ok = false; } else setBad("ct-message", false);
+          return ok;
+        }
+
+        form.addEventListener("submit", function (e) {
+          e.preventDefault();
+          if (!validate()) {
+            var fb = form.querySelector(".field.bad"); if (fb) fb.scrollIntoView({ behavior: "smooth", block: "center" });
+            return;
+          }
+          var rec = window.NagiStore.addInquiry({
+            name: val("ct-name"), email: val("ct-email"), type: val("ct-type"), message: val("ct-message")
+          });
+          renderSuccess(rec);
+        });
+
+        function renderSuccess(rec) {
+          var meta = (window.NAGI_CAT_META || {})[rec.category] || { cls: "gray" };
+          var panel = document.getElementById("formPanel"); panel.textContent = "";
+
+          var mark = document.createElement("div"); mark.className = "success-mark"; mark.insertAdjacentHTML("beforeend", ICON_CHECK);
+          panel.appendChild(mark);
+          var h = document.createElement("h2"); h.className = "mincho center"; h.style.fontSize = "24px";
+          h.textContent = "お問い合わせを受け付けました"; panel.appendChild(h);
+          var p = document.createElement("p"); p.className = "center muted";
+          p.style.cssText = "margin:10px auto 24px; max-width:48ch; font-size:13.5px;";
+          p.textContent = "担当より、内容を確認してご返信いたします。以下はAIが生成した分類と返信たたき台です（スタッフ向け・送信前の下書き）。";
+          panel.appendChild(p);
+
+          var box = document.createElement("div"); box.className = "ai-box";
+          var head = document.createElement("div"); head.className = "ai-head";
+          var mk = document.createElement("span"); mk.className = "ai-mark"; mk.insertAdjacentHTML("beforeend", ICON_AI);
+          var tt = document.createElement("div"); tt.className = "t"; tt.appendChild(document.createTextNode("AIによる分類と返信案"));
+          var sm = document.createElement("small"); sm.textContent = "Auto classify · reply draft"; tt.appendChild(sm);
+          head.appendChild(mk); head.appendChild(tt); box.appendChild(head);
+
+          var row = document.createElement("div"); row.className = "ai-row";
+          var k = document.createElement("span"); k.className = "k"; k.textContent = "分類カテゴリ：";
+          var badge = document.createElement("span"); badge.className = "badge badge-cat " + meta.cls; badge.textContent = rec.category;
+          row.appendChild(k); row.appendChild(badge); box.appendChild(row);
+
+          var draftLbl = document.createElement("p");
+          draftLbl.style.cssText = "font-size:12.5px; color:var(--seiji); margin:4px 0 0; letter-spacing:.04em;";
+          draftLbl.textContent = "▸ 返信文のたたき台";
+          box.appendChild(draftLbl);
+          var draft = document.createElement("div"); draft.className = "draft"; draft.textContent = rec.name + " 様\n\n" + rec.aiSuggestedReply;
+          box.appendChild(draft);
+
+          var copyBtn = document.createElement("button"); copyBtn.type = "button"; copyBtn.className = "copy-btn";
+          copyBtn.style.marginTop = "10px"; copyBtn.insertAdjacentHTML("beforeend", ICON_COPY);
+          var cspan = document.createElement("span"); cspan.textContent = "たたき台をコピー"; copyBtn.appendChild(cspan);
+          copyBtn.addEventListener("click", function () {
+            var text = draft.textContent;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText(text).then(function () { cspan.textContent = "コピーしました"; }, function () { cspan.textContent = "コピーできませんでした"; });
+            } else { cspan.textContent = "コピー非対応です"; }
+          });
+          box.appendChild(copyBtn);
+
+          var chTitle = document.createElement("p");
+          chTitle.style.cssText = "font-size:12.5px; color:var(--seiji); margin:16px 0 4px; letter-spacing:.04em;";
+          chTitle.textContent = "▸ 返信前のスタッフ確認ポイント";
+          box.appendChild(chTitle);
+          var ul = document.createElement("ul"); ul.className = "checks";
+          (rec.aiChecks || []).forEach(function (c) {
+            var li = document.createElement("li"); li.insertAdjacentHTML("beforeend", ICON_CHECK);
+            var sp = document.createElement("span"); sp.textContent = c; li.appendChild(sp); ul.appendChild(li);
+          });
+          box.appendChild(ul);
+
+          var note = document.createElement("p"); note.className = "ai-note"; note.insertAdjacentHTML("beforeend", ICON_INFO);
+          var ns = document.createElement("span"); ns.textContent = "このたたき台はAIの下書きです。料金・日時など事実関係はスタッフが確認・修正してから送信します。";
+          note.appendChild(ns); box.appendChild(note);
+          panel.appendChild(box);
+
+          var acts = document.createElement("div"); acts.style.cssText = "display:flex; gap:10px; flex-wrap:wrap; margin-top:18px;";
+          var a1 = document.createElement("a"); a1.className = "btn btn-ghost"; a1.href = "../dashboard/"; a1.textContent = "管理画面で確認 →";
+          var a2 = document.createElement("a"); a2.className = "btn btn-ghost"; a2.href = "../faq/"; a2.textContent = "AI FAQに戻る";
+          acts.appendChild(a1); acts.appendChild(a2); panel.appendChild(acts);
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+      })();
+    </script>
+  </body>
+</html>
