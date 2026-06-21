@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>nail salon luce｜SNS予約ページ（Instagramから予約・デモ）</title>
+<meta name="description" content="ネイルサロン luce のInstagramプロフィールリンクからアクセスするSNS集客型の予約ページ。流入元アンケート・Instagram/LINE連絡・フォロワー限定クーポンつき。架空サロンのポートフォリオデモ。" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23b89478'/%3E%3Ctext x='16' y='22' font-family='Georgia,serif' font-size='16' fill='%23fdf6ef' text-anchor='middle'%3EL%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Tenor+Sans&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --milk: #fbf6f2; --cream: #f4ebe2; --surface: #ffffff;
+    --mocha: #b89478; --mocha-deep: #9a7a5e; --blush: #e7bfb4; --rose: #d99a92;
+    --text: #443c37; --muted: #8a7d74; --faint: #b3a79d; --line: #ece2da; --line-strong: #ddd0c4;
+    --shadow-sm: 0 4px 18px rgba(91,72,58,.07); --shadow-md: 0 18px 50px -24px rgba(91,72,58,.4);
+    --display: 'Tenor Sans', serif; --sans: 'Zen Kaku Gothic New', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--sans); color: var(--text); line-height: 1.8; font-size: 15px; -webkit-font-smoothing: antialiased;
+    background: radial-gradient(120% 60% at 50% 0%, #f7e7df 0%, var(--milk) 46%, var(--cream) 100%); min-height: 100vh; }
+  a { color: inherit; text-decoration: none; }
+  .en { font-family: var(--display); letter-spacing: .04em; }
+  .shell { width: min(480px, 100%); margin: 0 auto; padding: 26px 18px 44px; }
+
+  /* link-in-bio profile header */
+  .profile { text-align: center; }
+  .avatar { width: 78px; height: 78px; border-radius: 50%; margin: 0 auto 12px; display: grid; place-items: center;
+    background: linear-gradient(135deg, var(--mocha), var(--rose)); color: #fff; font-family: var(--display); font-size: 30px;
+    box-shadow: 0 8px 22px -8px rgba(154,122,94,.6); border: 3px solid #fff; }
+  .profile h1 { font-family: var(--display); font-size: 26px; color: var(--text); letter-spacing: .02em; }
+  .handle { font-size: 13px; color: var(--muted); margin-top: 2px; letter-spacing: .04em; }
+  .ig-stats { display: flex; justify-content: center; gap: 22px; margin: 12px 0 16px; font-size: 12.5px; color: var(--muted); }
+  .ig-stats b { display: block; font-family: var(--display); font-size: 17px; color: var(--text); }
+  .bio { font-size: 13px; color: var(--muted); max-width: 30ch; margin: 0 auto 16px; line-height: 1.7; }
+
+  .links-row { display: grid; gap: 9px; margin-bottom: 18px; }
+  .lk { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px; border-radius: 13px;
+    background: var(--surface); border: 1px solid var(--line-strong); font-size: 14px; font-weight: 500; transition: transform .15s, box-shadow .15s, border-color .15s; }
+  .lk:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); border-color: var(--mocha); }
+  .lk svg { width: 18px; height: 18px; }
+  .lk.ig { background: linear-gradient(105deg, #f7e3da, #fbeef0); }
+  .lk.line { background: #eef6ec; }
+
+  .coupon { display: flex; align-items: center; gap: 10px; background: #fff; border: 1px dashed var(--mocha); border-radius: 12px;
+    padding: 11px 14px; margin-bottom: 22px; font-size: 12.5px; color: var(--mocha-deep); }
+  .coupon b { font-family: var(--display); font-size: 19px; color: var(--mocha-deep); }
+  .coupon .tag { margin-left: auto; background: var(--mocha); color: #fff; font-size: 10.5px; padding: 3px 9px; border-radius: 999px; letter-spacing: .08em; }
+
+  /* design gallery */
+  .gal-title { font-family: var(--display); font-size: 13px; letter-spacing: .18em; text-transform: uppercase; color: var(--mocha-deep); text-align: center; margin-bottom: 12px; }
+  .gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; margin-bottom: 26px; }
+  .swatch { aspect-ratio: 1; border-radius: 12px; position: relative; overflow: hidden; box-shadow: var(--shadow-sm); display: flex; align-items: flex-end; }
+  .swatch span { position: relative; z-index: 2; font-size: 11px; color: #fff; padding: 8px 10px; font-weight: 500; text-shadow: 0 1px 4px rgba(0,0,0,.35); letter-spacing: .04em; }
+  .sw1 { background: linear-gradient(135deg,#d9b8a3,#c89f86); }
+  .sw2 { background: radial-gradient(circle at 32% 28%, #f6eae3, transparent 55%), linear-gradient(135deg,#e9d3c9,#c4a597); }
+  .sw3 { background: linear-gradient(135deg,#cdbfd6,#a98cae); }
+  .sw4 { background: linear-gradient(135deg,#f5e8ee,#e7bfb4); }
+  .sw5 { background: linear-gradient(135deg,#cdd2c0,#9fae8f); }
+  .sw6 { background: linear-gradient(135deg,#e8c7a0,#cf9f6f); }
+
+  /* form card */
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 22px 20px; box-shadow: var(--shadow-md); }
+  .card h2 { font-family: var(--display); font-size: 20px; text-align: center; margin-bottom: 4px; }
+  .card .sub { text-align: center; font-size: 12.5px; color: var(--muted); margin-bottom: 20px; }
+  .field { margin-bottom: 15px; }
+  .field > label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 6px; }
+  .req, .opt { font-size: 10px; padding: 1px 7px; border-radius: 999px; margin-left: 6px; vertical-align: 2px; letter-spacing: .06em; }
+  .req { background: #f3ddd6; color: var(--mocha-deep); } .opt { background: var(--cream); color: var(--muted); }
+  .input, .select, .textarea { width: 100%; font-family: inherit; font-size: 14px; color: var(--text); background: var(--milk);
+    border: 1px solid var(--line-strong); border-radius: 11px; padding: 11px 13px; transition: border-color .2s, box-shadow .2s; }
+  .input:focus, .select:focus, .textarea:focus { outline: none; border-color: var(--mocha); box-shadow: 0 0 0 3px rgba(184,148,120,.18); background: #fff; }
+  .textarea { min-height: 78px; resize: vertical; line-height: 1.7; }
+  .select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23b89478' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 13px center; padding-right: 34px; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
+  .hint { font-size: 11.5px; color: var(--muted); margin-top: 5px; }
+  .err-msg { display: none; font-size: 11.5px; color: #c0573f; margin-top: 5px; }
+  .field.bad .input, .field.bad .select, .field.bad .textarea { border-color: #d68a73; background: #fbf0ec; }
+  .field.bad .err-msg { display: block; }
+
+  .seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .seg label { display: block; text-align: center; padding: 10px 4px; border: 1px solid var(--line-strong); border-radius: 11px; font-size: 12.5px; cursor: pointer; background: var(--milk); transition: .15s; }
+  .seg label small { display: block; font-size: 10px; color: var(--faint); margin-top: 1px; }
+  .seg input { position: absolute; opacity: 0; }
+  .seg input:checked + label { border-color: var(--mocha); background: #f7ece3; color: var(--mocha-deep); font-weight: 500; }
+  .choices2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .choices2 label { display: block; text-align: center; padding: 9px; border: 1px solid var(--line-strong); border-radius: 11px; font-size: 13px; cursor: pointer; background: var(--milk); transition: .15s; }
+  .choices2 input { position: absolute; opacity: 0; }
+  .choices2 input:checked + label { border-color: var(--mocha); background: #f7ece3; color: var(--mocha-deep); font-weight: 500; }
+
+  .btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; font-family: inherit; font-size: 15px; font-weight: 500;
+    padding: 14px; border-radius: 13px; border: none; cursor: pointer; transition: transform .15s, background .2s; }
+  .btn-primary { background: linear-gradient(105deg, var(--mocha), var(--mocha-deep)); color: #fff; box-shadow: 0 10px 24px -12px rgba(154,122,94,.8); }
+  .btn-primary:hover { transform: translateY(-2px); }
+  .privacy { display: flex; gap: 7px; align-items: flex-start; font-size: 11px; color: var(--muted); margin-top: 12px; line-height: 1.6; }
+  .privacy svg { width: 14px; height: 14px; flex: none; margin-top: 2px; color: var(--mocha); }
+
+  /* source note inside form */
+  .src-note { background: #f7ece3; border-radius: 11px; padding: 9px 12px; font-size: 11.5px; color: var(--mocha-deep); margin-top: 6px; display: flex; gap: 7px; align-items: flex-start; }
+  .src-note svg { width: 14px; height: 14px; flex: none; margin-top: 2px; }
+
+  /* success */
+  .success-mark { width: 58px; height: 58px; border-radius: 50%; background: linear-gradient(135deg, var(--mocha), var(--rose)); color: #fff; display: grid; place-items: center; margin: 0 auto 14px; }
+  .success-mark svg { width: 28px; height: 28px; }
+  .sum-row { display: flex; gap: 12px; padding: 8px 0; border-bottom: 1px dashed var(--line); font-size: 13px; }
+  .sum-row:last-child { border-bottom: none; }
+  .sum-row .k { color: var(--muted); min-width: 86px; flex: none; }
+
+  /* owner analytics panel */
+  .owner { margin-top: 18px; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+  .owner summary { list-style: none; cursor: pointer; padding: 14px 18px; display: flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 500; color: var(--text); }
+  .owner summary::-webkit-details-marker { display: none; }
+  .owner summary .chev { margin-left: auto; transition: transform .2s; color: var(--muted); }
+  .owner[open] summary .chev { transform: rotate(180deg); }
+  .owner summary .tagm { background: var(--cream); color: var(--muted); font-size: 10px; padding: 2px 8px; border-radius: 999px; letter-spacing: .06em; }
+  .owner-body { padding: 4px 18px 20px; }
+  .owner-body p { font-size: 12px; color: var(--muted); margin-bottom: 14px; }
+  .bar { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; font-size: 12px; }
+  .bar .bl { width: 96px; flex: none; color: var(--text); }
+  .bar .track { flex: 1; height: 12px; background: var(--cream); border-radius: 999px; overflow: hidden; }
+  .bar .fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--blush), var(--mocha)); transition: width .5s cubic-bezier(.2,.7,.2,1); }
+  .bar .bv { width: 30px; flex: none; text-align: right; color: var(--muted); font-family: var(--display); }
+  .bar.you .bl { color: var(--mocha-deep); font-weight: 500; }
+
+  footer { text-align: center; font-size: 11px; color: var(--faint); margin-top: 26px; line-height: 1.7; }
+  footer a { color: var(--muted); border-bottom: 1px solid var(--line-strong); }
+  @media (max-width: 380px) { .row2 { grid-template-columns: 1fr; } .seg { grid-template-columns: 1fr 1fr; } }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <div class="profile">
+    <div class="avatar en">L</div>
+    <h1 class="en">nail salon luce</h1>
+    <div class="handle">@luce_nail ・ 東京 / 表参道</div>
+    <div class="ig-stats">
+      <span><b>8,420</b>フォロワー</span>
+      <span><b>1,260</b>投稿</span>
+      <span><b>★4.9</b>口コミ</span>
+    </div>
+    <p class="bio">ニュアンス・マグネット・韓国ネイルが得意な完全予約制プライベートサロン。指先に、ちいさな光を。</p>
+
+    <div class="links-row">
+      <a class="lk ig" href="#book">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        Instagramの投稿から予約
+      </a>
+      <a class="lk line" href="#book">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M21 11c0-4.2-4-7.5-9-7.5S3 6.8 3 11c0 3.8 3.2 7 7.6 7.6.9.1.8.6.7 1.1l-.2 1c-.1.5.3.7.8.4C16 18.7 21 15.3 21 11z"/></svg>
+        LINEで相談する
+      </a>
+    </div>
+
+    <div class="coupon">
+      <b>¥500 OFF</b>
+      <span>Instagram・LINEからのご予約で初回オフ</span>
+      <span class="tag">フォロワー限定</span>
+    </div>
+  </div>
+
+  <div class="gal-title en">Design Gallery</div>
+  <div class="gallery" aria-label="ネイルデザイン例">
+    <div class="swatch sw1"><span>ワンカラー</span></div>
+    <div class="swatch sw2"><span>ニュアンス</span></div>
+    <div class="swatch sw3"><span>マグネット</span></div>
+    <div class="swatch sw4"><span>グラデーション</span></div>
+    <div class="swatch sw5"><span>フレンチ</span></div>
+    <div class="swatch sw6"><span>フットネイル</span></div>
+  </div>
+
+  <div class="card" id="book">
+    <div id="formWrap">
+      <h2 class="en">Book your nails</h2>
+      <p class="sub">ご希望をお知らせください。空き状況を確認のうえ、Instagram / LINE でご連絡します。</p>
+      <form id="bookingForm" novalidate>
+        <div class="field">
+          <label for="bk-name">お名前 / ニックネーム<span class="req">必須</span></label>
+          <input class="input" id="bk-name" placeholder="luce はな" autocomplete="name" />
+          <p class="err-msg">お名前をご入力ください。</p>
+        </div>
+
+        <div class="field">
+          <label>ご連絡方法<span class="req">必須</span></label>
+          <div class="seg" role="radiogroup">
+            <input type="radio" id="ct-ig" name="contactType" value="Instagram" checked /><label for="ct-ig">Instagram<small>DM</small></label>
+            <input type="radio" id="ct-line" name="contactType" value="LINE" /><label for="ct-line">LINE<small>トーク</small></label>
+            <input type="radio" id="ct-tel" name="contactType" value="電話" /><label for="ct-tel">電話<small>SMS可</small></label>
+          </div>
+          <input class="input" id="bk-contact" style="margin-top:9px" placeholder="@instagram_id" />
+          <p class="err-msg" id="contactErr">ご連絡先をご入力ください。</p>
+        </div>
+
+        <div class="field">
+          <label for="bk-menu">希望メニュー<span class="req">必須</span></label>
+          <select class="select" id="bk-menu"><option value="">選択してください</option></select>
+          <p class="err-msg">メニューをお選びください。</p>
+        </div>
+
+        <div class="field">
+          <label for="bk-design">デザインのご希望<span class="opt">任意</span></label>
+          <textarea class="textarea" id="bk-design" placeholder="例）くすみカラーのニュアンス。保存した投稿のスクショをDMで送ります。"></textarea>
+          <p class="hint">Instagramの保存画像・お手持ちの写真は、ご予約後のDM/LINEで送っていただけます。</p>
+        </div>
+
+        <div class="row2">
+          <div class="field">
+            <label for="bk-first">第一希望日時<span class="req">必須</span></label>
+            <input class="input" id="bk-first" type="datetime-local" />
+            <p class="err-msg">第一希望をご入力ください。</p>
+          </div>
+          <div class="field">
+            <label for="bk-second">第二希望<span class="opt">任意</span></label>
+            <input class="input" id="bk-second" type="datetime-local" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label>当サロンのご利用は？<span class="req">必須</span></label>
+          <div class="choices2" role="radiogroup">
+            <input type="radio" id="fv-y" name="firstVisit" value="yes" /><label for="fv-y">はじめて</label>
+            <input type="radio" id="fv-n" name="firstVisit" value="no" /><label for="fv-n">2回目以降</label>
+          </div>
+          <p class="err-msg" id="fvErr">いずれかをお選びください。</p>
+        </div>
+
+        <div class="field">
+          <label for="bk-source">どこで知りましたか？<span class="req">必須</span></label>
+          <select class="select" id="bk-source">
+            <option value="">選択してください</option>
+            <option value="Instagram投稿">Instagramの投稿</option>
+            <option value="Instagramリール">Instagramのリール</option>
+            <option value="TikTok">TikTok</option>
+            <option value="Googleマップ">Googleマップ / 検索</option>
+            <option value="友人の紹介">友人・知人の紹介</option>
+            <option value="その他">その他</option>
+          </select>
+          <div class="src-note">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l3-3 3 3 4-5"/></svg>
+            <span>このアンケートは「どのSNSからの集客か」を可視化し、発信の改善に役立てます。</span>
+          </div>
+          <p class="err-msg">きっかけをお選びください。</p>
+        </div>
+
+        <div class="field">
+          <label for="bk-coupon">クーポンコード<span class="opt">任意</span></label>
+          <input class="input" id="bk-coupon" placeholder="フォロワー限定コード（例：LUCE500）" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          この内容で予約をリクエスト
+        </button>
+        <p class="privacy">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+          これはデモです。入力はお使いのブラウザ内（localStorage）にのみ保存され、外部送信されません。
+        </p>
+      </form>
+    </div>
+  </div>
+
+  <details class="owner" id="ownerPanel">
+    <summary>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l3-3 3 3 4-5"/></svg>
+      オーナー向けデモ：流入元レポート
+      <span class="tagm">この月の予約</span>
+      <span class="chev"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span>
+    </summary>
+    <div class="owner-body">
+      <p>予約フォームの「どこで知りましたか？」を自動集計。フォームに予約を送ると、この内訳がリアルタイムで更新されます。</p>
+      <div id="srcChart"></div>
+    </div>
+  </details>
+
+  <footer>
+    nail salon luce ・ SNS予約ページデモ<br />
+    ※ ポートフォリオ用に制作した架空サロンのデモです。実在の店舗・連絡先ではありません。<br />
+    <a href="/">← Bone Studios ポートフォリオへ</a>
+  </footer>
+</div>
+
+<script>
+"use strict";
+(function () {
+  var K = "luce_bookings_v1", KS = "luce_seeded_v1";
+  var MENUS = ["ワンカラー（¥6,600）", "ニュアンスアート（¥8,800）", "マグネットネイル（¥9,900）", "グラデーション（¥7,700）", "フレンチ（¥7,700）", "フットネイル（¥8,800）", "付け替え（オフ込み）", "その他・相談したい"];
+  var SOURCES = ["Instagram投稿", "Instagramリール", "TikTok", "Googleマップ", "友人の紹介", "その他"];
+  var SEED = { "Instagram投稿": 14, "Instagramリール": 9, "TikTok": 6, "Googleマップ": 4, "友人の紹介": 3, "その他": 1 };
+  var ICON_CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>';
+
+  function read() { try { return JSON.parse(localStorage.getItem(K) || "[]"); } catch (e) { return []; } }
+  function write(v) { localStorage.setItem(K, JSON.stringify(v)); }
+  function seed() {
+    if (localStorage.getItem(KS)) return;
+    var list = [];
+    SOURCES.forEach(function (s) { for (var i = 0; i < SEED[s]; i++) list.push({ source: s, seedOnly: true }); });
+    write(list); localStorage.setItem(KS, "1");
+  }
+
+  // populate menu
+  var sel = document.getElementById("bk-menu");
+  MENUS.forEach(function (m) { var o = document.createElement("option"); o.value = m; o.textContent = m; sel.appendChild(o); });
+
+  // contact placeholder switching
+  var contactInput = document.getElementById("bk-contact");
+  var PH = { "Instagram": "@instagram_id", "LINE": "LINEの表示名", "電話": "090-1234-5678" };
+  Array.prototype.forEach.call(document.querySelectorAll('input[name="contactType"]'), function (r) {
+    r.addEventListener("change", function () {
+      contactInput.placeholder = PH[r.value] || "";
+      contactInput.type = r.value === "電話" ? "tel" : "text";
+    });
+  });
+
+  var form = document.getElementById("bookingForm");
+  function field(id) { var el = document.getElementById(id); return el ? el.closest(".field") : null; }
+  function setBad(id, bad) { var f = field(id); if (f) f.classList.toggle("bad", bad); }
+  function val(id) { return (document.getElementById(id).value || "").trim(); }
+
+  function validate() {
+    var ok = true;
+    if (!val("bk-name")) { setBad("bk-name", true); ok = false; } else setBad("bk-name", false);
+    if (!val("bk-contact")) { setBad("bk-contact", true); ok = false; } else setBad("bk-contact", false);
+    if (!val("bk-menu")) { setBad("bk-menu", true); ok = false; } else setBad("bk-menu", false);
+    if (!val("bk-first")) { setBad("bk-first", true); ok = false; } else setBad("bk-first", false);
+    if (!val("bk-source")) { setBad("bk-source", true); ok = false; } else setBad("bk-source", false);
+    var fv = form.querySelector('input[name="firstVisit"]:checked');
+    var fvField = document.getElementById("fv-y").closest(".field");
+    if (!fv) { fvField.classList.add("bad"); ok = false; } else fvField.classList.remove("bad");
+    return ok;
+  }
+
+  function fmtDT(v) {
+    if (!v) return "—";
+    var d = new Date(v); if (isNaN(d.getTime())) return v;
+    var w = ["日","月","火","水","木","金","土"][d.getDay()];
+    return (d.getMonth() + 1) + "月" + d.getDate() + "日(" + w + ") " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
+  }
+
+  function renderChart(highlight) {
+    var list = read();
+    var counts = {}; SOURCES.forEach(function (s) { counts[s] = 0; });
+    list.forEach(function (r) { if (counts[r.source] != null) counts[r.source]++; });
+    var max = Math.max.apply(null, SOURCES.map(function (s) { return counts[s]; }).concat([1]));
+    var chart = document.getElementById("srcChart"); chart.replaceChildren();
+    SOURCES.forEach(function (s) {
+      var row = document.createElement("div"); row.className = "bar" + (s === highlight ? " you" : "");
+      var bl = document.createElement("div"); bl.className = "bl"; bl.textContent = s;
+      var track = document.createElement("div"); track.className = "track";
+      var fill = document.createElement("div"); fill.className = "fill"; fill.style.width = Math.round((counts[s] / max) * 100) + "%";
+      track.appendChild(fill);
+      var bv = document.createElement("div"); bv.className = "bv"; bv.textContent = counts[s];
+      row.appendChild(bl); row.appendChild(track); row.appendChild(bv); chart.appendChild(row);
+    });
+  }
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (!validate()) {
+      var bad = form.querySelector(".field.bad"); if (bad) bad.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+    var rec = {
+      name: val("bk-name"),
+      contactType: form.querySelector('input[name="contactType"]:checked').value,
+      contact: val("bk-contact"), menu: val("bk-menu"), design: val("bk-design"),
+      firstChoice: val("bk-first"), secondChoice: val("bk-second"),
+      firstVisit: form.querySelector('input[name="firstVisit"]:checked').value === "yes",
+      source: val("bk-source"), coupon: val("bk-coupon"), createdAt: Date.now()
+    };
+    var list = read(); list.push(rec); write(list);
+    renderSuccess(rec);
+    renderChart(rec.source);
+    document.getElementById("ownerPanel").open = true;
+  });
+
+  function appendRow(parent, k, v) {
+    var r = document.createElement("div"); r.className = "sum-row";
+    var ks = document.createElement("span"); ks.className = "k"; ks.textContent = k;
+    var vs = document.createElement("span"); vs.textContent = v;
+    r.appendChild(ks); r.appendChild(vs); parent.appendChild(r);
+  }
+
+  function renderSuccess(rec) {
+    var wrap = document.getElementById("formWrap"); wrap.replaceChildren();
+    var mark = document.createElement("div"); mark.className = "success-mark"; mark.insertAdjacentHTML("beforeend", ICON_CHECK); wrap.appendChild(mark);
+    var h = document.createElement("h2"); h.className = "en"; h.textContent = "Thank you!"; h.style.textAlign = "center"; wrap.appendChild(h);
+    var p = document.createElement("p"); p.className = "sub"; p.style.marginBottom = "18px";
+    p.textContent = "予約リクエストを受け付けました。空き状況を確認し、" + rec.contactType + "でご連絡します。"; wrap.appendChild(p);
+
+    var box = document.createElement("div");
+    appendRow(box, "お名前", rec.name + " 様");
+    appendRow(box, "連絡方法", rec.contactType + "（" + rec.contact + "）");
+    appendRow(box, "メニュー", rec.menu);
+    appendRow(box, "第一希望", fmtDT(rec.firstChoice));
+    if (rec.secondChoice) appendRow(box, "第二希望", fmtDT(rec.secondChoice));
+    appendRow(box, "ご利用", rec.firstVisit ? "はじめて" : "2回目以降");
+    appendRow(box, "きっかけ", rec.source);
+    if (rec.coupon) appendRow(box, "クーポン", rec.coupon);
+    wrap.appendChild(box);
+
+    var note = document.createElement("p"); note.className = "src-note"; note.style.marginTop = "16px";
+    note.insertAdjacentHTML("beforeend", '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l3-3 3 3 4-5"/></svg>');
+    var ns = document.createElement("span"); ns.textContent = "「" + rec.source + "」からの集客として記録しました。下の流入元レポートに反映されています。";
+    note.appendChild(ns); wrap.appendChild(note);
+
+    var again = document.createElement("button"); again.className = "btn btn-primary"; again.style.marginTop = "16px";
+    again.textContent = "もう一度デモを試す";
+    again.onclick = function () { location.reload(); };
+    wrap.appendChild(again);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  seed();
+  renderChart();
+})();
+</script>
+</body>
+</html>
