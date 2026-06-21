@@ -112,6 +112,27 @@
       .btn-ghost { background: var(--card); border-color: var(--line-strong); color: var(--ink); }
       .btn-ghost:hover { border-color: var(--clay); color: var(--clay-deep); }
 
+      /* ---- Hero layout + visual ---- */
+      .hero-grid { display: grid; grid-template-columns: 1.04fr .96fr; gap: clamp(30px, 5vw, 58px); align-items: center; }
+      @media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; gap: 40px; } }
+      .hero-visual { position: relative; min-height: 390px; }
+      @media (max-width: 900px) { .hero-visual { min-height: 330px; } }
+      @media (max-width: 460px) { .hero-visual { min-height: 250px; } }
+      .mock { position: absolute; background: #fff; border: 1px solid var(--line-strong); border-radius: 13px; overflow: hidden; transition: transform .45s cubic-bezier(.2,.7,.2,1);
+              box-shadow: 0 34px 64px -32px rgba(31,30,29,.5), 0 10px 24px -14px rgba(31,30,29,.28); }
+      .mock .bar { height: 27px; background: linear-gradient(var(--surface), #f0ede5); border-bottom: 1px solid var(--line); display: flex; align-items: center; gap: 6px; padding: 0 11px; }
+      .mock .bar i { width: 8.5px; height: 8.5px; border-radius: 50%; display: block; }
+      .mock .bar i:nth-child(1){ background:#e09177; } .mock .bar i:nth-child(2){ background:#e7c896; } .mock .bar i:nth-child(3){ background:#bcd2b0; }
+      .mock img { display: block; width: 100%; height: auto; }
+      .mock.main { width: 75%; right: 0; top: 5%; transform: rotate(-2.5deg); z-index: 2; }
+      .mock.sub { width: 49%; left: 0; bottom: 2%; transform: rotate(3.5deg); z-index: 3; }
+      .hero-visual:hover .mock.main { transform: rotate(-1.5deg) translateY(-4px); }
+      .hero-visual:hover .mock.sub { transform: rotate(2.5deg) translateY(-3px); }
+      .hero-visual .float { position: absolute; z-index: 4; top: -10px; left: 6%; background: var(--ink); color: #fff; font-size: 12.5px; font-weight: 600; padding: 8px 15px; border-radius: 999px; box-shadow: var(--shadow); display: flex; align-items: center; gap: 8px; }
+      .hero-visual .float .d { width: 7px; height: 7px; border-radius: 50%; background: #7ec07e; box-shadow: 0 0 0 0 rgba(126,192,126,.5); animation: pulse2 2s infinite; }
+      @keyframes pulse2 { 0% { box-shadow: 0 0 0 0 rgba(126,192,126,.5); } 70% { box-shadow: 0 0 0 6px rgba(126,192,126,0); } 100% { box-shadow: 0 0 0 0 rgba(126,192,126,0); } }
+      @media (prefers-reduced-motion: reduce) { .float .d { animation: none; } }
+
       /* ---- Stats ---- */
       .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; margin-top: 56px; }
       .stat { background: var(--surface); padding: 22px 24px; }
@@ -135,6 +156,19 @@
         transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
       }
       .card:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: var(--line-strong); }
+      /* flagship (featured) card */
+      .card.featured { grid-column: 1 / -1; border-color: #ecd6cb; }
+      @media (min-width: 761px) {
+        .card.featured { flex-direction: row; }
+        .card.featured .thumb { aspect-ratio: auto; width: 46%; min-height: 320px; border-bottom: 0; border-right: 1px solid var(--line); }
+        .card.featured .card-body { width: 54%; justify-content: center; padding: 32px 34px; }
+        .card.featured h3 { font-size: 24px; }
+        .card.featured p { font-size: 15px; }
+      }
+      .ribbon { position: absolute; top: 14px; left: 14px; z-index: 2; font-size: 11.5px; font-weight: 600; letter-spacing: .04em;
+        color: #fff; background: var(--clay-deep); padding: 6px 13px; border-radius: 999px; box-shadow: 0 6px 18px rgba(31,30,29,.22);
+        display: inline-flex; align-items: center; gap: 6px; }
+      .ribbon .s { width: 6px; height: 6px; border-radius: 50%; background: #fff; }
       .thumb { aspect-ratio: 16 / 10; border-bottom: 1px solid var(--line); overflow: hidden; position: relative; background: var(--canvas-deep); }
       .thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
       .card-body { padding: 22px 22px 24px; display: flex; flex-direction: column; flex: 1; }
@@ -187,19 +221,29 @@
 
     <header class="hero">
       <div class="wrap">
-        <span class="kicker reveal"><span class="pulse"></span>受託・業務委託 受付中</span>
-        <h1 class="title reveal">Webと予約の仕組みで、<br /><em>お店の毎日</em>をラクに。</h1>
-        <p class="lead reveal">
-          サロン・店舗・教室向けのLP/サイト制作と、スマホで完結するネット予約フォームを制作します。
-          InstagramのDM予約の自動化や、AIを使った業務効率化まで。実際に動くデモでご確認いただけます。
-        </p>
-        <div class="hero-cta reveal">
-          <a class="btn btn-primary" href="#work">制作物を見る →</a>
-          <a class="btn btn-ghost" href="#contact">仕事を相談する</a>
+        <div class="hero-grid">
+          <div class="hero-copy">
+            <span class="kicker reveal"><span class="pulse"></span>受託・業務委託 受付中</span>
+            <h1 class="title reveal">Webと予約の仕組みで、<br /><em>お店の毎日</em>をラクに。</h1>
+            <p class="lead reveal">
+              サロン・店舗・教室向けのLP/サイト制作と、スマホで完結するネット予約フォームを制作します。
+              InstagramのDM予約の自動化や、AIを使った業務効率化まで。実際に動くデモでご確認いただけます。
+              <br />いまの主力は、整体サロン向けの<b>AI業務改善デモ（予約・FAQ・問い合わせを一体化）</b>です。
+            </p>
+            <div class="hero-cta reveal">
+              <a class="btn btn-primary" href="#work">制作物を見る →</a>
+              <a class="btn btn-ghost" href="#contact">仕事を相談する</a>
+            </div>
+          </div>
+          <div class="hero-visual reveal">
+            <span class="float"><span class="d"></span>すべて触れる実物デモ</span>
+            <div class="mock main"><div class="bar"><i></i><i></i><i></i></div><img src="assets/massage.png" alt="マッサージ店サイト NAGI の制作例" loading="eager" /></div>
+            <div class="mock sub"><div class="bar"><i></i><i></i><i></i></div><img src="assets/restaurant.png" alt="飲食店ホームページの制作例" loading="eager" /></div>
+          </div>
         </div>
 
         <div class="stats reveal">
-          <div class="stat"><div class="n">6</div><div class="l">公開プロジェクト</div></div>
+          <div class="stat"><div class="n">7</div><div class="l">公開プロジェクト</div></div>
           <div class="stat"><div class="n">78</div><div class="l">自動テスト</div></div>
           <div class="stat"><div class="n">100%</div><div class="l">TypeScript strict</div></div>
           <div class="stat"><div class="n">0</div><div class="l">既知の脆弱性</div></div>
@@ -212,9 +256,75 @@
         <div class="sec-head reveal">
           <div class="ey">Work</div>
           <h2>制作物</h2>
-          <p>すべて実際に動作し、テスト・CI・型安全を備えています。AI・業務自動化・社内ツールの3領域をカバー。</p>
+          <p>店舗サイト・ネット予約・管理画面から、AI・業務自動化まで。すべて実際に動作し、テスト・型安全を備えています。</p>
         </div>
         <div class="grid">
+
+          <!-- massage : 整体・ボディケアサロン向け AI業務改善パッケージ（フラッグシップ） -->
+          <article class="card featured reveal">
+            <div class="thumb"><span class="ribbon"><span class="s"></span>注目の案件</span><img src="assets/massage.png" alt="整体・ボディケアサロン 凪 NAGI のAI業務改善デモ画面" /></div>
+            <div class="card-body">
+              <div class="tags"><span class="tag cat">AI業務改善パッケージ</span><span class="tag">AI FAQ（簡易RAG）</span><span class="tag">予約＋AI事前整理</span><span class="tag">問い合わせ自動分類</span><span class="tag">管理ダッシュボード</span></div>
+              <h3>整体・ボディケアサロン向け AI業務改善デモ（凪 NAGI）</h3>
+              <p>架空のボディケアサロン「凪 NAGI」を題材に、<b>予約・FAQ・問い合わせ対応を一体化</b>した業務改善パッケージ。和モダンのLPに加え、AI事前整理つき予約フォーム／根拠つきAI FAQチャット／自動分類＋返信たたき台つき問い合わせ／予約・問い合わせを集約する管理ダッシュボードを実装。AIは「人の確認を前提にした半自動」設計です。<b>課題→提案→制作物→成果</b>をケーススタディで読めます。</p>
+              <div class="links"><a href="massage/" target="_blank" rel="noopener">サイト ↗</a><a href="massage/case-study/" target="_blank" rel="noopener">ケーススタディ ↗</a><a href="massage/faq/" target="_blank" rel="noopener">AI FAQ ↗</a><a href="massage/dashboard/" target="_blank" rel="noopener">管理画面 ↗</a></div>
+            </div>
+          </article>
+
+          <!-- restaurant-site : 多ページHP -->
+          <article class="card reveal">
+            <div class="thumb"><img src="assets/restaurant.png" alt="飲食店ホームページ（和食 結 -yui-）の画面" /></div>
+            <div class="card-body">
+              <div class="tags"><span class="tag cat">ホームページ制作</span><span class="tag">多ページ</span><span class="tag">飲食店</span><span class="tag">予約フォーム付き</span></div>
+              <h3>和食 結 -yui- — 飲食店の多ページHP</h3>
+              <p>飲食店向けの本格的な多ページホームページ（トップ／お品書き・コース／こだわり／アクセス／ご予約フォーム）。「5ページ程度のホームページ制作」案件に直結するサンプル。スマホ対応。</p>
+              <div class="links"><a href="restaurant/" target="_blank" rel="noopener">ライブデモ ↗</a><a href="https://github.com/messi10reo-beep/restaurant-site" target="_blank" rel="noopener">コード ↗</a></div>
+            </div>
+          </article>
+
+          <!-- salon : サイト+予約+管理 3画面スイート -->
+          <article class="card reveal">
+            <div class="thumb"><img src="assets/salon.png" alt="美容室3画面スイート（hair atelier hibi）— サイト・予約フォーム・管理画面" /></div>
+            <div class="card-body">
+              <div class="tags"><span class="tag cat">店舗サイト</span><span class="tag">予約フォーム</span><span class="tag">管理画面</span><span class="tag">AI事前整理</span></div>
+              <h3>hair atelier hibi — 美容室サイト＋予約＋管理</h3>
+              <p>架空の美容室を題材に、<b>サイト・オンライン予約フォーム・予約管理画面</b>の3画面を一体で制作。予約フォームの送信内容はAIが「お悩みカテゴリ」と「カウンセリング確認ポイント」に事前整理し、そのまま管理画面の予約一覧へ反映。ステータス管理・絞り込み・KPI集計まで<b>実際に動く</b>デモです（AIは人の確認前提の半自動設計）。</p>
+              <div class="links"><a href="salon/" target="_blank" rel="noopener">サイト ↗</a><a href="salon/booking/" target="_blank" rel="noopener">予約フォーム ↗</a><a href="salon/admin/" target="_blank" rel="noopener">管理画面 ↗</a><a href="https://github.com/messi10reo-beep/salon-lp" target="_blank" rel="noopener">コード ↗</a></div>
+            </div>
+          </article>
+
+          <!-- clinic-lp : 多ステップ予約フォーム -->
+          <article class="card reveal">
+            <div class="thumb"><img src="assets/clinic.png" alt="WEB予約フォーム（あおぞらクリニック）の画面" /></div>
+            <div class="card-body">
+              <div class="tags"><span class="tag cat">予約フォーム</span><span class="tag">個人事業主向け</span><span class="tag">スマホ最適化</span><span class="tag">多ステップ</span></div>
+              <h3>ネット予約フォーム（個人事業主向け）</h3>
+              <p>Instagramで予約管理するサロン・教室などの個人事業主向け。メニュー→日時（カレンダー＋空き時間）→お客様情報（Instagram/連絡方法）→確認→予約番号発行まで、スマホで完結。DMのやりとりを減らせる実用フォーム。</p>
+              <div class="links"><a href="clinic/" target="_blank" rel="noopener">ライブデモ ↗</a><a href="https://github.com/messi10reo-beep/clinic-lp" target="_blank" rel="noopener">コード ↗</a></div>
+            </div>
+          </article>
+
+          <!-- brand-site -->
+          <article class="card reveal">
+            <div class="thumb"><img src="assets/brand-site.png" alt="架空コーヒーブランドLPの画面" /></div>
+            <div class="card-body">
+              <div class="tags"><span class="tag cat">ブランドLP</span><span class="tag">HTML/CSS</span><span class="tag">アニメーション</span><span class="tag">レスポンシブ</span></div>
+              <h3>KIRI COFFEE — ブランドLP</h3>
+              <p>架空のスペシャルティ珈琲焙煎所のランディングページ。編集的なタイポグラフィ・スクロール演出・マーキーで世界観を表現。店舗/ブランドサイト制作のデモ。</p>
+              <div class="links"><a href="brand/" target="_blank" rel="noopener">ライブデモ ↗</a><a href="https://github.com/messi10reo-beep/brand-site" target="_blank" rel="noopener">コード ↗</a></div>
+            </div>
+          </article>
+
+          <!-- admin / 予約管理システム -->
+          <article class="card reveal">
+            <div class="thumb"><img src="assets/admin.png" alt="予約管理ダッシュボードの画面" /></div>
+            <div class="card-body">
+              <div class="tags"><span class="tag cat">社内ツール・管理画面</span><span class="tag">Supabase</span><span class="tag">予約システム</span><span class="tag">CRUD</span></div>
+              <h3>予約管理ダッシュボード</h3>
+              <p>予約フォームから入った予約を一覧・検索・ステータス管理。メニューの追加/編集/並び替えも可能。Supabaseでデータを永続化し、フォームと連動する一気通貫の社内ツールです（デモのパスコード: 2026）。</p>
+              <div class="links"><a href="admin/" target="_blank" rel="noopener">管理画面デモ ↗</a><a href="clinic/" target="_blank" rel="noopener">予約フォーム ↗</a></div>
+            </div>
+          </article>
 
           <!-- rag-chat -->
           <article class="card reveal">
@@ -235,61 +345,6 @@
               <h3>AI議事録要約</h3>
               <p>会議の文字起こしから、要約・決定事項・ToDo（担当/期限）を自動抽出して議事録を生成。会議内容をローカルで処理します。</p>
               <div class="links"><a class="muted">ローカルデモ（要Node環境）</a><a href="https://github.com/messi10reo-beep/meeting-summarizer" target="_blank" rel="noopener">コード ↗</a></div>
-            </div>
-          </article>
-
-          <!-- brand-site -->
-          <article class="card reveal">
-            <div class="thumb"><img src="assets/brand-site.png" alt="架空コーヒーブランドLPの画面" /></div>
-            <div class="card-body">
-              <div class="tags"><span class="tag cat">ブランドLP</span><span class="tag">HTML/CSS</span><span class="tag">アニメーション</span><span class="tag">レスポンシブ</span></div>
-              <h3>KIRI COFFEE — ブランドLP</h3>
-              <p>架空のスペシャルティ珈琲焙煎所のランディングページ。編集的なタイポグラフィ・スクロール演出・マーキーで世界観を表現。店舗/ブランドサイト制作のデモ。</p>
-              <div class="links"><a href="brand/" target="_blank" rel="noopener">ライブデモ ↗</a><a href="https://github.com/messi10reo-beep/brand-site" target="_blank" rel="noopener">コード ↗</a></div>
-            </div>
-          </article>
-
-          <!-- salon-lp -->
-          <article class="card reveal">
-            <div class="thumb"><img src="assets/salon.png" alt="美容室LP（hair atelier hibi）の画面" /></div>
-            <div class="card-body">
-              <div class="tags"><span class="tag cat">店舗LP</span><span class="tag">HTML/CSS</span><span class="tag">レスポンシブ</span></div>
-              <h3>hair atelier hibi — 美容室LP</h3>
-              <p>美容室のランディングページ。写真で世界観を作り、メニュー・料金、ギャラリー、アクセス、予約導線までを1ページに。店舗・サロン案件向けのデモ。</p>
-              <div class="links"><a href="salon/" target="_blank" rel="noopener">ライブデモ ↗</a><a href="https://github.com/messi10reo-beep/salon-lp" target="_blank" rel="noopener">コード ↗</a></div>
-            </div>
-          </article>
-
-          <!-- restaurant-site : 多ページHP -->
-          <article class="card reveal">
-            <div class="thumb"><img src="assets/restaurant.png" alt="飲食店ホームページ（和食 結 -yui-）の画面" /></div>
-            <div class="card-body">
-              <div class="tags"><span class="tag cat">ホームページ制作</span><span class="tag">多ページ</span><span class="tag">飲食店</span><span class="tag">予約フォーム付き</span></div>
-              <h3>和食 結 -yui- — 飲食店の多ページHP</h3>
-              <p>飲食店向けの本格的な多ページホームページ（トップ／お品書き・コース／こだわり／アクセス／ご予約フォーム）。「5ページ程度のホームページ制作」案件に直結するサンプル。スマホ対応。</p>
-              <div class="links"><a href="restaurant/" target="_blank" rel="noopener">ライブデモ ↗</a><a href="https://github.com/messi10reo-beep/restaurant-site" target="_blank" rel="noopener">コード ↗</a></div>
-            </div>
-          </article>
-
-          <!-- clinic-lp : 多ステップ予約フォーム -->
-          <article class="card reveal">
-            <div class="thumb"><img src="assets/clinic.png" alt="WEB予約フォーム（あおぞらクリニック）の画面" /></div>
-            <div class="card-body">
-              <div class="tags"><span class="tag cat">予約フォーム</span><span class="tag">個人事業主向け</span><span class="tag">スマホ最適化</span><span class="tag">多ステップ</span></div>
-              <h3>ネット予約フォーム（個人事業主向け）</h3>
-              <p>Instagramで予約管理するサロン・教室などの個人事業主向け。メニュー→日時（カレンダー＋空き時間）→お客様情報（Instagram/連絡方法）→確認→予約番号発行まで、スマホで完結。DMのやりとりを減らせる実用フォーム。</p>
-              <div class="links"><a href="clinic/" target="_blank" rel="noopener">ライブデモ ↗</a><a href="https://github.com/messi10reo-beep/clinic-lp" target="_blank" rel="noopener">コード ↗</a></div>
-            </div>
-          </article>
-
-          <!-- admin / 予約管理システム -->
-          <article class="card reveal">
-            <div class="thumb"><img src="assets/admin.png" alt="予約管理ダッシュボードの画面" /></div>
-            <div class="card-body">
-              <div class="tags"><span class="tag cat">社内ツール・管理画面</span><span class="tag">Supabase</span><span class="tag">予約システム</span><span class="tag">CRUD</span></div>
-              <h3>予約管理ダッシュボード</h3>
-              <p>予約フォームから入った予約を一覧・検索・ステータス管理。メニューの追加/編集/並び替えも可能。Supabaseでデータを永続化し、フォームと連動する一気通貫の社内ツールです（デモのパスコード: 2026）。</p>
-              <div class="links"><a href="admin/" target="_blank" rel="noopener">管理画面デモ ↗</a><a href="clinic/" target="_blank" rel="noopener">予約フォーム ↗</a></div>
             </div>
           </article>
 

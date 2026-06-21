@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ご予約 | hair atelier hibi（オンライン予約・デモ）</title>
+<meta name="description" content="hair atelier hibi のオンライン予約フォーム。ご希望メニュー・日時・髪のお悩みを入力すると、AIが内容を事前整理してスタイリストの確認ポイントを提示します。架空サロンのポートフォリオデモ。" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%233f3a36'/%3E%3Ctext x='16' y='22' font-family='Georgia,serif' font-size='17' fill='%23d8c3a5' text-anchor='middle'%3Eh%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Shippori+Mincho:wght@400;500;600&family=Zen+Kaku+Gothic+New:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --charcoal: #3f3a36; --charcoal-soft: #56504a; --greige: #b9aa97; --greige-light: #e8e0d6;
+    --cream: #f6f2ec; --paper: #fbf9f5; --accent: #a98c6b; --accent-deep: #8a7050;
+    --line: #ddd3c6; --text: #4a443f; --text-soft: #7a726a; --white: #ffffff;
+    --shadow-sm: 0 4px 16px rgba(63,58,54,.06); --shadow-md: 0 14px 40px rgba(63,58,54,.12);
+    --serif-en: 'Cormorant Garamond', serif; --serif-ja: 'Shippori Mincho', serif; --sans-ja: 'Zen Kaku Gothic New', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--sans-ja); color: var(--text); background: var(--paper); line-height: 1.85; font-size: 16px; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+  .wrap { width: min(1080px, 90vw); margin-inline: auto; }
+  .eyebrow { font-family: var(--serif-en); font-size: .95rem; letter-spacing: .42em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
+
+  /* header */
+  header { position: sticky; top: 0; z-index: 50; display: flex; align-items: center; justify-content: space-between;
+    padding: 1rem clamp(1.25rem, 5vw, 3.5rem); background: rgba(251,249,245,.92); backdrop-filter: blur(10px); box-shadow: var(--shadow-sm); }
+  .logo { font-family: var(--serif-en); font-size: 1.4rem; font-weight: 600; letter-spacing: .18em; color: var(--charcoal); }
+  .logo .logo-sub { display: block; font-family: var(--sans-ja); font-size: .58rem; letter-spacing: .4em; margin-top: 2px; opacity: .75; }
+  .header-nav { display: flex; gap: 1.4rem; align-items: center; font-size: .8rem; letter-spacing: .1em; }
+  .header-nav a:hover { color: var(--accent); }
+
+  /* hero */
+  .phero { background: linear-gradient(180deg, var(--cream), var(--paper)); padding: clamp(2.6rem, 6vw, 4rem) 0 clamp(1.5rem, 4vw, 2.5rem); border-bottom: 1px solid var(--line); }
+  .phero h1 { font-family: var(--serif-ja); font-weight: 600; font-size: clamp(1.9rem, 5vw, 2.8rem); color: var(--charcoal); letter-spacing: .06em; margin: .5rem 0 .3rem; }
+  .phero h1 .en { display: block; font-family: var(--serif-en); font-style: italic; font-size: 1.05rem; color: var(--accent); letter-spacing: .04em; font-weight: 500; margin-top: .3rem; }
+  .phero .lead { max-width: 60ch; color: var(--text-soft); font-size: .95rem; margin-top: 1rem; }
+  .phero .lead b { color: var(--charcoal); font-weight: 500; }
+
+  /* layout */
+  .section { padding: clamp(2.2rem, 5vw, 3.4rem) 0 clamp(3.5rem, 8vw, 5rem); }
+  .bk-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 30px; align-items: start; }
+  .panel { background: var(--white); border: 1px solid var(--line); border-radius: 12px; padding: clamp(1.6rem, 4vw, 2.4rem); box-shadow: var(--shadow-sm); }
+
+  /* form */
+  .field { margin-bottom: 1.3rem; }
+  .field > label { display: block; font-size: .88rem; font-weight: 500; color: var(--charcoal); letter-spacing: .04em; margin-bottom: .5rem; }
+  .req, .opt { font-size: .68rem; font-weight: 500; padding: .1rem .5rem; border-radius: 999px; margin-left: .6rem; letter-spacing: .08em; vertical-align: 2px; }
+  .req { background: #efe2d6; color: var(--accent-deep); }
+  .opt { background: var(--cream); color: var(--text-soft); }
+  .input, .select, .textarea { width: 100%; font-family: inherit; font-size: .95rem; color: var(--text); background: var(--paper);
+    border: 1px solid var(--line); border-radius: 8px; padding: .7rem .9rem; transition: border-color .25s ease, box-shadow .25s ease; }
+  .input:focus, .select:focus, .textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(169,140,107,.15); }
+  .textarea { min-height: 110px; resize: vertical; line-height: 1.7; }
+  .select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a98c6b' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right .9rem center; padding-right: 2.2rem; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .hint { font-size: .76rem; color: var(--text-soft); margin-top: .4rem; }
+  .err-msg { display: none; font-size: .78rem; color: #b4452f; margin-top: .4rem; }
+  .field.bad .input, .field.bad .select, .field.bad .textarea { border-color: #c96a4f; background: #fbf1ec; }
+  .field.bad .err-msg { display: block; }
+  .choices { display: flex; gap: 12px; flex-wrap: wrap; }
+  .choice { flex: 1; min-width: 130px; }
+  .choice input { position: absolute; opacity: 0; }
+  .choice label { display: block; text-align: center; padding: .65rem; border: 1px solid var(--line); border-radius: 8px; font-size: .9rem; cursor: pointer; background: var(--paper); transition: .2s; }
+  .choice input:checked + label { border-color: var(--accent); background: #f3ebe1; color: var(--accent-deep); font-weight: 500; }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: .6rem; font-family: inherit; font-size: .92rem;
+    letter-spacing: .08em; padding: .9rem 1.8rem; border-radius: 999px; border: 1px solid transparent; cursor: pointer; transition: .25s; }
+  .btn-primary { background: var(--accent); color: var(--white); box-shadow: var(--shadow-sm); }
+  .btn-primary:hover { background: var(--accent-deep); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+  .btn-ghost { background: transparent; border-color: var(--line); color: var(--charcoal); }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent-deep); }
+  .btn-block { width: 100%; }
+
+  .ai-note { display: flex; gap: .55rem; align-items: flex-start; font-size: .78rem; color: var(--text-soft); line-height: 1.6; }
+  .ai-note svg { width: 16px; height: 16px; flex: none; margin-top: 2px; color: var(--accent); }
+
+  /* aside */
+  .card { background: var(--white); border: 1px solid var(--line); border-radius: 12px; padding: 1.4rem 1.5rem; }
+  .card h3 { font-family: var(--serif-ja); font-size: 1.05rem; color: var(--charcoal); margin-bottom: 1rem; }
+  .flow { list-style: none; display: grid; gap: 1rem; }
+  .flow li { display: flex; gap: .9rem; font-size: .86rem; color: var(--text-soft); }
+  .flow b { font-family: var(--serif-en); font-style: italic; font-size: 1.1rem; color: var(--accent); flex: none; }
+  .ai-box { background: linear-gradient(180deg, #f4ede3, var(--white)); border: 1px solid var(--greige); border-radius: 12px; padding: 1.3rem 1.4rem; }
+  .ai-head { display: flex; align-items: center; gap: .7rem; margin-bottom: .8rem; }
+  .ai-mark { width: 34px; height: 34px; border-radius: 50%; background: var(--accent); color: var(--white); display: grid; place-items: center; flex: none; }
+  .ai-mark svg { width: 18px; height: 18px; }
+  .ai-head .t { font-weight: 500; color: var(--charcoal); font-size: .92rem; }
+  .ai-head .t small { display: block; font-family: var(--serif-en); font-style: italic; font-size: .72rem; color: var(--accent); letter-spacing: .04em; }
+  .ai-box p { font-size: .84rem; color: var(--text-soft); line-height: 1.7; }
+
+  /* success */
+  .success-mark { width: 64px; height: 64px; border-radius: 50%; background: var(--accent); color: var(--white); display: grid; place-items: center; margin: 0 auto 1.2rem; }
+  .success-mark svg { width: 30px; height: 30px; }
+  .center { text-align: center; } .muted { color: var(--text-soft); }
+  .mincho { font-family: var(--serif-ja); color: var(--charcoal); }
+  .sum-row { display: flex; gap: 14px; padding: .6rem 0; border-bottom: 1px dashed var(--line); font-size: .88rem; }
+  .sum-row:last-child { border-bottom: none; }
+  .sum-row .k { color: var(--text-soft); min-width: 92px; flex: none; }
+  .badge { display: inline-block; font-size: .76rem; font-weight: 500; padding: .2rem .7rem; border-radius: 999px; background: #efe2d6; color: var(--accent-deep); letter-spacing: .04em; }
+  .checks { list-style: none; display: grid; gap: .5rem; margin-top: .5rem; }
+  .checks li { display: flex; gap: .5rem; font-size: .84rem; color: var(--text); }
+  .checks svg { width: 15px; height: 15px; flex: none; margin-top: 4px; color: var(--accent); }
+
+  footer { background: #2f2b28; color: var(--greige-light); padding: 2.2rem 0; font-size: .76rem; }
+  .foot-grid { display: flex; justify-content: space-between; flex-wrap: wrap; gap: .8rem; opacity: .8; }
+
+  @media (max-width: 880px) { .bk-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 520px) { .row2 { grid-template-columns: 1fr; } .header-nav .hide-sp { display: none; } }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="../" class="logo">hibi<span class="logo-sub">HAIR ATELIER</span></a>
+  <nav class="header-nav">
+    <a href="../" class="hide-sp">サイト</a>
+    <a href="../admin/" class="hide-sp">管理画面</a>
+    <a href="tel:0312345678">03-1234-5678</a>
+  </nav>
+</header>
+
+<section class="phero">
+  <div class="wrap">
+    <span class="eyebrow">Online Booking</span>
+    <h1>ご予約<span class="en">Reserve your time at hibi</span></h1>
+    <p class="lead">ご希望のメニューと日時、いまの髪のお悩みをお知らせください。送信すると、AIが内容を「事前整理」し、当日スタイリストが確認すべきポイントを提示します。<b>空き状況の確認・確定のご連絡はスタッフが行います。</b></p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap bk-grid">
+    <div class="panel" id="formPanel">
+      <form id="bookingForm" novalidate>
+        <div class="field">
+          <label for="bk-name">お名前<span class="req">必須</span></label>
+          <input class="input" id="bk-name" name="name" autocomplete="name" placeholder="日比野 花子" />
+          <p class="err-msg">お名前をご入力ください。</p>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label for="bk-email">メールアドレス<span class="req">必須</span></label>
+            <input class="input" id="bk-email" name="email" type="email" autocomplete="email" placeholder="hanako@example.com" />
+            <p class="err-msg">正しいメールアドレスをご入力ください。</p>
+          </div>
+          <div class="field">
+            <label for="bk-phone">電話番号<span class="req">必須</span></label>
+            <input class="input" id="bk-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="090-1234-5678" />
+            <p class="err-msg">電話番号をご入力ください（数字10〜11桁）。</p>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label for="bk-menu">希望メニュー<span class="req">必須</span></label>
+            <select class="select" id="bk-menu" name="menu"><option value="">選択してください</option></select>
+            <p class="err-msg">メニューをお選びください。</p>
+          </div>
+          <div class="field">
+            <label for="bk-stylist">ご指名<span class="opt">任意</span></label>
+            <select class="select" id="bk-stylist" name="stylist"></select>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label for="bk-first">第一希望日時<span class="req">必須</span></label>
+            <input class="input" id="bk-first" name="firstChoice" type="datetime-local" />
+            <p class="err-msg">第一希望日時をご入力ください。</p>
+          </div>
+          <div class="field">
+            <label for="bk-second">第二希望日時<span class="opt">任意</span></label>
+            <input class="input" id="bk-second" name="secondChoice" type="datetime-local" />
+          </div>
+        </div>
+        <div class="field">
+          <label for="bk-concern">髪のお悩み・ご希望<span class="req">必須</span></label>
+          <textarea class="textarea" id="bk-concern" name="concern" placeholder="例）毛先のパサつきが気になります。湿気でくせが広がるので、扱いやすいスタイルにしたいです。"></textarea>
+          <p class="hint">入力内容をもとに、AIがお悩みのカテゴリを自動で振り分けます（ダメージ・くせ毛・白髪 など）。</p>
+          <p class="err-msg">髪のお悩み・ご希望をご入力ください。</p>
+        </div>
+        <div class="field">
+          <label>当サロンのご利用は？<span class="req">必須</span></label>
+          <div class="choices" role="radiogroup">
+            <div class="choice"><input type="radio" id="bk-first-yes" name="isFirstVisit" value="yes" /><label for="bk-first-yes">はじめて</label></div>
+            <div class="choice"><input type="radio" id="bk-first-no" name="isFirstVisit" value="no" /><label for="bk-first-no">2回目以降</label></div>
+          </div>
+          <p class="err-msg" id="fvErr">いずれかをお選びください。</p>
+        </div>
+        <div class="field">
+          <label for="bk-note">そのほかご要望<span class="opt">任意</span></label>
+          <textarea class="textarea" id="bk-note" name="note" style="min-height:80px" placeholder="例）見本の写真があります／お子様連れで伺います など"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">この内容で予約を申し込む</button>
+        <p class="ai-note" style="margin-top:14px">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4M12 16h.01"/><circle cx="12" cy="12" r="10"/></svg>
+          これはデモです。入力内容はお使いのブラウザ内（localStorage）にのみ保存され、外部には送信されません。
+        </p>
+      </form>
+    </div>
+
+    <aside style="display:grid; gap:18px;">
+      <div class="card">
+        <h3>ご予約後の流れ</h3>
+        <ol class="flow">
+          <li><b>01</b><span>フォーム送信（AIが内容を事前整理）</span></li>
+          <li><b>02</b><span>スタッフが空き状況を確認</span></li>
+          <li><b>03</b><span>確定のご連絡（メール / 電話）</span></li>
+          <li><b>04</b><span>ご来店・カウンセリング</span></li>
+        </ol>
+      </div>
+      <div class="ai-box">
+        <div class="ai-head">
+          <span class="ai-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4"/><circle cx="12" cy="12" r="3"/></svg></span>
+          <div class="t">AIが入力をサポート<small>Human-in-the-loop</small></div>
+        </div>
+        <p>送信後、AIが髪のお悩みを分類して「カウンセリングで確認すべきポイント」を提示します。あくまで下書きで、確定はスタイリストが行います。</p>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-grid">
+    <span>© 2026 hair atelier hibi</span>
+    <span>※ ポートフォリオ用に制作した架空サロンのデモです。実在の店舗・連絡先ではありません。</span>
+  </div>
+</footer>
+
+<script src="../assets/data.js"></script>
+<script src="../assets/ai.js"></script>
+<script src="../assets/store.js"></script>
+<script>
+"use strict";
+(function () {
+  var ICON_AI = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4"/><circle cx="12" cy="12" r="3"/></svg>';
+  var ICON_CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>';
+  var ICON_INFO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4M12 16h.01"/><circle cx="12" cy="12" r="10"/></svg>';
+
+  // メニュー・スタイリストの選択肢を store から流し込む
+  var sel = document.getElementById("bk-menu");
+  window.HibiStore.MENUS.forEach(function (m) {
+    var o = document.createElement("option");
+    o.value = m.name;
+    o.textContent = m.price !== "—" ? m.name + "（" + m.price + " / " + m.minutes + "分）" : m.name;
+    sel.appendChild(o);
+  });
+  var ssel = document.getElementById("bk-stylist");
+  window.HibiStore.STYLISTS.forEach(function (s) {
+    var o = document.createElement("option"); o.value = s; o.textContent = s; ssel.appendChild(o);
+  });
+
+  var form = document.getElementById("bookingForm");
+  function field(id) { var el = document.getElementById(id); return el ? el.closest(".field") : null; }
+  function setBad(id, bad) { var f = field(id); if (f) f.classList.toggle("bad", bad); }
+  function val(id) { return (document.getElementById(id).value || "").trim(); }
+
+  function validate() {
+    var ok = true;
+    if (!val("bk-name")) { setBad("bk-name", true); ok = false; } else setBad("bk-name", false);
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val("bk-email"))) { setBad("bk-email", true); ok = false; } else setBad("bk-email", false);
+    if (!/^\d{10,11}$/.test(val("bk-phone").replace(/[-\s]/g, ""))) { setBad("bk-phone", true); ok = false; } else setBad("bk-phone", false);
+    if (!val("bk-menu")) { setBad("bk-menu", true); ok = false; } else setBad("bk-menu", false);
+    if (!val("bk-first")) { setBad("bk-first", true); ok = false; } else setBad("bk-first", false);
+    if (!val("bk-concern")) { setBad("bk-concern", true); ok = false; } else setBad("bk-concern", false);
+    var fv = form.querySelector('input[name="isFirstVisit"]:checked');
+    var fvField = document.getElementById("bk-first-yes").closest(".field");
+    if (!fv) { fvField.classList.add("bad"); ok = false; } else fvField.classList.remove("bad");
+    return ok;
+  }
+
+  function fmtDT(v) {
+    if (!v) return "—";
+    var d = new Date(v);
+    if (isNaN(d.getTime())) return v;
+    var w = ["日","月","火","水","木","金","土"][d.getDay()];
+    return (d.getMonth() + 1) + "月" + d.getDate() + "日(" + w + ") " +
+      ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
+  }
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (!validate()) {
+      var firstBad = form.querySelector(".field.bad");
+      if (firstBad) firstBad.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+    var rec = window.HibiStore.addBooking({
+      name: val("bk-name"), email: val("bk-email"), phone: val("bk-phone"),
+      menu: val("bk-menu"), stylist: val("bk-stylist"),
+      firstChoice: val("bk-first"), secondChoice: val("bk-second"),
+      concern: val("bk-concern"),
+      isFirstVisit: form.querySelector('input[name="isFirstVisit"]:checked').value === "yes",
+      note: val("bk-note")
+    });
+    renderSuccess(rec);
+  });
+
+  function appendRow(parent, k, v) {
+    var line = document.createElement("div"); line.className = "sum-row";
+    var ks = document.createElement("span"); ks.className = "k"; ks.textContent = k;
+    var vs = document.createElement("span"); vs.textContent = v;
+    line.appendChild(ks); line.appendChild(vs); parent.appendChild(line);
+  }
+
+  function renderSuccess(rec) {
+    var panel = document.getElementById("formPanel");
+    panel.textContent = "";
+
+    var mark = document.createElement("div"); mark.className = "success-mark";
+    mark.insertAdjacentHTML("beforeend", ICON_CHECK); panel.appendChild(mark);
+
+    var h = document.createElement("h2"); h.className = "mincho center"; h.style.fontSize = "1.5rem";
+    h.textContent = "ご予約を受け付けました"; panel.appendChild(h);
+    var p = document.createElement("p"); p.className = "center muted";
+    p.style.cssText = "margin:.7rem auto 1.6rem; max-width:46ch; font-size:.86rem;";
+    p.textContent = "空き状況を確認し、スタッフより確定のご連絡をいたします。以下はAIによる事前整理の結果です（社内向けの下書き）。";
+    panel.appendChild(p);
+
+    var sumCard = document.createElement("div"); sumCard.className = "card"; sumCard.style.marginBottom = "1.1rem";
+    appendRow(sumCard, "お名前", rec.name + " 様");
+    appendRow(sumCard, "メニュー", rec.menu);
+    appendRow(sumCard, "ご指名", rec.stylist || "指名なし（お任せ）");
+    appendRow(sumCard, "第一希望", fmtDT(rec.firstChoice));
+    appendRow(sumCard, "第二希望", fmtDT(rec.secondChoice));
+    appendRow(sumCard, "ご利用", rec.isFirstVisit ? "はじめて" : "2回目以降");
+    panel.appendChild(sumCard);
+
+    var box = document.createElement("div"); box.className = "ai-box";
+    var head = document.createElement("div"); head.className = "ai-head";
+    var mk = document.createElement("span"); mk.className = "ai-mark"; mk.insertAdjacentHTML("beforeend", ICON_AI);
+    var tt = document.createElement("div"); tt.className = "t"; tt.appendChild(document.createTextNode("AIによる事前整理"));
+    var sm = document.createElement("small"); sm.textContent = "Auto triage · draft"; tt.appendChild(sm);
+    head.appendChild(mk); head.appendChild(tt); box.appendChild(head);
+
+    var row = document.createElement("div"); row.style.cssText = "display:flex;align-items:center;gap:.6rem;margin-bottom:.6rem;";
+    var k = document.createElement("span"); k.style.cssText = "font-size:.82rem;color:var(--text-soft);"; k.textContent = "自動分類カテゴリ：";
+    var badge = document.createElement("span"); badge.className = "badge"; badge.textContent = rec.category;
+    row.appendChild(k); row.appendChild(badge); box.appendChild(row);
+
+    var sumP = document.createElement("p"); sumP.textContent = rec.aiSummary; box.appendChild(sumP);
+
+    var chTitle = document.createElement("p");
+    chTitle.style.cssText = "font-size:.8rem;color:var(--accent-deep);margin:.9rem 0 .2rem;letter-spacing:.04em;";
+    chTitle.textContent = "▸ カウンセリング時の確認ポイント"; box.appendChild(chTitle);
+    var ul = document.createElement("ul"); ul.className = "checks";
+    (rec.aiChecks || []).forEach(function (c) {
+      var li = document.createElement("li"); li.insertAdjacentHTML("beforeend", ICON_CHECK);
+      var sp = document.createElement("span"); sp.textContent = c; li.appendChild(sp); ul.appendChild(li);
+    });
+    box.appendChild(ul);
+
+    var note = document.createElement("p"); note.className = "ai-note"; note.style.marginTop = ".9rem";
+    note.insertAdjacentHTML("beforeend", ICON_INFO);
+    var ns = document.createElement("span");
+    ns.textContent = "この分類とポイントはAIの下書きです。実際の施術内容は、当日スタイリストがカウンセリングで最終判断します。";
+    note.appendChild(ns); box.appendChild(note);
+    panel.appendChild(box);
+
+    var acts = document.createElement("div"); acts.style.cssText = "display:flex;gap:10px;flex-wrap:wrap;margin-top:1.2rem;";
+    var a1 = document.createElement("a"); a1.className = "btn btn-primary"; a1.href = "../admin/"; a1.textContent = "管理画面で確認 →";
+    var a2 = document.createElement("a"); a2.className = "btn btn-ghost"; a2.href = "../"; a2.textContent = "サイトに戻る";
+    acts.appendChild(a1); acts.appendChild(a2); panel.appendChild(acts);
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+})();
+</script>
+</body>
+</html>
