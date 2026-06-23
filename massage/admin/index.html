@@ -52,6 +52,7 @@
       .gate-card h1 { font-size: 20px; margin-bottom: 6px; }
       .gate-card .sub { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
       .gate-card input { width: 100%; height: 54px; font-size: 20px; text-align: center; letter-spacing: .4em; border: 1px solid var(--line-strong); border-radius: 12px; margin-bottom: 12px; background: var(--surface-2); }
+      .gate-card input.gate-text { font-size: 16px; text-align: left; letter-spacing: normal; padding: 0 14px; }
       .gate-card input:focus { outline: 2px solid var(--shu); border-color: var(--shu); background: #fff; }
       .gate-card .err { color: #a32d2d; font-size: 13px; min-height: 18px; margin-bottom: 8px; }
       .gate-card .hint { margin-top: 18px; font-size: 12px; color: var(--faint); }
@@ -218,11 +219,12 @@
       <div class="gate-card">
         <div class="logo">凪</div>
         <h1>管理画面にログイン</h1>
-        <div class="sub">お店のパスコードを入力してください</div>
-        <input id="passInput" type="password" inputmode="numeric" placeholder="••••" autocomplete="off" />
+        <div class="sub">管理者アカウントでログインしてください</div>
+        <input id="emailInput" class="gate-text" type="email" placeholder="メールアドレス" autocomplete="username" autocapitalize="off" spellcheck="false" />
+        <input id="passInput" class="gate-text" type="password" placeholder="パスワード" autocomplete="current-password" />
         <div class="err" id="passErr"></div>
         <button class="btn btn-dark btn-block" id="passBtn">ログイン</button>
-        <div class="hint">デモ用パスコード：<b>2026</b></div>
+        <div class="hint">アクセス権限のある管理者のみログインできます。</div>
       </div>
     </div>
 

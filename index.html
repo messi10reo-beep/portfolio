@@ -9,9 +9,28 @@
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Bone Studios — Web制作・予約フォーム・LP制作" />
     <meta property="og:description" content="サロン・店舗向けのLP/サイト制作と、スマホ完結のネット予約フォーム制作。実際に動くデモを公開中。" />
-    <meta property="og:image" content="https://portfolio-three-tawny-17.vercel.app/assets/massage.png" />
+    <meta property="og:image" content="https://portfolio-three-tawny-17.vercel.app/assets/massage.jpg" />
     <meta property="og:url" content="https://portfolio-three-tawny-17.vercel.app/" />
     <meta name="twitter:card" content="summary_large_image" />
+    <link rel="canonical" href="https://portfolio-three-tawny-17.vercel.app/" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "ProfessionalService",
+        "name": "Bone Studios",
+        "description": "サロン・店舗・小規模事業者向けのLP/サイト制作、スマホ完結のネット予約フォーム、AIを活用した業務改善を制作。すべて実際に動くデモを公開。",
+        "url": "https://portfolio-three-tawny-17.vercel.app/",
+        "image": "https://portfolio-three-tawny-17.vercel.app/assets/massage.jpg",
+        "email": "bonestudios02@gmail.com",
+        "areaServed": "JP",
+        "knowsAbout": ["Web制作", "LP制作", "ネット予約フォーム", "AI業務改善", "RAGチャットボット", "業務自動化"],
+        "makesOffer": [
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "ネット予約フォーム制作" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "店舗サイト・LP制作" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "AI業務改善・チャットボット導入" } }
+        ]
+      }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -203,6 +222,42 @@
       @keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
       @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(217,119,87,.5); } 70% { box-shadow: 0 0 0 7px rgba(217,119,87,0); } 100% { box-shadow: 0 0 0 0 rgba(217,119,87,0); } }
       @media (prefers-reduced-motion: reduce) { .reveal { animation: none; } .pulse { animation: none; } html { scroll-behavior: auto; } }
+
+      /* ---- About ---- */
+      .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(24px, 4vw, 46px); align-items: start; }
+      @media (max-width: 760px) { .about-grid { grid-template-columns: 1fr; } }
+      .about-lead { font-family: var(--font-display); font-weight: 500; font-size: clamp(19px, 2.5vw, 25px); line-height: 1.5; letter-spacing: -.01em; margin: 0 0 18px; }
+      .about-lead em { font-style: italic; color: var(--clay-deep); }
+      .about p { color: var(--muted); line-height: 1.8; margin: 0 0 14px; }
+      .stance { display: grid; gap: 11px; margin: 0; padding: 0; }
+      .stance li { list-style: none; display: flex; gap: 13px; align-items: flex-start; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+      .stance li b { display: block; font-family: var(--font-display); font-size: 15px; margin-bottom: 2px; }
+      .stance li span { color: var(--muted); font-size: 13.5px; line-height: 1.6; }
+      .stance .mk { flex: 0 0 auto; width: 26px; height: 26px; border-radius: 7px; background: var(--clay-soft); color: var(--clay-deep); display: grid; place-items: center; font-weight: 700; font-size: 13px; }
+
+      /* ---- Engagement (流れ・料金) ---- */
+      .eng-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: clamp(24px, 4vw, 40px); align-items: start; }
+      @media (max-width: 760px) { .eng-grid { grid-template-columns: 1fr; } }
+      .steps { display: grid; gap: 12px; }
+      .step { display: flex; gap: 14px; align-items: flex-start; }
+      .step .num { flex: 0 0 auto; width: 30px; height: 30px; border-radius: 50%; background: var(--ink); color: #fff; display: grid; place-items: center; font-family: var(--font-display); font-weight: 600; font-size: 14px; }
+      .step .tx b { display: block; font-size: 15px; }
+      .step .tx span { color: var(--muted); font-size: 13.5px; line-height: 1.6; }
+      .price { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 24px; box-shadow: 0 1px 2px rgba(31,30,29,.03); }
+      .price h3 { font-family: var(--font-display); font-weight: 600; font-size: 18px; margin: 0 0 4px; }
+      .price .note { color: var(--faint); font-size: 12.5px; margin: 0 0 16px; }
+      .price ul { list-style: none; padding: 0; margin: 0; }
+      .price li { display: flex; justify-content: space-between; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+      .price li:last-child { border-bottom: 0; padding-bottom: 0; }
+      .price li b { color: var(--clay-deep); font-family: var(--font-display); white-space: nowrap; }
+
+      /* ---- Contact extras ---- */
+      .contact .channels { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 14px; }
+      .contact .meta { color: #9b9384; font-size: 13px; margin: 20px 0 0; }
+      .contact .btn-light { background: #f3efe7; color: #2a2521; }
+      .contact .btn-light:hover { background: #fff; transform: translateY(-2px); }
+      .contact .btn-line { background: transparent; color: #f3efe7; border: 1.5px solid rgba(243,239,231,.45); }
+      .contact .btn-line:hover { border-color: rgba(243,239,231,.9); transform: translateY(-2px); }
     </style>
   </head>
   <body>
@@ -211,7 +266,9 @@
         <span class="brand"><span class="dot">B</span>Bone Studios</span>
         <div class="nav-links">
           <a href="#work">実績</a>
+          <a href="#about">自己紹介</a>
           <a href="#strengths">強み</a>
+          <a href="#engagement">料金</a>
           <a href="#contact">連絡先</a>
         </div>
         <a class="nav-cta" href="#contact">相談する</a>
@@ -236,8 +293,8 @@
           </div>
           <div class="hero-visual reveal">
             <span class="float"><span class="d"></span>すべて触れる実物デモ</span>
-            <div class="mock main"><div class="bar"><i></i><i></i><i></i></div><img src="assets/massage.png" alt="マッサージ店サイト NAGI の制作例" loading="eager" /></div>
-            <div class="mock sub"><div class="bar"><i></i><i></i><i></i></div><img src="assets/restaurant.png" alt="飲食店ホームページの制作例" loading="eager" /></div>
+            <div class="mock main"><div class="bar"><i></i><i></i><i></i></div><img src="assets/massage.jpg" alt="マッサージ店サイト NAGI の制作例" loading="eager" /></div>
+            <div class="mock sub"><div class="bar"><i></i><i></i><i></i></div><img src="assets/restaurant.jpg" alt="飲食店ホームページの制作例" loading="eager" /></div>
           </div>
         </div>
 
@@ -261,7 +318,7 @@
 
           <!-- massage : 整体・ボディケアサロン向け AI業務改善パッケージ（フラッグシップ） -->
           <article class="card featured reveal">
-            <div class="thumb"><span class="ribbon"><span class="s"></span>注目の案件</span><img src="assets/massage.png" alt="整体・ボディケアサロン 凪 NAGI のAI業務改善デモ画面" /></div>
+            <div class="thumb"><span class="ribbon"><span class="s"></span>注目の案件</span><img src="assets/massage.jpg" alt="整体・ボディケアサロン 凪 NAGI のAI業務改善デモ画面" loading="lazy" decoding="async" width="1200" height="681" /></div>
             <div class="card-body">
               <div class="tags"><span class="tag cat">AI業務改善パッケージ</span><span class="tag">AI FAQ（簡易RAG）</span><span class="tag">予約＋AI事前整理</span><span class="tag">問い合わせ自動分類</span><span class="tag">管理ダッシュボード</span></div>
               <h3>整体・ボディケアサロン向け AI業務改善デモ（凪 NAGI）</h3>
@@ -272,7 +329,7 @@
 
           <!-- g-kentei : G検定 学習アプリ（React/TS・PWA） -->
           <article class="card reveal">
-            <div class="thumb"><img src="assets/g-kentei.png" alt="G検 Trainer — G検定 学習アプリのホーム画面" /></div>
+            <div class="thumb"><img src="assets/g-kentei.jpg" alt="G検 Trainer — G検定 学習アプリのホーム画面" loading="lazy" decoding="async" width="2560" height="1600" /></div>
             <div class="card-body">
               <div class="tags"><span class="tag cat">AI学習アプリ</span><span class="tag">React / TypeScript</span><span class="tag">PWA・オフライン</span><span class="tag">320問・シラバス2024</span></div>
               <h3>G検 Trainer — G検定 学習アプリ</h3>
@@ -283,7 +340,7 @@
 
           <!-- restaurant-site : 多ページHP -->
           <article class="card reveal">
-            <div class="thumb"><img src="assets/restaurant.png" alt="飲食店ホームページ（和食 結 -yui-）の画面" /></div>
+            <div class="thumb"><img src="assets/restaurant.jpg" alt="飲食店ホームページ（和食 結 -yui-）の画面" loading="lazy" decoding="async" width="1200" height="681" /></div>
             <div class="card-body">
               <div class="tags"><span class="tag cat">多ページHP＋予約</span><span class="tag">飲食店</span><span class="tag">席種・コース予約</span><span class="tag">予約台帳（管理）</span></div>
               <h3>和食 結 -yui- — 飲食店の多ページHP＋予約台帳</h3>
@@ -294,7 +351,7 @@
 
           <!-- salon : サイト+予約+管理 3画面スイート -->
           <article class="card reveal">
-            <div class="thumb"><img src="assets/salon.png" alt="美容室3画面スイート（hair atelier hibi）— サイト・予約フォーム・管理画面" /></div>
+            <div class="thumb"><img src="assets/salon.jpg" alt="美容室3画面スイート（hair atelier hibi）— サイト・予約フォーム・管理画面" loading="lazy" decoding="async" width="1280" height="720" /></div>
             <div class="card-body">
               <div class="tags"><span class="tag cat">店舗サイト</span><span class="tag">予約フォーム</span><span class="tag">管理画面</span><span class="tag">AI事前整理</span></div>
               <h3>hair atelier hibi — 美容室サイト＋予約＋管理</h3>
@@ -305,7 +362,7 @@
 
           <!-- sns-booking : SNS予約フォーム＋予約管理（ネイルサロン） -->
           <article class="card reveal">
-            <div class="thumb"><img src="assets/sns-booking.png" alt="SNS予約フォーム＋予約管理（ネイルサロン luce）の画面" /></div>
+            <div class="thumb"><img src="assets/sns-booking.jpg" alt="SNS予約フォーム＋予約管理（ネイルサロン luce）の画面" loading="lazy" decoding="async" width="1180" height="740" /></div>
             <div class="card-body">
               <div class="tags"><span class="tag cat">SNS予約フォーム＋管理</span><span class="tag">Instagram / LINE</span><span class="tag">DM/LINE返信文 自動生成</span><span class="tag">流入元の可視化</span></div>
               <h3>ネイルサロンのSNS予約フォーム＋予約管理</h3>
@@ -333,15 +390,74 @@
       </div>
     </section>
 
+    <section id="about">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <div class="ey">About</div>
+          <h2>制作する人について</h2>
+        </div>
+        <div class="about-grid about">
+          <div class="reveal">
+            <p class="about-lead">動くものを早く形にして、<em>お金を払う価値があるか</em>で判断する。それが制作の基準です。</p>
+            <p>AIを“流行り”ではなく<b>お店の現実の課題解決</b>に使うことに取り組んでいます。サロン・飲食店・教室といった小規模事業者の「予約・問い合わせ・集客」のつまずきを、Webと予約の仕組み、そして人の確認を前提にしたAIで軽くする——そんな制作を続けてきました。</p>
+            <p>このサイトに並ぶ作品はすべて<b>実際に触れる実物デモ</b>です。「作れます」ではなく「動くものでお見せします」を信条に、<b>課題→提案→制作物→成果</b>の形で説明します。まずは気軽にご相談ください。</p>
+          </div>
+          <ul class="stance reveal">
+            <li><span class="mk">✓</span><div><b>動くもので証明する</b><span>口頭やスライドでなく、実際に操作できるデモで価値を確認いただけます。</span></div></li>
+            <li><span class="mk">✓</span><div><b>盛らない・正直に</b><span>できること／できないことを率直に。実績や効果を誇張しません。</span></div></li>
+            <li><span class="mk">✓</span><div><b>小さく始めて確かめる</b><span>まず小さく作って効果を確認し、必要な分だけ拡張します。</span></div></li>
+            <li><span class="mk">✓</span><div><b>AIは人の確認を前提に</b><span>全自動でなく半自動。最終判断は人が行う、安全な設計にします。</span></div></li>
+            <li><span class="mk">✓</span><div><b>データに配慮した実装</b><span>外部に出さないローカル完結の構成・入力チェック・型安全な実装。</span></div></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="engagement">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <div class="ey">How it works</div>
+          <h2>ご依頼の流れと料金の目安</h2>
+          <p>ご相談・お見積りは無料です。要件をうかがってから、最適な形と金額をご提案します。</p>
+        </div>
+        <div class="eng-grid">
+          <div class="steps reveal">
+            <div class="step"><span class="num">1</span><div class="tx"><b>ご相談（無料）</b><span>やりたいこと・お悩みをお聞かせください。デモをお見せしながら方向性を整理します。</span></div></div>
+            <div class="step"><span class="num">2</span><div class="tx"><b>ご提案・お見積り</b><span>構成・できること・金額・納期を明確にご提示します。</span></div></div>
+            <div class="step"><span class="num">3</span><div class="tx"><b>制作</b><span>こまめに途中経過を共有し、認識のズレが出ないよう進めます。</span></div></div>
+            <div class="step"><span class="num">4</span><div class="tx"><b>ご確認・修正</b><span>実際に触っていただき、気になる点を調整します。</span></div></div>
+            <div class="step"><span class="num">5</span><div class="tx"><b>納品・公開</b><span>公開設定の代行や、その後の運用・改修のご相談も承ります。</span></div></div>
+          </div>
+          <div class="price reveal">
+            <h3>料金の目安</h3>
+            <p class="note">※ 内容・規模で変動します。まずはお見積りを。</p>
+            <ul>
+              <li>ネット予約フォーム<b>¥15,000〜</b></li>
+              <li>LP（1ページ）<b>¥30,000〜</b></li>
+              <li>店舗サイト（5ページ）<b>¥80,000〜</b></li>
+              <li>AI FAQ・チャットボット<b>¥20,000〜</b></li>
+              <li>業務自動化（CSV集計など）<b>¥5,000〜</b></li>
+              <li>AI業務改善スイート（凪 NAGI 型）<b>応相談</b></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section id="contact">
       <div class="wrap">
         <div class="contact reveal">
           <h2>お仕事のご依頼・ご相談</h2>
-          <p>予約フォーム・LP・店舗サイト制作を承っています。下記のサービスからお気軽にご相談ください（お見積り無料）。</p>
-          <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
-            <a class="btn btn-primary" href="https://coconala.com/" target="_blank" rel="noopener">ココナラで相談する</a>
-            <a class="btn" href="https://www.lancers.jp/" target="_blank" rel="noopener" style="background:transparent;color:#f3efe7;border:1.5px solid rgba(243,239,231,.45);">ランサーズで相談する</a>
+          <p>予約フォーム・店舗サイト・LP制作から、AIを使った業務改善まで。お見積り・ご相談は無料です。まずはお気軽にどうぞ。</p>
+          <div class="channels">
+            <a class="btn btn-primary" href="mailto:bonestudios02@gmail.com?subject=%E5%88%B6%E4%BD%9C%E3%81%AE%E3%81%94%E7%9B%B8%E8%AB%87%EF%BC%88Bone%20Studios%EF%BC%89">メールで相談する</a>
+            <a class="btn btn-light" href="https://github.com/messi10reo-beep" target="_blank" rel="noopener">GitHub ↗</a>
           </div>
+          <div class="channels">
+            <a class="btn btn-line" href="https://coconala.com/" target="_blank" rel="noopener">ココナラ</a>
+            <a class="btn btn-line" href="https://www.lancers.jp/" target="_blank" rel="noopener">ランサーズ</a>
+          </div>
+          <p class="meta">通常2〜3営業日以内にご返信します ／ 個人事業主・小規模店舗のご依頼を歓迎します</p>
         </div>
       </div>
     </section>

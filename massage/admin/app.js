@@ -1,11 +1,15 @@
 // 凪 NAGI メニューCMS (demo). Vanilla JS + Supabase REST. XSS-safe (no innerHTML).
 "use strict";
 
-const SB = "https://ysgyhijsrwrzrawfceba.supabase.co/rest/v1";
+const SB_BASE = "https://ysgyhijsrwrzrawfceba.supabase.co";
+const SB = SB_BASE + "/rest/v1";
+const SB_AUTH = SB_BASE + "/auth/v1";
+// Public "anon" key: safe to ship to the browser. Row-Level Security restricts
+// writes to authenticated admins, so this key alone cannot modify any data.
 const KEY =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlzZ3loaWpzcndyenJhd2ZjZWJhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3Nzg0OTIsImV4cCI6MjA5NzM1NDQ5Mn0.LJ0K_RpQJ6CYPaas-cN59olZwCcUy6Y-mZA6OgVYD1Q";
-const PASSCODE = "2026";
 const TABLE = "/massage_menus";
+const SESSION_KEY = "nagi_admin_session";
 const CATEGORIES = ["ボディ", "ヘッド", "フット", "ウェルネス", "スペシャル"];
 const CAT_EN = { "ボディ": "Body", "ヘッド": "Head", "フット": "Foot", "ウェルネス": "Wellness", "スペシャル": "Special", "その他": "Other" };
 
@@ -19,13 +23,56 @@ const state = { menus: [], view: "dash", search: "", catFilter: "", statusFilter
 const $ = (s) => document.querySelector(s);
 const $$ = (s) => Array.prototype.slice.call(document.querySelectorAll(s));
 
+// ---- Supabase Auth (admin session) ----
+let session = null; // { access_token, refresh_token, expires_at }
+
+function loadSession() {
+  try { session = JSON.parse(sessionStorage.getItem(SESSION_KEY) || "null"); }
+  catch (e) { session = null; }
+  return session;
+}
+function saveSession(s) {
+  if (s && s.access_token) {
+    session = { access_token: s.access_token, refresh_token: s.refresh_token, expires_at: Date.now() + (s.expires_in || 3600) * 1000 };
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
+  } else {
+    session = null;
+    sessionStorage.removeItem(SESSION_KEY);
+  }
+}
+async function authToken(grant, payload) {
+  const res = await fetch(SB_AUTH + "/token?grant_type=" + grant, {
+    method: "POST",
+    headers: { apikey: KEY, "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) return null;
+  return res.json();
+}
+async function signIn(email, password) {
+  const data = await authToken("password", { email: email, password: password });
+  if (!data) throw new Error("login failed");
+  saveSession(data);
+}
+async function refreshSession() {
+  if (!session || !session.refresh_token) return false;
+  const data = await authToken("refresh_token", { refresh_token: session.refresh_token });
+  saveSession(data);
+  return !!data;
+}
+function signOut() { saveSession(null); }
+
 // ---- Supabase REST ----
 async function api(path, opts = {}) {
-  const res = await fetch(SB + path, {
+  const send = (tok) => fetch(SB + path, {
     method: opts.method || "GET",
-    headers: { apikey: KEY, Authorization: "Bearer " + KEY, "Content-Type": "application/json", Prefer: opts.prefer || "" },
+    headers: { apikey: KEY, Authorization: "Bearer " + tok, "Content-Type": "application/json", Prefer: opts.prefer || "" },
     body: opts.body ? JSON.stringify(opts.body) : undefined,
   });
+  let res = await send((session && session.access_token) || KEY);
+  // Token expired mid-session: refresh once and retry, otherwise force re-login.
+  if (res.status === 401 && (await refreshSession())) res = await send(session.access_token);
+  if (res.status === 401) { signOut(); location.reload(); throw new Error("セッションが切れました。再度ログインしてください。"); }
   if (!res.ok) throw new Error("API " + res.status + ": " + (await res.text()));
   return res.status === 204 ? null : res.json();
 }
@@ -307,9 +354,21 @@ function startApp() {
   $("#app").style.display = "grid";
   loadAll();
 }
-function tryLogin() {
-  if ($("#passInput").value === PASSCODE) { sessionStorage.setItem("nagi_admin", "1"); startApp(); }
-  else { $("#passErr").textContent = "パスコードが違います"; $("#passInput").value = ""; }
+async function tryLogin() {
+  const email = $("#emailInput").value.trim();
+  const password = $("#passInput").value;
+  if (!email || !password) { $("#passErr").textContent = "メールアドレスとパスワードを入力してください"; return; }
+  const btn = $("#passBtn"); const prev = btn.textContent;
+  btn.disabled = true; btn.textContent = "ログイン中…"; $("#passErr").textContent = "";
+  try {
+    await signIn(email, password);
+    startApp();
+  } catch (e) {
+    $("#passErr").textContent = "メールアドレスまたはパスワードが違います";
+    $("#passInput").value = "";
+  } finally {
+    btn.disabled = false; btn.textContent = prev;
+  }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -319,10 +378,11 @@ document.addEventListener("DOMContentLoaded", () => {
   document.body.appendChild(dl);
 
   $("#passBtn").onclick = tryLogin;
+  $("#emailInput").addEventListener("keydown", (e) => { if (e.key === "Enter") tryLogin(); });
   $("#passInput").addEventListener("keydown", (e) => { if (e.key === "Enter") tryLogin(); });
   $("#reloadBtn").onclick = () => { loadAll(); if (state.view === "preview") reloadFrame(); toast("最新の状態に更新しました"); };
   $("#addMenuBtn").onclick = () => openMenuModal(null);
-  $("#logoutBtn").onclick = (e) => { e.preventDefault(); sessionStorage.removeItem("nagi_admin"); location.reload(); };
+  $("#logoutBtn").onclick = (e) => { e.preventDefault(); signOut(); location.reload(); };
   $$(".navitem").forEach((b) => (b.onclick = () => switchView(b.dataset.view)));
 
   $("#search").addEventListener("input", (e) => { state.search = e.target.value.trim(); renderMenuList(); });
@@ -335,5 +395,5 @@ document.addEventListener("DOMContentLoaded", () => {
   }));
   $("#frameReload").onclick = () => { reloadFrame(); toast("プレビューを更新しました"); };
 
-  if (sessionStorage.getItem("nagi_admin") === "1") startApp();
+  if (loadSession()) startApp();
 });
