@@ -258,6 +258,18 @@
       .contact .btn-light:hover { background: #fff; transform: translateY(-2px); }
       .contact .btn-line { background: transparent; color: #f3efe7; border: 1.5px solid rgba(243,239,231,.45); }
       .contact .btn-line:hover { border-color: rgba(243,239,231,.9); transform: translateY(-2px); }
+
+      /* ---- FAQ (実績ゼロの不安に答える) ---- */
+      .faq-list { display: grid; gap: 12px; max-width: 760px; }
+      .faq-item { background: var(--card); border: 1px solid var(--line); border-radius: 13px; overflow: hidden; transition: border-color .15s; }
+      .faq-item[open] { border-color: var(--line-strong); }
+      .faq-item summary { list-style: none; cursor: pointer; padding: 18px 20px; display: flex; align-items: center; gap: 13px; font-family: var(--font-display); font-weight: 600; font-size: 16px; letter-spacing: -.01em; }
+      .faq-item summary::-webkit-details-marker { display: none; }
+      .faq-item summary .q { flex: 0 0 auto; width: 24px; height: 24px; border-radius: 7px; background: var(--clay-soft); color: var(--clay-deep); display: grid; place-items: center; font-weight: 700; font-size: 13px; }
+      .faq-item summary .chev { margin-left: auto; color: var(--faint); transition: transform .2s; font-size: 14px; }
+      .faq-item[open] summary .chev { transform: rotate(180deg); }
+      .faq-item .a { padding: 0 20px 18px 57px; color: var(--muted); font-size: 14.5px; line-height: 1.75; }
+      .faq-item .a b { color: var(--ink); font-weight: 600; }
     </style>
   </head>
   <body>
@@ -269,6 +281,7 @@
           <a href="#about">自己紹介</a>
           <a href="#strengths">強み</a>
           <a href="#engagement">料金</a>
+          <a href="#faq">FAQ</a>
           <a href="#contact">連絡先</a>
         </div>
         <a class="nav-cta" href="#contact">相談する</a>
@@ -440,6 +453,42 @@
               <li>AI業務改善スイート（凪 NAGI 型）<b>応相談</b></li>
             </ul>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <div class="ey">FAQ</div>
+          <h2>よくあるご質問</h2>
+          <p>初めてWeb制作を依頼する方・実績の少ない相手に頼むのが不安な方へ。よくいただく質問にお答えします。</p>
+        </div>
+        <div class="faq-list">
+          <details class="faq-item reveal">
+            <summary><span class="q">Q</span>実績がまだ少ないようですが、頼んで大丈夫ですか？<span class="chev">▾</span></summary>
+            <div class="a">はい。だからこそ<b>「作れます」と言葉で説明する代わりに、すべて実際に動くデモで判断いただけるように</b>しています。このサイトの制作物はどれも今すぐ触れます。ご依頼前に近い形のデモをお見せし、仕上がりイメージのズレをなくしてから着手します。</div>
+          </details>
+          <details class="faq-item reveal">
+            <summary><span class="q">Q</span>見積りより後から高くなりませんか？<span class="chev">▾</span></summary>
+            <div class="a">着手前に<b>構成・できること・金額・納期を文面で確定</b>してから進めます。追加が必要になった場合も、勝手に増やさず必ず事前にご相談・お見積りします。提示した金額の範囲で完了するのが基本です。</div>
+          </details>
+          <details class="faq-item reveal">
+            <summary><span class="q">Q</span>途中で連絡が取れなくなったりしませんか？<span class="chev">▾</span></summary>
+            <div class="a">制作中は<b>こまめに途中経過を共有</b>し、ご連絡には<b>2〜3営業日以内に必ず返信</b>します。「依頼したのに音沙汰がない」という不安が起きないよう、進め方を最初にすり合わせます。</div>
+          </details>
+          <details class="faq-item reveal">
+            <summary><span class="q">Q</span>まず小さく試すことはできますか？<span class="chev">▾</span></summary>
+            <div class="a">できます。たとえば<b>ネット予約フォーム（¥15,000〜）から小さく始めて</b>、効果を確かめてからサイトやAI機能へ広げる、という進め方が可能です。いきなり大きな投資をする必要はありません。</div>
+          </details>
+          <details class="faq-item reveal">
+            <summary><span class="q">Q</span>公開した後の修正や運用もお願いできますか？<span class="chev">▾</span></summary>
+            <div class="a">はい。公開設定の代行に加え、<b>公開後の軽微な修正・運用・改修のご相談</b>も承ります。「作って終わり」ではなく、運用しながら必要な分だけ育てていけます。</div>
+          </details>
+          <details class="faq-item reveal">
+            <summary><span class="q">Q</span>お店のデータやお客様情報の扱いが心配です。<span class="chev">▾</span></summary>
+            <div class="a">機密データを外部に出さない<b>ローカル完結の構成</b>を選べます。入力チェック（バリデーション）と型安全な実装を前提とし、AIも「人の確認を前提にした半自動」設計で、最終判断は必ず人が行えるようにします。</div>
+          </details>
         </div>
       </div>
     </section>
