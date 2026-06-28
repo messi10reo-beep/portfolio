@@ -31,8 +31,16 @@
     return models[0];
   }
 
+  // https のページから http://localhost を叩くと mixed content で必ず失敗し、
+  // ブラウザがコンソールに赤エラーを出す（catch では抑止できない）。
+  // その組み合わせは検出しても無意味なので、プローブ自体をスキップする。
+  function isUnreachable() {
+    return location.protocol === "https:" && /^http:\/\//i.test(cfg.endpoint);
+  }
+
   // Ollama が起動しているか検出（/api/tags）。起動していればモデル一覧を返す。
   function detect() {
+    if (isUnreachable()) return Promise.resolve({ ok: false });
     var ctrl = new AbortController();
     var t = setTimeout(function () { ctrl.abort(); }, cfg.timeoutMs);
     return fetch(cfg.endpoint + "/api/tags", { signal: ctrl.signal })
