@@ -3,32 +3,29 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bone Studios — Web制作・予約フォーム・LP制作</title>
+    <title>bonestudios ｜ AI×DXポートフォリオ — 名城大学 経営学部 28卒</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23d97757'/%3E%3Ctext x='16' y='23' font-size='18' font-family='Georgia,serif' font-weight='bold' fill='%23fbf6ee' text-anchor='middle'%3EB%3C/text%3E%3C/svg%3E" />
-    <meta name="description" content="Bone Studios — サロン・店舗向けのLP/サイト制作と、スマホで完結するネット予約フォーム制作。AI活用の業務効率化まで。実際に動くデモを公開中。" />
+    <meta name="description" content="名城大学 経営学部 28卒。独学でWeb開発とAI活用を習得し、ローカル完結RAG(検索Recall@1 100%・評価駆動)やAI業務改善スイートを開発・公開。課題発見からAIの設計・実装・評価・運用まで。" />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Bone Studios — Web制作・予約フォーム・LP制作" />
-    <meta property="og:description" content="サロン・店舗向けのLP/サイト制作と、スマホ完結のネット予約フォーム制作。実際に動くデモを公開中。" />
-    <meta property="og:image" content="https://portfolio-three-tawny-17.vercel.app/assets/massage.jpg" />
+    <meta property="og:title" content="bonestudios ｜ AI×DXポートフォリオ — 名城大学 経営学部 28卒" />
+    <meta property="og:description" content="独学でWeb開発とAI活用を習得。ローカル完結RAG(検索Recall@1 100%・評価駆動)やAI業務改善スイートを開発・公開しています。" />
+    <meta property="og:image" content="https://portfolio-three-tawny-17.vercel.app/assets/rag-chat.jpg" />
     <meta property="og:url" content="https://portfolio-three-tawny-17.vercel.app/" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="canonical" href="https://portfolio-three-tawny-17.vercel.app/" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "ProfessionalService",
-        "name": "Bone Studios",
-        "description": "サロン・店舗・小規模事業者向けのLP/サイト制作、スマホ完結のネット予約フォーム、AIを活用した業務改善を制作。すべて実際に動くデモを公開。",
+        "@type": "Person",
+        "name": "bonestudios",
+        "jobTitle": "学生エンジニア（AI×DX）",
+        "alumniOf": { "@type": "CollegeOrUniversity", "name": "名城大学" },
+        "description": "名城大学 経営学部 28卒。独学でWeb開発とAI活用を習得し、課題発見からAIの設計・実装・評価・公開まで一人で行うプロジェクトを公開。",
         "url": "https://portfolio-three-tawny-17.vercel.app/",
-        "image": "https://portfolio-three-tawny-17.vercel.app/assets/massage.jpg",
+        "image": "https://portfolio-three-tawny-17.vercel.app/assets/rag-chat.jpg",
         "email": "bonestudios02@gmail.com",
-        "areaServed": "JP",
-        "knowsAbout": ["Web制作", "LP制作", "ネット予約フォーム", "AI業務改善", "RAGチャットボット", "業務自動化"],
-        "makesOffer": [
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "ネット予約フォーム制作" } },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "店舗サイト・LP制作" } },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "AI業務改善・チャットボット導入" } }
-        ]
+        "sameAs": ["https://github.com/messi10reo-beep"],
+        "knowsAbout": ["RAG", "LLM評価", "生成AI", "TypeScript", "React", "業務改善"]
       }
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -196,13 +193,19 @@
       .tag.cat { color: var(--clay-deep); background: var(--clay-soft); border-color: #ecd6cb; }
       .card h3 { font-family: var(--font-display); font-weight: 600; font-size: 20px; letter-spacing: -.01em; margin: 0 0 9px; }
       .card p { font-size: 14.5px; color: var(--muted); margin: 0 0 18px; flex: 1; line-height: 1.65; }
-      .links { display: flex; gap: 16px; font-size: 14px; font-weight: 500; }
+      .links { display: flex; gap: 16px; font-size: 14px; font-weight: 500; flex-wrap: wrap; }
       .links a { display: inline-flex; align-items: center; gap: 6px; color: var(--ink); border-bottom: 1.5px solid transparent; padding-bottom: 2px; transition: border-color .15s, color .15s; }
       .links a:hover { color: var(--clay-deep); border-color: var(--clay); }
       .links a.muted { color: var(--faint); cursor: default; }
       .links a.muted:hover { border-color: transparent; }
 
-      /* ---- Strengths ---- */
+      /* ---- metric mini-grid (featured card) ---- */
+      .mstats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin: 0 0 18px; }
+      .mstats div { background: var(--canvas); border: 1px solid var(--line); border-radius: 10px; padding: 10px 13px; }
+      .mstats b { display: block; font-family: var(--font-display); font-weight: 600; font-size: 18px; color: var(--clay-deep); letter-spacing: -.01em; }
+      .mstats span { font-size: 11.5px; color: var(--muted); }
+
+      /* ---- Skills ---- */
       .str-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
       @media (max-width: 680px) { .str-grid { grid-template-columns: 1fr; } }
       .str { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 26px; }
@@ -223,7 +226,7 @@
       @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(217,119,87,.5); } 70% { box-shadow: 0 0 0 7px rgba(217,119,87,0); } 100% { box-shadow: 0 0 0 0 rgba(217,119,87,0); } }
       @media (prefers-reduced-motion: reduce) { .reveal { animation: none; } .pulse { animation: none; } html { scroll-behavior: auto; } }
 
-      /* ---- About ---- */
+      /* ---- Profile ---- */
       .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(24px, 4vw, 46px); align-items: start; }
       @media (max-width: 760px) { .about-grid { grid-template-columns: 1fr; } }
       .about-lead { font-family: var(--font-display); font-weight: 500; font-size: clamp(19px, 2.5vw, 25px); line-height: 1.5; letter-spacing: -.01em; margin: 0 0 18px; }
@@ -235,56 +238,33 @@
       .stance li span { color: var(--muted); font-size: 13.5px; line-height: 1.6; }
       .stance .mk { flex: 0 0 auto; width: 26px; height: 26px; border-radius: 7px; background: var(--clay-soft); color: var(--clay-deep); display: grid; place-items: center; font-weight: 700; font-size: 13px; }
 
-      /* ---- Engagement (流れ・料金) ---- */
-      .eng-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: clamp(24px, 4vw, 40px); align-items: start; }
-      @media (max-width: 760px) { .eng-grid { grid-template-columns: 1fr; } }
+      /* ---- Approach (開発の進め方) ---- */
+      .appr-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: clamp(24px, 4vw, 40px); align-items: start; }
+      @media (max-width: 760px) { .appr-grid { grid-template-columns: 1fr; } }
       .steps { display: grid; gap: 12px; }
       .step { display: flex; gap: 14px; align-items: flex-start; }
       .step .num { flex: 0 0 auto; width: 30px; height: 30px; border-radius: 50%; background: var(--ink); color: #fff; display: grid; place-items: center; font-family: var(--font-display); font-weight: 600; font-size: 14px; }
       .step .tx b { display: block; font-size: 15px; }
       .step .tx span { color: var(--muted); font-size: 13.5px; line-height: 1.6; }
-      .price { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 24px; box-shadow: 0 1px 2px rgba(31,30,29,.03); }
-      .price h3 { font-family: var(--font-display); font-weight: 600; font-size: 18px; margin: 0 0 4px; }
-      .price .note { color: var(--faint); font-size: 12.5px; margin: 0 0 16px; }
-      .price ul { list-style: none; padding: 0; margin: 0; }
-      .price li { display: flex; justify-content: space-between; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
-      .price li:last-child { border-bottom: 0; padding-bottom: 0; }
-      .price li b { color: var(--clay-deep); font-family: var(--font-display); white-space: nowrap; }
 
       /* ---- Contact extras ---- */
       .contact .channels { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 14px; }
       .contact .meta { color: #9b9384; font-size: 13px; margin: 20px 0 0; }
       .contact .btn-light { background: #f3efe7; color: #2a2521; }
       .contact .btn-light:hover { background: #fff; transform: translateY(-2px); }
-      .contact .btn-line { background: transparent; color: #f3efe7; border: 1.5px solid rgba(243,239,231,.45); }
-      .contact .btn-line:hover { border-color: rgba(243,239,231,.9); transform: translateY(-2px); }
-
-      /* ---- FAQ (実績ゼロの不安に答える) ---- */
-      .faq-list { display: grid; gap: 12px; max-width: 760px; }
-      .faq-item { background: var(--card); border: 1px solid var(--line); border-radius: 13px; overflow: hidden; transition: border-color .15s; }
-      .faq-item[open] { border-color: var(--line-strong); }
-      .faq-item summary { list-style: none; cursor: pointer; padding: 18px 20px; display: flex; align-items: center; gap: 13px; font-family: var(--font-display); font-weight: 600; font-size: 16px; letter-spacing: -.01em; }
-      .faq-item summary::-webkit-details-marker { display: none; }
-      .faq-item summary .q { flex: 0 0 auto; width: 24px; height: 24px; border-radius: 7px; background: var(--clay-soft); color: var(--clay-deep); display: grid; place-items: center; font-weight: 700; font-size: 13px; }
-      .faq-item summary .chev { margin-left: auto; color: var(--faint); transition: transform .2s; font-size: 14px; }
-      .faq-item[open] summary .chev { transform: rotate(180deg); }
-      .faq-item .a { padding: 0 20px 18px 57px; color: var(--muted); font-size: 14.5px; line-height: 1.75; }
-      .faq-item .a b { color: var(--ink); font-weight: 600; }
     </style>
   </head>
   <body>
     <nav>
       <div class="wrap nav-in">
-        <span class="brand"><span class="dot">B</span>Bone Studios</span>
+        <span class="brand"><span class="dot">B</span>bonestudios</span>
         <div class="nav-links">
-          <a href="#work">実績</a>
-          <a href="#about">自己紹介</a>
-          <a href="#strengths">強み</a>
-          <a href="#engagement">料金</a>
-          <a href="#faq">FAQ</a>
-          <a href="#contact">連絡先</a>
+          <a href="#projects">プロジェクト</a>
+          <a href="#approach">開発の進め方</a>
+          <a href="#profile">プロフィール</a>
+          <a href="#skills">スキル</a>
         </div>
-        <a class="nav-cta" href="#contact">相談する</a>
+        <a class="nav-cta" href="#contact">連絡先</a>
       </div>
     </nav>
 
@@ -292,62 +272,68 @@
       <div class="wrap">
         <div class="hero-grid">
           <div class="hero-copy">
-            <span class="kicker reveal"><span class="pulse"></span>受託・業務委託 受付中</span>
-            <h1 class="title reveal">Webと予約の仕組みで、<br /><em>お店の毎日</em>をラクに。</h1>
+            <span class="kicker reveal"><span class="pulse"></span>名城大学 経営学部 28卒 ｜ AI × DX</span>
+            <h1 class="title reveal">AIで、業務の課題を<br /><em>動くかたち</em>に。</h1>
             <p class="lead reveal">
-              サロン・店舗・教室向けのLP/サイト制作と、スマホで完結するネット予約フォームを制作します。
-              InstagramのDM予約の自動化や、AIを使った業務効率化まで。実際に動くデモでご確認いただけます。
-              <br />いまの主力は、整体サロン向けの<b>AI業務改善デモ（予約・FAQ・問い合わせを一体化）</b>です。
+              名城大学 経営学部で経営・業務を学びながら、独学でWeb開発とAI活用を習得しました。
+              課題の発見からAIの設計・実装・評価・公開まで一人でやり切ったプロジェクトを公開しています。
+              <br /><b>すべて実際に動き、品質は数値で確認できます。</b>
             </p>
             <div class="hero-cta reveal">
-              <a class="btn btn-primary" href="#work">制作物を見る →</a>
-              <a class="btn btn-ghost" href="#contact">仕事を相談する</a>
+              <a class="btn btn-primary" href="#projects">プロジェクトを見る →</a>
+              <a class="btn btn-ghost" href="#profile">プロフィールを見る</a>
             </div>
           </div>
           <div class="hero-visual reveal">
-            <span class="float"><span class="d"></span>すべて触れる実物デモ</span>
-            <div class="mock main"><div class="bar"><i></i><i></i><i></i></div><img src="assets/massage.jpg" alt="マッサージ店サイト NAGI の制作例" loading="eager" /></div>
-            <div class="mock sub"><div class="bar"><i></i><i></i><i></i></div><img src="assets/restaurant.jpg" alt="飲食店ホームページの制作例" loading="eager" /></div>
+            <span class="float"><span class="d"></span>すべて実際に動くプロジェクト</span>
+            <div class="mock main"><div class="bar"><i></i><i></i><i></i></div><img src="assets/rag-chat.jpg" alt="ローカル完結RAGのチャット画面と評価結果" loading="eager" /></div>
+            <div class="mock sub"><div class="bar"><i></i><i></i><i></i></div><img src="assets/massage.jpg" alt="AI業務改善スイート 凪 NAGI の画面" loading="eager" /></div>
           </div>
         </div>
 
         <div class="stats reveal">
+          <div class="stat"><div class="n">100%</div><div class="l">検索Recall@1（85→100%に改善）</div></div>
+          <div class="stat"><div class="n">20→5%</div><div class="l">ハルシネーション率の改善</div></div>
+          <div class="stat"><div class="n">59件</div><div class="l">自動テスト・CI通過</div></div>
           <div class="stat"><div class="n">6</div><div class="l">公開プロジェクト</div></div>
-          <div class="stat"><div class="n">4</div><div class="l">店舗・サロン向けデモ</div></div>
-          <div class="stat"><div class="n">100%</div><div class="l">実際に動くデモ</div></div>
-          <div class="stat"><div class="n">0</div><div class="l">既知の脆弱性</div></div>
         </div>
       </div>
     </header>
 
-    <section id="work">
+    <section id="projects">
       <div class="wrap">
         <div class="sec-head reveal">
-          <div class="ey">Work</div>
-          <h2>制作物</h2>
-          <p>店舗サイト・ネット予約・管理画面から、AI・業務自動化まで。すべて実際に動作し、テスト・型安全を備えています。</p>
+          <div class="ey">Projects</div>
+          <h2>プロジェクト</h2>
+          <p>すべて独学・個人開発。課題の発見からAIの設計・実装・評価・公開まで一人で行い、全プロジェクトが実際に動作します。</p>
         </div>
         <div class="grid">
 
-          <!-- massage : 整体・ボディケアサロン向け AI業務改善パッケージ（フラッグシップ） -->
+          <!-- rag-chat : ローカル完結RAG（主力・評価駆動） -->
           <article class="card featured reveal">
-            <div class="thumb"><span class="ribbon"><span class="s"></span>注目の案件</span><img src="assets/massage.jpg" alt="整体・ボディケアサロン 凪 NAGI のAI業務改善デモ画面" loading="lazy" decoding="async" width="1200" height="681" /></div>
-            <div class="card-body">
-              <div class="tags"><span class="tag cat">AI業務改善パッケージ</span><span class="tag">AI FAQ（簡易RAG）</span><span class="tag">予約＋AI事前整理</span><span class="tag">問い合わせ自動分類</span><span class="tag">管理ダッシュボード</span></div>
-              <h3>整体・ボディケアサロン向け AI業務改善デモ（凪 NAGI）</h3>
-              <p>架空のボディケアサロン「凪 NAGI」を題材に、<b>予約・FAQ・問い合わせ対応を一体化</b>した業務改善パッケージ。和モダンのLPに加え、AI事前整理つき予約フォーム／根拠つきAI FAQチャット／自動分類＋返信たたき台つき問い合わせ／予約・問い合わせを集約する管理ダッシュボードを実装。AIは「人の確認を前提にした半自動」設計です。<b>課題→提案→制作物→成果</b>をケーススタディで読めます。</p>
-              <div class="links"><a href="massage/" target="_blank" rel="noopener">サイト ↗</a><a href="massage/case-study/" target="_blank" rel="noopener">ケーススタディ ↗</a><a href="massage/faq/" target="_blank" rel="noopener">AI FAQ ↗</a><a href="massage/dashboard/" target="_blank" rel="noopener">管理画面 ↗</a></div>
-            </div>
-          </article>
-
-          <!-- rag-chat : ローカル完結RAG（AIエンジニアリング・評価駆動） -->
-          <article class="card reveal">
-            <div class="thumb"><img src="assets/rag-chat.jpg" alt="機密現場向けローカル完結RAG — 評価結果(Recall@1 85→100%・ハルシネーション20→5%)" loading="lazy" decoding="async" width="1200" height="681" /></div>
+            <div class="thumb"><span class="ribbon"><span class="s"></span>主力プロジェクト</span><img src="assets/rag-chat.jpg" alt="機密現場向けローカル完結RAG — 評価結果(Recall@1 85→100%・ハルシネーション20→5%)" loading="eager" decoding="async" width="1200" height="681" /></div>
             <div class="card-body">
               <div class="tags"><span class="tag cat">AIエンジニアリング</span><span class="tag">ローカルLLM RAG</span><span class="tag">ハイブリッド検索＋評価</span><span class="tag">TypeScript strict</span></div>
               <h3>機密文書QA — ローカル完結RAG（評価駆動）</h3>
-              <p>製造業など「社外に出せない文書」を想定した<b>完全ローカルRAG</b>。埋め込み・検索・生成をすべて端末内で実行し外部APIを使わない設計（データ非送出・オフライン動作・APIコスト0）。<b>評価基盤（<code>npm run eval</code>）で検索・生成品質を数値化</b>し、型番の取り違えを<b>完全一致ブーストで解消（検索Recall@1を85→100%）</b>、<b>ハルシネーション率を20→5%</b>に改善。BM25全文融合やリランカは「評価して効かないので既定OFF」と判断＝<b>流行りで盛らず測って選別</b>。LLMは抽象化し商用API（Claude/OpenAI）へ1行で差替可能。テスト59件・CI通過。</p>
+              <p>製造業など「社外に出せない文書」を想定した<b>完全ローカルRAG</b>。埋め込み・検索・生成をすべて端末内で実行し、外部APIに一切データを送らない設計（オフライン動作・APIコスト0）。<b>評価基盤（<code>npm run eval</code>）で検索・生成品質を数値化</b>し、型番の取り違えを完全一致ブーストで解消。BM25全文融合やリランカは「評価して効かないので既定OFF」——<b>流行りの手法を盛るのではなく、測って選ぶ開発</b>を実践しています。LLMは抽象化し、商用API（Claude/OpenAI）へ1行で差し替え可能です。</p>
+              <div class="mstats">
+                <div><b>85→100%</b><span>検索Recall@1（完全一致ブースト）</span></div>
+                <div><b>20→5%</b><span>ハルシネーション率</span></div>
+                <div><b>59件</b><span>自動テスト・CI通過</span></div>
+                <div><b>0</b><span>外部へのデータ送信</span></div>
+              </div>
               <div class="links"><a href="https://github.com/messi10reo-beep/rag-chat" target="_blank" rel="noopener">コード ↗</a><a href="https://github.com/messi10reo-beep/rag-chat/blob/main/eval-results/results.md" target="_blank" rel="noopener">評価結果 ↗</a><a href="https://github.com/messi10reo-beep/rag-chat#readme" target="_blank" rel="noopener">設計解説 ↗</a></div>
+            </div>
+          </article>
+
+          <!-- massage : 凪 NAGI（課題発見→企画→実装→公開の一気通貫） -->
+          <article class="card featured reveal">
+            <div class="thumb"><img src="assets/massage.jpg" alt="整体・ボディケアサロン 凪 NAGI のAI業務改善デモ画面" loading="lazy" decoding="async" width="1200" height="681" /></div>
+            <div class="card-body">
+              <div class="tags"><span class="tag cat">課題発見→企画→実装→公開</span><span class="tag">AI FAQ（簡易RAG）</span><span class="tag">予約＋AI事前整理</span><span class="tag">問い合わせ自動分類</span><span class="tag">管理ダッシュボード</span></div>
+              <h3>凪 NAGI — 整体サロンのAI業務改善スイート</h3>
+              <p>「小規模店舗が予約・問い合わせ対応に追われ本業に集中できない」という課題を自分で見つけ、<b>企画から実装・公開まで一人でやり切った</b>AI業務改善スイート。架空のボディケアサロン「凪 NAGI」を題材に、AI事前整理つき予約フォーム／根拠つきAI FAQチャット／自動分類＋返信たたき台つき問い合わせ／それらを集約する管理ダッシュボードを実装。AIは<b>「人の確認を前提にした半自動」</b>設計です。<b>課題→提案→制作物→成果</b>をケーススタディで読めます。</p>
+              <div class="links"><a href="massage/" target="_blank" rel="noopener">サイト ↗</a><a href="massage/case-study/" target="_blank" rel="noopener">ケーススタディ ↗</a><a href="massage/faq/" target="_blank" rel="noopener">AI FAQ ↗</a><a href="massage/dashboard/" target="_blank" rel="noopener">管理画面 ↗</a></div>
             </div>
           </article>
 
@@ -357,18 +343,18 @@
             <div class="card-body">
               <div class="tags"><span class="tag cat">AI学習アプリ</span><span class="tag">React / TypeScript</span><span class="tag">PWA・オフライン</span><span class="tag">320問・シラバス2024</span></div>
               <h3>G検 Trainer — G検定 学習アプリ</h3>
-              <p>JDLA G検定（ディープラーニング検定）合格のための学習アプリ。シラバス2024準拠の8章で<b>要点ノート・暗記カード</b>からインプットし、<b>全320問</b>の演習（章別／模試／弱点復習）でアウトプット。全問に根拠つき解説を実装し、進捗・正答率を自動記録。React + TypeScriptで単一HTMLにビルドした<b>PWA</b>で、学習データは端末内のみ（localStorage完結・サーバー送信なし）。登録・インストール不要で誰でもすぐ使えます。</p>
+              <p>挑戦中のJDLA G検定（ディープラーニング検定）に合格するため、<b>学習そのものを仕組み化して自作</b>したアプリ。シラバス2024準拠の8章で要点ノート・暗記カードからインプットし、<b>全320問</b>の演習（章別／模試／弱点復習）でアウトプット。全問に根拠つき解説を実装し、進捗・正答率を自動記録。React + TypeScriptで単一HTMLにビルドした<b>PWA</b>で、学習データは端末内のみ（localStorage完結）です。</p>
               <div class="links"><a href="g-kentei/" target="_blank" rel="noopener">ライブデモ ↗</a><a href="https://github.com/messi10reo-beep/g-kentei" target="_blank" rel="noopener">コード ↗</a></div>
             </div>
           </article>
 
-          <!-- restaurant-site : 多ページHP -->
+          <!-- restaurant-site : 多ページHP＋予約台帳 -->
           <article class="card reveal">
             <div class="thumb"><img src="assets/restaurant.jpg" alt="飲食店ホームページ（和食 結 -yui-）の画面" loading="lazy" decoding="async" width="1200" height="681" /></div>
             <div class="card-body">
-              <div class="tags"><span class="tag cat">多ページHP＋予約</span><span class="tag">飲食店</span><span class="tag">席種・コース予約</span><span class="tag">予約台帳（管理）</span></div>
+              <div class="tags"><span class="tag cat">横展開：飲食店</span><span class="tag">多ページHP</span><span class="tag">席種・コース予約</span><span class="tag">予約台帳（管理）</span></div>
               <h3>和食 結 -yui- — 飲食店の多ページHP＋予約台帳</h3>
-              <p>飲食店向けの本格的な多ページホームページ（トップ／お品書き・コース／こだわり／アクセス／ご予約）。<b>席種・コース・人数・日時</b>を選べる予約フォームの内容はそのまま<b>予約台帳</b>に反映され、<b>日付ごとの予約・席種・総人数の管理</b>まで実際に動きます。「5ページHP＋予約」案件に直結。</p>
+              <p>凪NAGIの型を飲食業態へ横展開。多ページ構成（トップ／お品書き／こだわり／アクセス／ご予約）で、<b>席種・コース・人数・日時</b>を選ぶ予約フォームの内容がそのまま<b>予約台帳</b>に反映され、日付ごとの予約・総人数の管理まで実際に動きます。</p>
               <div class="links"><a href="restaurant/" target="_blank" rel="noopener">サイト ↗</a><a href="restaurant/contact.html" target="_blank" rel="noopener">予約フォーム ↗</a><a href="restaurant/admin/" target="_blank" rel="noopener">予約台帳 ↗</a><a href="https://github.com/messi10reo-beep/restaurant-site" target="_blank" rel="noopener">コード ↗</a></div>
             </div>
           </article>
@@ -377,9 +363,9 @@
           <article class="card reveal">
             <div class="thumb"><img src="assets/salon.jpg" alt="美容室3画面スイート（hair atelier hibi）— サイト・予約フォーム・管理画面" loading="lazy" decoding="async" width="1280" height="720" /></div>
             <div class="card-body">
-              <div class="tags"><span class="tag cat">店舗サイト</span><span class="tag">予約フォーム</span><span class="tag">管理画面</span><span class="tag">AI事前整理</span></div>
+              <div class="tags"><span class="tag cat">横展開：美容室</span><span class="tag">予約フォーム</span><span class="tag">管理画面</span><span class="tag">AI事前整理</span></div>
               <h3>hair atelier hibi — 美容室サイト＋予約＋管理</h3>
-              <p>架空の美容室を題材に、<b>サイト・オンライン予約フォーム・予約管理画面</b>の3画面を一体で制作。予約フォームの送信内容はAIが「お悩みカテゴリ」と「カウンセリング確認ポイント」に事前整理し、そのまま管理画面の予約一覧へ反映。ステータス管理・絞り込み・KPI集計まで<b>実際に動く</b>デモです（AIは人の確認前提の半自動設計）。</p>
+              <p>凪NAGIの型を美容室へ横展開。<b>サイト・予約フォーム・管理画面</b>の3画面を一体で制作し、予約内容はAIが「お悩みカテゴリ」と「カウンセリング確認ポイント」に事前整理して管理画面へ反映（人の確認前提の半自動）。ステータス管理・KPI集計まで動きます。</p>
               <div class="links"><a href="salon/" target="_blank" rel="noopener">サイト ↗</a><a href="salon/booking/" target="_blank" rel="noopener">予約フォーム ↗</a><a href="salon/admin/" target="_blank" rel="noopener">管理画面 ↗</a><a href="https://github.com/messi10reo-beep/salon-lp" target="_blank" rel="noopener">コード ↗</a></div>
             </div>
           </article>
@@ -388,9 +374,9 @@
           <article class="card reveal">
             <div class="thumb"><img src="assets/sns-booking.jpg" alt="SNS予約フォーム＋予約管理（ネイルサロン luce）の画面" loading="lazy" decoding="async" width="1180" height="740" /></div>
             <div class="card-body">
-              <div class="tags"><span class="tag cat">SNS予約フォーム＋管理</span><span class="tag">Instagram / LINE</span><span class="tag">DM/LINE返信文 自動生成</span><span class="tag">流入元の可視化</span></div>
-              <h3>ネイルサロンのSNS予約フォーム＋予約管理</h3>
-              <p>DM・LINEで予約をさばく個人サロン向け。Instagramのプロフィールリンクに貼る<b>リンク・イン・バイオ型の予約フォーム</b>と、届いた予約を回す<b>予約管理画面</b>の2画面構成。管理画面では各予約から<b>DM/LINEにそのまま貼れる返信文（確定・リマインド・お礼）を自動生成</b>。ステータス管理・流入元の自動集計まで、フォーム＋管理だけで予約業務が完結します。</p>
+              <div class="tags"><span class="tag cat">横展開：ネイルサロン</span><span class="tag">Instagram / LINE</span><span class="tag">返信文の自動生成</span><span class="tag">流入元の可視化</span></div>
+              <h3>ネイルサロン luce — SNS予約フォーム＋予約管理</h3>
+              <p>凪NAGIの型をSNS運用の個人サロンへ横展開。Instagramのプロフィールリンクに置く<b>リンク・イン・バイオ型の予約フォーム</b>と予約管理画面の2画面構成で、<b>DM/LINEにそのまま貼れる返信文（確定・リマインド・お礼）を自動生成</b>。流入元の自動集計まで動きます。</p>
               <div class="links"><a href="sns-booking/" target="_blank" rel="noopener">予約フォーム ↗</a><a href="sns-booking/admin/" target="_blank" rel="noopener">管理画面 ↗</a></div>
             </div>
           </article>
@@ -399,36 +385,24 @@
       </div>
     </section>
 
-    <section id="strengths">
+    <section id="approach">
       <div class="wrap">
         <div class="sec-head reveal">
-          <div class="ey">Strengths</div>
-          <h2>できること・強み</h2>
+          <div class="ey">Approach</div>
+          <h2>開発の進め方</h2>
+          <p>流行りの手法を盛るのではなく、課題から出発して測って選ぶ。すべてのプロジェクトをこの進め方で作っています。</p>
         </div>
-        <div class="str-grid">
-          <div class="str reveal"><div class="ic">AI</div><h3>生成AI・LLM組み込み</h3><p>RAG（社内文書Q&A）、チャットボット、文書からの情報抽出。要件に合わせてローカル/クラウドのLLMを選定します。</p></div>
-          <div class="str reveal"><div class="ic">⚙</div><h3>業務自動化</h3><p>CSV/Excelの集計、定型作業のスクリプト化、レポート自動生成。手作業を仕組みに置き換えます。</p></div>
-          <div class="str reveal"><div class="ic">▤</div><h3>社内ツール・管理画面</h3><p>問い合わせ・在庫・顧客管理などのWebアプリを、フロントからAPIまで一貫して構築します。</p></div>
-          <div class="str reveal"><div class="ic">🔒</div><h3>ローカル＆セキュア</h3><p>機密データを外部に出さないローカル完結の構成、入力バリデーション、型安全な実装で安心して使える品質に。</p></div>
-        </div>
-      </div>
-    </section>
-
-    <section id="about">
-      <div class="wrap">
-        <div class="sec-head reveal">
-          <div class="ey">About</div>
-          <h2>制作する人について</h2>
-        </div>
-        <div class="about-grid about">
-          <div class="reveal">
-            <p class="about-lead">動くものを早く形にして、<em>お金を払う価値があるか</em>で判断する。それが制作の基準です。</p>
-            <p>AIを“流行り”ではなく<b>お店の現実の課題解決</b>に使うことに取り組んでいます。サロン・飲食店・教室といった小規模事業者の「予約・問い合わせ・集客」のつまずきを、Webと予約の仕組み、そして人の確認を前提にしたAIで軽くする——そんな制作を続けてきました。</p>
-            <p>このサイトに並ぶ作品はすべて<b>実際に触れる実物デモ</b>です。「作れます」ではなく「動くものでお見せします」を信条に、<b>課題→提案→制作物→成果</b>の形で説明します。まずは気軽にご相談ください。</p>
+        <div class="appr-grid">
+          <div class="steps reveal">
+            <div class="step"><span class="num">1</span><div class="tx"><b>課題を見つける</b><span>経営学部で学ぶ業務の視点から「人手に頼っていて、仕組みで軽くできる仕事」を探します。凪NAGIは店舗の予約・問い合わせ対応の負担から始まりました。</span></div></div>
+            <div class="step"><span class="num">2</span><div class="tx"><b>小さく設計する</b><span>最小構成で価値を検証できる形に切り出します。機密データを扱う想定では、外部に出さないローカル完結を基本にします。</span></div></div>
+            <div class="step"><span class="num">3</span><div class="tx"><b>実装する</b><span>TypeScript strict・テスト前提。AIは全自動にせず「人の確認を前提にした半自動」に設計し、現場が安心して使える形にします。</span></div></div>
+            <div class="step"><span class="num">4</span><div class="tx"><b>測って判断する</b><span>評価基盤で検索・生成品質を数値化し、改善は数値で確認します。BM25融合やリランカのように「効かない手法は流行でも既定OFF」にします。</span></div></div>
+            <div class="step"><span class="num">5</span><div class="tx"><b>公開して運用する</b><span>全プロジェクトを誰でも触れる状態で公開し、テスト・CIで品質を保ちながら改善を続けます。</span></div></div>
           </div>
           <ul class="stance reveal">
-            <li><span class="mk">✓</span><div><b>動くもので証明する</b><span>口頭やスライドでなく、実際に操作できるデモで価値を確認いただけます。</span></div></li>
-            <li><span class="mk">✓</span><div><b>盛らない・正直に</b><span>できること／できないことを率直に。実績や効果を誇張しません。</span></div></li>
+            <li><span class="mk">✓</span><div><b>動くもので証明する</b><span>口頭やスライドでなく、実際に操作できるプロジェクトで判断してもらいます。</span></div></li>
+            <li><span class="mk">✓</span><div><b>盛らない・正直に</b><span>できること／できないことを率直に。数値や成果を誇張しません。</span></div></li>
             <li><span class="mk">✓</span><div><b>小さく始めて確かめる</b><span>まず小さく作って効果を確認し、必要な分だけ拡張します。</span></div></li>
             <li><span class="mk">✓</span><div><b>AIは人の確認を前提に</b><span>全自動でなく半自動。最終判断は人が行う、安全な設計にします。</span></div></li>
             <li><span class="mk">✓</span><div><b>データに配慮した実装</b><span>外部に出さないローカル完結の構成・入力チェック・型安全な実装。</span></div></li>
@@ -437,69 +411,41 @@
       </div>
     </section>
 
-    <section id="engagement">
+    <section id="profile">
       <div class="wrap">
         <div class="sec-head reveal">
-          <div class="ey">How it works</div>
-          <h2>ご依頼の流れと料金の目安</h2>
-          <p>ご相談・お見積りは無料です。要件をうかがってから、最適な形と金額をご提案します。</p>
+          <div class="ey">Profile</div>
+          <h2>プロフィール</h2>
         </div>
-        <div class="eng-grid">
-          <div class="steps reveal">
-            <div class="step"><span class="num">1</span><div class="tx"><b>ご相談（無料）</b><span>やりたいこと・お悩みをお聞かせください。デモをお見せしながら方向性を整理します。</span></div></div>
-            <div class="step"><span class="num">2</span><div class="tx"><b>ご提案・お見積り</b><span>構成・できること・金額・納期を明確にご提示します。</span></div></div>
-            <div class="step"><span class="num">3</span><div class="tx"><b>制作</b><span>こまめに途中経過を共有し、認識のズレが出ないよう進めます。</span></div></div>
-            <div class="step"><span class="num">4</span><div class="tx"><b>ご確認・修正</b><span>実際に触っていただき、気になる点を調整します。</span></div></div>
-            <div class="step"><span class="num">5</span><div class="tx"><b>納品・公開</b><span>公開設定の代行や、その後の運用・改修のご相談も承ります。</span></div></div>
+        <div class="about-grid about">
+          <div class="reveal">
+            <p class="about-lead">経営がわかる文系だからこそ、AIを<em>“課題解決の道具”</em>として使える。</p>
+            <p>名城大学 経営学部の28卒（2028年3月卒業予定）。授業で扱う「業務・経営の課題」を自分の手で解けるようになりたくて、独学でWeb開発とAI活用を始めました。</p>
+            <p>学んだことは必ず「実際に動くもの」にしています。整体サロンのAI業務改善スイート「凪NAGI」は課題の発見から企画・実装・公開まで一人でやり切り、機密文書QAのローカル完結RAGでは評価基盤を組んで品質を数値で改善しました（検索Recall@1 85→100%、ハルシネーション率20→5%）。</p>
+            <p>ココナラ等で実案件の受託営業も経験し、顧客ヒアリングと見積り・納品の実務感覚を得ました。現在はAIを正しく理解して使うため、JDLA G検定の合格に挑戦中です。</p>
           </div>
-          <div class="price reveal">
-            <h3>料金の目安</h3>
-            <p class="note">※ 内容・規模で変動します。まずはお見積りを。</p>
-            <ul>
-              <li>ネット予約フォーム<b>¥15,000〜</b></li>
-              <li>LP（1ページ）<b>¥30,000〜</b></li>
-              <li>店舗サイト（5ページ）<b>¥80,000〜</b></li>
-              <li>AI FAQ・チャットボット<b>¥20,000〜</b></li>
-              <li>業務自動化（CSV集計など）<b>¥5,000〜</b></li>
-              <li>AI業務改善スイート（凪 NAGI 型）<b>応相談</b></li>
-            </ul>
-          </div>
+          <ul class="stance reveal">
+            <li><span class="mk">学</span><div><b>名城大学 経営学部 在学</b><span>2028年3月卒業予定（28卒）。業務・経営の仕組みを専攻。</span></div></li>
+            <li><span class="mk">技</span><div><b>Web開発・AI活用を独学で習得</b><span>React / TypeScript / RAG・ローカルLLM。学びは必ず動くものに。</span></div></li>
+            <li><span class="mk">資</span><div><b>JDLA G検定 挑戦中</b><span>合格に向けて学習アプリ「G検 Trainer」を自作して対策中。</span></div></li>
+            <li><span class="mk">@</span><div><b>bonestudios02@gmail.com</b><span>連絡はメールが確実です。通常2〜3営業日以内に返信します。</span></div></li>
+            <li><span class="mk">G</span><div><b>GitHub: messi10reo-beep</b><span>コード・評価結果・設計ドキュメントを公開しています。</span></div></li>
+          </ul>
         </div>
       </div>
     </section>
 
-    <section id="faq">
+    <section id="skills">
       <div class="wrap">
         <div class="sec-head reveal">
-          <div class="ey">FAQ</div>
-          <h2>よくあるご質問</h2>
-          <p>初めてWeb制作を依頼する方・実績の少ない相手に頼むのが不安な方へ。よくいただく質問にお答えします。</p>
+          <div class="ey">Skills</div>
+          <h2>できること</h2>
         </div>
-        <div class="faq-list">
-          <details class="faq-item reveal">
-            <summary><span class="q">Q</span>実績がまだ少ないようですが、頼んで大丈夫ですか？<span class="chev">▾</span></summary>
-            <div class="a">はい。だからこそ<b>「作れます」と言葉で説明する代わりに、すべて実際に動くデモで判断いただけるように</b>しています。このサイトの制作物はどれも今すぐ触れます。ご依頼前に近い形のデモをお見せし、仕上がりイメージのズレをなくしてから着手します。</div>
-          </details>
-          <details class="faq-item reveal">
-            <summary><span class="q">Q</span>見積りより後から高くなりませんか？<span class="chev">▾</span></summary>
-            <div class="a">着手前に<b>構成・できること・金額・納期を文面で確定</b>してから進めます。追加が必要になった場合も、勝手に増やさず必ず事前にご相談・お見積りします。提示した金額の範囲で完了するのが基本です。</div>
-          </details>
-          <details class="faq-item reveal">
-            <summary><span class="q">Q</span>途中で連絡が取れなくなったりしませんか？<span class="chev">▾</span></summary>
-            <div class="a">制作中は<b>こまめに途中経過を共有</b>し、ご連絡には<b>2〜3営業日以内に必ず返信</b>します。「依頼したのに音沙汰がない」という不安が起きないよう、進め方を最初にすり合わせます。</div>
-          </details>
-          <details class="faq-item reveal">
-            <summary><span class="q">Q</span>まず小さく試すことはできますか？<span class="chev">▾</span></summary>
-            <div class="a">できます。たとえば<b>ネット予約フォーム（¥15,000〜）から小さく始めて</b>、効果を確かめてからサイトやAI機能へ広げる、という進め方が可能です。いきなり大きな投資をする必要はありません。</div>
-          </details>
-          <details class="faq-item reveal">
-            <summary><span class="q">Q</span>公開した後の修正や運用もお願いできますか？<span class="chev">▾</span></summary>
-            <div class="a">はい。公開設定の代行に加え、<b>公開後の軽微な修正・運用・改修のご相談</b>も承ります。「作って終わり」ではなく、運用しながら必要な分だけ育てていけます。</div>
-          </details>
-          <details class="faq-item reveal">
-            <summary><span class="q">Q</span>お店のデータやお客様情報の扱いが心配です。<span class="chev">▾</span></summary>
-            <div class="a">機密データを外部に出さない<b>ローカル完結の構成</b>を選べます。入力チェック（バリデーション）と型安全な実装を前提とし、AIも「人の確認を前提にした半自動」設計で、最終判断は必ず人が行えるようにします。</div>
-          </details>
+        <div class="str-grid">
+          <div class="str reveal"><div class="ic">AI</div><h3>AIエンジニアリング</h3><p>RAG（埋め込み・ハイブリッド検索）、ローカルLLM（Ollama）、チャットボット、文書からの情報抽出。要件に合わせてローカル/商用APIを選定し、LLM層は差し替え可能に抽象化します。</p></div>
+          <div class="str reveal"><div class="ic">測</div><h3>評価・品質</h3><p>評価データセットで検索・生成品質を数値化（Recall@1、ハルシネーション率）。TypeScript strict・自動テスト59件・CIを前提に、効かない手法は流行でも採用しない判断をします。</p></div>
+          <div class="str reveal"><div class="ic">▤</div><h3>フロントエンド〜アプリ</h3><p>React / TypeScript / PWA。サイト・予約フォーム・管理画面・ダッシュボードまで、フロントからデータ管理まで一貫して構築します。</p></div>
+          <div class="str reveal"><div class="ic">⚙</div><h3>業務理解 × 設計</h3><p>経営学部で学ぶ業務の視点で課題を分解し、AIを「人の確認を前提にした半自動」ワークフローに落とし込みます。技術より先に、現場が安心して使える形を考えます。</p></div>
         </div>
       </div>
     </section>
@@ -507,23 +453,19 @@
     <section id="contact">
       <div class="wrap">
         <div class="contact reveal">
-          <h2>お仕事のご依頼・ご相談</h2>
-          <p>予約フォーム・店舗サイト・LP制作から、AIを使った業務改善まで。お見積り・ご相談は無料です。まずはお気軽にどうぞ。</p>
+          <h2>お問い合わせ</h2>
+          <p>採用ご担当者様からのご連絡・インターンのご案内など、お気軽にどうぞ。掲載プロジェクトの設計や実装の詳細もお答えできます。</p>
           <div class="channels">
-            <a class="btn btn-primary" href="mailto:bonestudios02@gmail.com?subject=%E5%88%B6%E4%BD%9C%E3%81%AE%E3%81%94%E7%9B%B8%E8%AB%87%EF%BC%88Bone%20Studios%EF%BC%89">メールで相談する</a>
+            <a class="btn btn-primary" href="mailto:bonestudios02@gmail.com?subject=%E3%83%9D%E3%83%BC%E3%83%88%E3%83%95%E3%82%A9%E3%83%AA%E3%82%AA%E3%81%AE%E4%BB%B6%EF%BC%88bonestudios%EF%BC%89">メールで連絡する</a>
             <a class="btn btn-light" href="https://github.com/messi10reo-beep" target="_blank" rel="noopener">GitHub ↗</a>
           </div>
-          <div class="channels">
-            <a class="btn btn-line" href="https://coconala.com/" target="_blank" rel="noopener">ココナラ</a>
-            <a class="btn btn-line" href="https://www.lancers.jp/" target="_blank" rel="noopener">ランサーズ</a>
-          </div>
-          <p class="meta">通常2〜3営業日以内にご返信します ／ 個人事業主・小規模店舗のご依頼を歓迎します</p>
+          <p class="meta">通常2〜3営業日以内にご返信します</p>
         </div>
       </div>
     </section>
 
     <footer class="wrap">
-      <span>© 2026 Bone Studios — Web制作・予約フォーム・LP制作</span>
+      <span>© 2026 bonestudios — AI×DX Portfolio</span>
       <span>HTML · CSS · JavaScript · TypeScript</span>
     </footer>
 
