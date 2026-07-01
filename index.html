@@ -67,6 +67,9 @@
         line-height: 1.6;
       }
       a { color: inherit; text-decoration: none; }
+      ::selection { background: var(--clay-soft); color: var(--clay-deep); }
+      code { font-family: var(--font-mono); font-size: .86em; background: var(--canvas); border: 1px solid var(--line); border-radius: 5px; padding: 1px 6px; white-space: nowrap; }
+      :focus-visible { outline: 2px solid var(--clay); outline-offset: 3px; border-radius: 4px; }
       .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 28px; }
 
       /* ---- subtle warm background wash ---- */
@@ -157,7 +160,7 @@
       @media (max-width: 680px) { .stats { grid-template-columns: repeat(2, 1fr); } }
 
       /* ---- Section ---- */
-      section { padding: 70px 0; }
+      section { padding: 70px 0; scroll-margin-top: 64px; }
       .sec-head { margin-bottom: 36px; }
       .sec-head .ey { font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--clay-deep); }
       .sec-head h2 { font-family: var(--font-display); font-weight: 600; font-size: clamp(26px, 3.6vw, 36px); letter-spacing: -.015em; margin: 10px 0 0; }
@@ -198,6 +201,17 @@
       .links a:hover { color: var(--clay-deep); border-color: var(--clay); }
       .links a.muted { color: var(--faint); cursor: default; }
       .links a.muted:hover { border-color: transparent; }
+
+      /* ---- deep-dive (featured card, collapsed by default) ---- */
+      .dive { border-top: 1px solid var(--line); margin: 0 0 16px; }
+      .dive summary { list-style: none; cursor: pointer; padding: 13px 0; display: flex; align-items: center; gap: 9px; font-size: 13.5px; font-weight: 600; color: var(--clay-deep); }
+      .dive summary::-webkit-details-marker { display: none; }
+      .dive summary .chev { margin-left: auto; color: var(--faint); font-size: 12px; transition: transform .2s; }
+      .dive[open] summary .chev { transform: rotate(180deg); }
+      .dive ul { list-style: none; margin: 0; padding: 0 0 6px; display: grid; gap: 8px; }
+      .dive li { font-size: 13px; color: var(--muted); line-height: 1.65; padding-left: 17px; position: relative; }
+      .dive li::before { content: "—"; position: absolute; left: 0; color: var(--clay); }
+      .dive li b { color: var(--ink); font-weight: 600; }
 
       /* ---- metric mini-grid (featured card) ---- */
       .mstats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin: 0 0 18px; }
@@ -303,7 +317,7 @@
     <section id="projects">
       <div class="wrap">
         <div class="sec-head reveal">
-          <div class="ey">Projects</div>
+          <div class="ey">01 — Projects</div>
           <h2>プロジェクト</h2>
           <p>すべて独学・個人開発。課題の発見からAIの設計・実装・評価・公開まで一人で行い、全プロジェクトが実際に動作します。</p>
         </div>
@@ -322,6 +336,15 @@
                 <div><b>59件</b><span>自動テスト・CI通過</span></div>
                 <div><b>0</b><span>外部へのデータ送信</span></div>
               </div>
+              <details class="dive">
+                <summary>設計の深掘り — 何をどう判断したか<span class="chev">▾</span></summary>
+                <ul>
+                  <li><b>ハイブリッド検索：</b>ベクトル検索だけでは型番など固有記号を取り違えた。完全一致ブーストを併用して検索Recall@1を85→100%に改善。</li>
+                  <li><b>評価を先に設計：</b>質問セットで検索・生成品質を毎回自動計測（<code>npm run eval</code>）。改善は体感でなく数値で判断する。</li>
+                  <li><b>測って捨てる：</b>BM25全文融合・リランカは実装したうえで評価し、効果がなかったため既定OFF。流行を理由に採用しない。</li>
+                  <li><b>差し替え可能なLLM層：</b>ローカルLLM（Ollama）前提だが、抽象化により商用API（Claude/OpenAI）へ1行で切替可能。要件に応じて選べる。</li>
+                </ul>
+              </details>
               <div class="links"><a href="https://github.com/messi10reo-beep/rag-chat" target="_blank" rel="noopener">コード ↗</a><a href="https://github.com/messi10reo-beep/rag-chat/blob/main/eval-results/results.md" target="_blank" rel="noopener">評価結果 ↗</a><a href="https://github.com/messi10reo-beep/rag-chat#readme" target="_blank" rel="noopener">設計解説 ↗</a></div>
             </div>
           </article>
@@ -330,9 +353,18 @@
           <article class="card featured reveal">
             <div class="thumb"><img src="assets/massage.jpg" alt="整体・ボディケアサロン 凪 NAGI のAI業務改善デモ画面" loading="lazy" decoding="async" width="1200" height="681" /></div>
             <div class="card-body">
-              <div class="tags"><span class="tag cat">課題発見→企画→実装→公開</span><span class="tag">AI FAQ（簡易RAG）</span><span class="tag">予約＋AI事前整理</span><span class="tag">問い合わせ自動分類</span><span class="tag">管理ダッシュボード</span></div>
+              <div class="tags"><span class="tag cat">課題発見→企画→実装→公開</span><span class="tag">AI FAQ（簡易RAG）</span><span class="tag">予約＋AI事前整理</span><span class="tag">管理ダッシュボード</span></div>
               <h3>凪 NAGI — 整体サロンのAI業務改善スイート</h3>
               <p>「小規模店舗が予約・問い合わせ対応に追われ本業に集中できない」という課題を自分で見つけ、<b>企画から実装・公開まで一人でやり切った</b>AI業務改善スイート。架空のボディケアサロン「凪 NAGI」を題材に、AI事前整理つき予約フォーム／根拠つきAI FAQチャット／自動分類＋返信たたき台つき問い合わせ／それらを集約する管理ダッシュボードを実装。AIは<b>「人の確認を前提にした半自動」</b>設計です。<b>課題→提案→制作物→成果</b>をケーススタディで読めます。</p>
+              <details class="dive">
+                <summary>設計の深掘り — 何をどう判断したか<span class="chev">▾</span></summary>
+                <ul>
+                  <li><b>半自動の設計：</b>AIの役割は「分類と下書き」まで。予約の確定や返信の送信は必ず人が行うワークフローにし、現場が安心して使える形にした。</li>
+                  <li><b>セキュリティの実践：</b>公開後の自己監査でDBの行レベルセキュリティ（RLS）が全開放なことを発見。最小権限に締め直し、管理画面をパスコードからSupabase Auth（メール+パスワード）に置き換えた。</li>
+                  <li><b>デモとしての割り切り：</b>体験デモ部分はlocalStorage完結・外部送信なし・APIキー不要。誰でもすぐ触れることを優先した。</li>
+                  <li><b>型化と横展開：</b>「サイト＋予約＋管理」の共通の型に整理し、飲食・美容室・ネイルの3業種へ展開。同じ設計が業種を跨いで通用することを確認した。</li>
+                </ul>
+              </details>
               <div class="links"><a href="massage/" target="_blank" rel="noopener">サイト ↗</a><a href="massage/case-study/" target="_blank" rel="noopener">ケーススタディ ↗</a><a href="massage/faq/" target="_blank" rel="noopener">AI FAQ ↗</a><a href="massage/dashboard/" target="_blank" rel="noopener">管理画面 ↗</a></div>
             </div>
           </article>
@@ -388,7 +420,7 @@
     <section id="approach">
       <div class="wrap">
         <div class="sec-head reveal">
-          <div class="ey">Approach</div>
+          <div class="ey">02 — Approach</div>
           <h2>開発の進め方</h2>
           <p>流行りの手法を盛るのではなく、課題から出発して測って選ぶ。すべてのプロジェクトをこの進め方で作っています。</p>
         </div>
@@ -414,7 +446,7 @@
     <section id="profile">
       <div class="wrap">
         <div class="sec-head reveal">
-          <div class="ey">Profile</div>
+          <div class="ey">03 — Profile</div>
           <h2>プロフィール</h2>
         </div>
         <div class="about-grid about">
@@ -438,7 +470,7 @@
     <section id="skills">
       <div class="wrap">
         <div class="sec-head reveal">
-          <div class="ey">Skills</div>
+          <div class="ey">04 — Skills</div>
           <h2>できること</h2>
         </div>
         <div class="str-grid">
