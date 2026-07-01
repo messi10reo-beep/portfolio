@@ -72,13 +72,18 @@
       :focus-visible { outline: 2px solid var(--clay); outline-offset: 3px; border-radius: 4px; }
       .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 28px; }
 
-      /* ---- subtle warm background wash ---- */
+      /* ---- subtle warm background wash (slow drift) ---- */
       body::before {
         content: "";
-        position: fixed; inset: 0; z-index: -1;
+        position: fixed; inset: -6%; z-index: -1;
         background:
-          radial-gradient(900px 520px at 80% -10%, rgba(217,119,87,.07), transparent 60%),
+          radial-gradient(900px 520px at 80% -10%, rgba(217,119,87,.08), transparent 60%),
           radial-gradient(700px 460px at 2% 2%, rgba(31,30,29,.03), transparent 55%);
+        animation: bgDrift 26s ease-in-out infinite alternate;
+      }
+      @keyframes bgDrift {
+        from { transform: translate3d(0, 0, 0) scale(1); }
+        to { transform: translate3d(-1.5%, 1.2%, 0) scale(1.05); }
       }
 
       /* ---- Nav ---- */
@@ -114,10 +119,23 @@
       .kicker .pulse { width: 7px; height: 7px; border-radius: 50%; background: var(--clay); box-shadow: 0 0 0 0 rgba(217,119,87,.5); animation: pulse 2s infinite; }
       h1.title {
         font-family: var(--font-display); font-weight: 600;
-        font-size: clamp(36px, 5.8vw, 62px); line-height: 1.1; letter-spacing: -.02em;
+        font-size: clamp(36px, 5.8vw, 62px); line-height: 1.14; letter-spacing: -.02em;
         margin: 0 0 22px;
       }
-      h1.title em { font-style: italic; color: var(--clay-deep); }
+      h1.title em { font-style: italic; color: var(--clay-deep); position: relative; display: inline-block; }
+      h1.title em::after {
+        content: ""; position: absolute; left: 0; right: 0; bottom: .04em; height: .09em;
+        background: var(--clay); border-radius: 99px; opacity: .45;
+        transform: scaleX(0); transform-origin: left center;
+      }
+      /* line-mask entrance (js-gated; without JS the title is simply visible) */
+      .title .line { display: block; overflow: hidden; padding-bottom: .08em; margin-bottom: -.08em; }
+      .title .line-in { display: inline-block; }
+      html.js .title .line-in { transform: translateY(112%); animation: lineUp .85s cubic-bezier(.2,.7,.2,1) forwards; }
+      html.js .title .line:nth-child(2) .line-in { animation-delay: .14s; }
+      html.js h1.title em::after { animation: drawIn .55s cubic-bezier(.2,.7,.2,1) 1s forwards; }
+      @keyframes lineUp { to { transform: translateY(0); } }
+      @keyframes drawIn { to { transform: scaleX(1); } }
       .lead { font-size: clamp(16px, 2.1vw, 19px); color: var(--muted); max-width: 600px; margin: 0 0 34px; line-height: 1.7; }
       .hero-cta { display: flex; gap: 12px; flex-wrap: wrap; }
       .btn {
@@ -143,10 +161,12 @@
       .mock .bar i { width: 8.5px; height: 8.5px; border-radius: 50%; display: block; }
       .mock .bar i:nth-child(1){ background:#e09177; } .mock .bar i:nth-child(2){ background:#e7c896; } .mock .bar i:nth-child(3){ background:#bcd2b0; }
       .mock img { display: block; width: 100%; height: auto; }
-      .mock.main { width: 75%; right: 0; top: 5%; transform: rotate(-2.5deg); z-index: 2; }
-      .mock.sub { width: 49%; left: 0; bottom: 2%; transform: rotate(3.5deg); z-index: 3; }
-      .hero-visual:hover .mock.main { transform: rotate(-1.5deg) translateY(-4px); }
-      .hero-visual:hover .mock.sub { transform: rotate(2.5deg) translateY(-3px); }
+      .mock.main { width: 75%; right: 0; top: 5%; transform: rotate(-2.5deg); z-index: 2; animation: floatA 7s ease-in-out infinite alternate; }
+      .mock.sub { width: 49%; left: 0; bottom: 2%; transform: rotate(3.5deg); z-index: 3; animation: floatB 8.5s ease-in-out -2.5s infinite alternate; }
+      @keyframes floatA { from { transform: rotate(-2.5deg) translateY(0); } to { transform: rotate(-1.7deg) translateY(-9px); } }
+      @keyframes floatB { from { transform: rotate(3.5deg) translateY(0); } to { transform: rotate(2.7deg) translateY(-7px); } }
+      .hero-visual .float { animation: bob 5.5s ease-in-out infinite alternate; }
+      @keyframes bob { from { transform: translateY(0); } to { transform: translateY(-5px); } }
       .hero-visual .float { position: absolute; z-index: 4; top: -10px; left: 6%; background: var(--ink); color: #fff; font-size: 12.5px; font-weight: 600; padding: 8px 15px; border-radius: 999px; box-shadow: var(--shadow); display: flex; align-items: center; gap: 8px; }
       .hero-visual .float .d { width: 7px; height: 7px; border-radius: 50%; background: #7ec07e; box-shadow: 0 0 0 0 rgba(126,192,126,.5); animation: pulse2 2s infinite; }
       @keyframes pulse2 { 0% { box-shadow: 0 0 0 0 rgba(126,192,126,.5); } 70% { box-shadow: 0 0 0 6px rgba(126,192,126,0); } 100% { box-shadow: 0 0 0 0 rgba(126,192,126,0); } }
@@ -234,11 +254,19 @@
 
       footer { padding: 40px 0 56px; color: var(--faint); font-size: 13px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
 
-      /* ---- reveal (load-in; content is always visible, animation is enhancement) ---- */
-      .reveal { animation: rise .7s cubic-bezier(.2,.7,.2,1) both; }
-      @keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+      /* ---- reveal on scroll (js-gated; without JS everything is simply visible.
+             A load-time failsafe in the script force-reveals anything left hidden.) ---- */
+      html.js .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1); }
+      html.js .reveal.in { opacity: 1; transform: none; }
       @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(217,119,87,.5); } 70% { box-shadow: 0 0 0 7px rgba(217,119,87,0); } 100% { box-shadow: 0 0 0 0 rgba(217,119,87,0); } }
-      @media (prefers-reduced-motion: reduce) { .reveal { animation: none; } .pulse { animation: none; } html { scroll-behavior: auto; } }
+      @media (prefers-reduced-motion: reduce) {
+        html.js .reveal { opacity: 1; transform: none; transition: none; }
+        html.js .title .line-in { transform: none; animation: none; }
+        html.js h1.title em::after { transform: scaleX(1); animation: none; }
+        .mock.main, .mock.sub, .hero-visual .float, body::before { animation: none; }
+        .pulse { animation: none; }
+        html { scroll-behavior: auto; }
+      }
 
       /* ---- Profile ---- */
       .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(24px, 4vw, 46px); align-items: start; }
@@ -267,6 +295,7 @@
       .contact .btn-light { background: #f3efe7; color: #2a2521; }
       .contact .btn-light:hover { background: #fff; transform: translateY(-2px); }
     </style>
+    <script>document.documentElement.classList.add("js");</script>
   </head>
   <body>
     <nav>
@@ -287,7 +316,10 @@
         <div class="hero-grid">
           <div class="hero-copy">
             <span class="kicker reveal"><span class="pulse"></span>名城大学 経営学部 28卒 ｜ AI × DX</span>
-            <h1 class="title reveal">AIで、業務の課題を<br /><em>動くかたち</em>に。</h1>
+            <h1 class="title">
+              <span class="line"><span class="line-in">AIで、業務の課題を</span></span>
+              <span class="line"><span class="line-in"><em>動くかたち</em>に。</span></span>
+            </h1>
             <p class="lead reveal">
               名城大学 経営学部で経営・業務を学びながら、独学でWeb開発とAI活用を習得しました。
               課題の発見からAIの設計・実装・評価・公開まで一人でやり切ったプロジェクトを公開しています。
@@ -306,10 +338,10 @@
         </div>
 
         <div class="stats reveal">
-          <div class="stat"><div class="n">100%</div><div class="l">検索Recall@1（85→100%に改善）</div></div>
-          <div class="stat"><div class="n">20→5%</div><div class="l">ハルシネーション率の改善</div></div>
-          <div class="stat"><div class="n">59件</div><div class="l">自動テスト・CI通過</div></div>
-          <div class="stat"><div class="n">6</div><div class="l">公開プロジェクト</div></div>
+          <div class="stat"><div class="n"><span data-cnt="85:100">100</span>%</div><div class="l">検索Recall@1（85→100%に改善）</div></div>
+          <div class="stat"><div class="n">20→<span data-cnt="20:5">5</span>%</div><div class="l">ハルシネーション率の改善</div></div>
+          <div class="stat"><div class="n"><span data-cnt="0:59">59</span>件</div><div class="l">自動テスト・CI通過</div></div>
+          <div class="stat"><div class="n"><span data-cnt="0:6">6</span></div><div class="l">公開プロジェクト</div></div>
         </div>
       </div>
     </header>
@@ -502,19 +534,55 @@
     </footer>
 
     <script>
-      // Reveal-on-scroll. Pure DOM, no innerHTML.
-      const io = new IntersectionObserver(
-        (entries) => {
-          for (const e of entries) {
-            if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
-          }
-        },
-        { threshold: 0.12 }
-      );
-      document.querySelectorAll(".reveal").forEach((n, i) => {
-        n.style.transitionDelay = Math.min(i * 60, 240) + "ms";
-        io.observe(n);
-      });
+      // Reveal-on-scroll + stat count-up. Pure DOM, no innerHTML.
+      (() => {
+        const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        const els = [...document.querySelectorAll(".reveal")];
+        const show = (el) => el.classList.add("in");
+        if (reduce || !("IntersectionObserver" in window)) {
+          els.forEach(show);
+        } else {
+          const io = new IntersectionObserver(
+            (entries) => {
+              for (const e of entries) {
+                if (e.isIntersecting) { show(e.target); io.unobserve(e.target); }
+              }
+            },
+            { threshold: 0.1, rootMargin: "0px 0px -8% 0px" }
+          );
+          els.forEach((n, i) => {
+            n.style.transitionDelay = ((i % 4) * 70) + "ms";
+            io.observe(n);
+          });
+          // failsafe: if the observer never fires, content must not stay hidden
+          setTimeout(() => { if (!els.some((el) => el.classList.contains("in"))) els.forEach(show); }, 2500);
+        }
+
+        // count-up (markup already holds the final value; skipped for reduced motion)
+        if (reduce || !("IntersectionObserver" in window)) return;
+        const ease = (t) => 1 - Math.pow(1 - t, 3);
+        const io2 = new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) {
+              if (!e.isIntersecting) continue;
+              io2.unobserve(e.target);
+              const parts = (e.target.dataset.cnt || "").split(":").map(Number);
+              if (parts.length !== 2 || parts.some(isNaN)) continue;
+              const [from, to] = parts;
+              const t0 = performance.now(), dur = 1300;
+              const tick = (now) => {
+                const p = Math.min(1, (now - t0) / dur);
+                e.target.textContent = String(Math.round(from + (to - from) * ease(p)));
+                if (p < 1) requestAnimationFrame(tick);
+              };
+              requestAnimationFrame(tick);
+            }
+          },
+          { threshold: 0.5 }
+        );
+        document.querySelectorAll("[data-cnt]").forEach((n) => io2.observe(n));
+      })();
     </script>
   </body>
 </html>
