@@ -312,7 +312,7 @@
         </div>
 
         <div class="stats reveal">
-          <div class="stat"><div class="n">5</div><div class="l">公開プロジェクト</div></div>
+          <div class="stat"><div class="n">6</div><div class="l">公開プロジェクト</div></div>
           <div class="stat"><div class="n">4</div><div class="l">店舗・サロン向けデモ</div></div>
           <div class="stat"><div class="n">100%</div><div class="l">実際に動くデモ</div></div>
           <div class="stat"><div class="n">0</div><div class="l">既知の脆弱性</div></div>
@@ -337,6 +337,17 @@
               <h3>整体・ボディケアサロン向け AI業務改善デモ（凪 NAGI）</h3>
               <p>架空のボディケアサロン「凪 NAGI」を題材に、<b>予約・FAQ・問い合わせ対応を一体化</b>した業務改善パッケージ。和モダンのLPに加え、AI事前整理つき予約フォーム／根拠つきAI FAQチャット／自動分類＋返信たたき台つき問い合わせ／予約・問い合わせを集約する管理ダッシュボードを実装。AIは「人の確認を前提にした半自動」設計です。<b>課題→提案→制作物→成果</b>をケーススタディで読めます。</p>
               <div class="links"><a href="massage/" target="_blank" rel="noopener">サイト ↗</a><a href="massage/case-study/" target="_blank" rel="noopener">ケーススタディ ↗</a><a href="massage/faq/" target="_blank" rel="noopener">AI FAQ ↗</a><a href="massage/dashboard/" target="_blank" rel="noopener">管理画面 ↗</a></div>
+            </div>
+          </article>
+
+          <!-- rag-chat : ローカル完結RAG（AIエンジニアリング・評価駆動） -->
+          <article class="card reveal">
+            <div class="thumb"><img src="assets/rag-chat.jpg" alt="機密現場向けローカル完結RAG — 評価結果(Recall@1 85→100%・ハルシネーション20→5%)" loading="lazy" decoding="async" width="1200" height="681" /></div>
+            <div class="card-body">
+              <div class="tags"><span class="tag cat">AIエンジニアリング</span><span class="tag">ローカルLLM RAG</span><span class="tag">ハイブリッド検索＋評価</span><span class="tag">TypeScript strict</span></div>
+              <h3>機密文書QA — ローカル完結RAG（評価駆動）</h3>
+              <p>製造業など「社外に出せない文書」を想定した<b>完全ローカルRAG</b>。埋め込み・検索・生成をすべて端末内で実行し外部APIを使わない設計（データ非送出・オフライン動作・APIコスト0）。<b>評価基盤（<code>npm run eval</code>）で検索・生成品質を数値化</b>し、型番の取り違えを<b>完全一致ブーストで解消（検索Recall@1を85→100%）</b>、<b>ハルシネーション率を20→5%</b>に改善。BM25全文融合やリランカは「評価して効かないので既定OFF」と判断＝<b>流行りで盛らず測って選別</b>。LLMは抽象化し商用API（Claude/OpenAI）へ1行で差替可能。テスト59件・CI通過。</p>
+              <div class="links"><a href="https://github.com/messi10reo-beep/rag-chat" target="_blank" rel="noopener">コード ↗</a><a href="https://github.com/messi10reo-beep/rag-chat/blob/main/eval-results/results.md" target="_blank" rel="noopener">評価結果 ↗</a><a href="https://github.com/messi10reo-beep/rag-chat#readme" target="_blank" rel="noopener">設計解説 ↗</a></div>
             </div>
           </article>
 
