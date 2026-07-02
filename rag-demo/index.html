@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>再現デモ ｜ 機密文書QA — ローカル完結RAG ｜ bonestudios</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23d97757'/%3E%3Ctext x='16' y='23' font-size='18' font-family='Georgia,serif' font-weight='bold' fill='%23fbf6ee' text-anchor='middle'%3EB%3C/text%3E%3C/svg%3E" />
+    <meta name="description" content="ローカル完結RAG(機密文書QA)の再現デモ。実機(Apple M4・Ollama qwen2.5:3b)で実際に生成した回答・根拠・応答時間を、編集せずそのまま再生します。" />
+    <meta name="robots" content="index,follow" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@500&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --canvas: #f0eee6; --surface: #faf9f5; --card: #ffffff;
+        --ink: #1f1e1d; --muted: #6b675f; --faint: #9a958a;
+        --line: #e3dfd4; --line-strong: #d6d1c4;
+        --clay: #d97757; --clay-deep: #bd5d3a; --clay-soft: #f6e7df;
+        --font-display: "Source Serif 4", "Zen Kaku Gothic New", Georgia, serif;
+        --font-sans: "Hanken Grotesk", "Zen Kaku Gothic New", system-ui, sans-serif;
+        --font-mono: "JetBrains Mono", ui-monospace, monospace;
+        --shadow: 0 1px 2px rgba(31,30,29,.04), 0 18px 44px -26px rgba(31,30,29,.20);
+      }
+      * { box-sizing: border-box; }
+      body { margin: 0; font-family: var(--font-sans); background: var(--canvas); color: var(--ink); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+      a { color: inherit; }
+      .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+      nav { position: sticky; top: 0; z-index: 20; background: rgba(240,238,230,.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+      .nav-in { display: flex; align-items: center; gap: 12px; height: 60px; font-size: 14px; }
+      .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; }
+      .brand .dot { width: 28px; height: 28px; border-radius: 7px; background: var(--clay); color: #fff; display: grid; place-items: center; font-family: var(--font-display); font-weight: 700; }
+      .back { margin-left: auto; color: var(--muted); text-decoration: none; }
+      .back:hover { color: var(--clay-deep); }
+
+      header.hd { padding: 44px 0 10px; }
+      .kicker { font-size: 12.5px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--clay-deep); }
+      h1 { font-family: var(--font-display); font-weight: 600; font-size: clamp(24px, 4vw, 34px); letter-spacing: -.015em; margin: 8px 0 10px; }
+      .hd p { color: var(--muted); max-width: 680px; margin: 0; }
+
+      .honest {
+        margin: 22px 0 0; background: var(--clay-soft); border: 1px solid #ecd6cb; border-radius: 14px;
+        padding: 14px 18px; font-size: 13.5px; color: #6f4a3a; line-height: 1.7;
+      }
+      .honest b { color: var(--clay-deep); }
+
+      .demo { display: grid; grid-template-columns: 340px 1fr; gap: 20px; padding: 28px 0 30px; align-items: start; }
+      @media (max-width: 800px) { .demo { grid-template-columns: 1fr; } }
+
+      .qlist { display: grid; gap: 9px; }
+      .qlist h2 { font-family: var(--font-display); font-size: 16px; font-weight: 600; margin: 0 0 4px; }
+      .qbtn {
+        text-align: left; font-family: var(--font-sans); font-size: 13.5px; line-height: 1.5; color: var(--ink);
+        background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 11px 13px; cursor: pointer;
+        transition: border-color .15s, transform .12s, box-shadow .15s;
+      }
+      .qbtn:hover { border-color: var(--clay); transform: translateY(-1px); box-shadow: var(--shadow); }
+      .qbtn.active { border-color: var(--clay); background: #fffdf9; }
+      .qbtn .kind { display: block; font-size: 10.5px; font-weight: 600; color: var(--clay-deep); letter-spacing: .04em; margin-bottom: 3px; }
+
+      .chat {
+        background: var(--surface); border: 1px solid var(--line-strong); border-radius: 18px; overflow: hidden;
+        box-shadow: var(--shadow); min-height: 480px; display: flex; flex-direction: column;
+      }
+      .chat .bar { height: 40px; background: linear-gradient(#fff, #f0ede5); border-bottom: 1px solid var(--line); display: flex; align-items: center; gap: 6px; padding: 0 14px; }
+      .chat .bar i { width: 9px; height: 9px; border-radius: 50%; }
+      .chat .bar i:nth-child(1){ background:#e09177; } .chat .bar i:nth-child(2){ background:#e7c896; } .chat .bar i:nth-child(3){ background:#bcd2b0; }
+      .chat .bar span { font-family: var(--font-mono); font-size: 11.5px; color: var(--faint); margin-left: 8px; }
+      .log { flex: 1; padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+      .hintmsg { color: var(--faint); font-size: 14px; margin: auto; text-align: center; }
+
+      .msg { max-width: 88%; font-size: 14px; line-height: 1.7; }
+      .msg.user { align-self: flex-end; background: var(--ink); color: #f3efe7; border-radius: 14px 14px 4px 14px; padding: 10px 15px; }
+      .msg.bot { align-self: flex-start; background: var(--card); border: 1px solid var(--line); border-radius: 14px 14px 14px 4px; padding: 12px 16px; }
+      .msg.bot .a { white-space: pre-wrap; }
+      .caret { display: inline-block; width: 7px; height: 1em; background: var(--clay); vertical-align: -0.15em; animation: blink 1s steps(1) infinite; }
+      @keyframes blink { 50% { opacity: 0; } }
+      .meta { font-family: var(--font-mono); font-size: 11px; color: var(--faint); margin-top: 9px; display: flex; gap: 12px; flex-wrap: wrap; }
+
+      details.src { margin-top: 10px; border-top: 1px solid var(--line); padding-top: 9px; }
+      details.src summary { cursor: pointer; font-size: 12.5px; font-weight: 600; color: var(--clay-deep); list-style: none; }
+      details.src summary::-webkit-details-marker { display: none; }
+      .chunk { background: var(--canvas); border: 1px solid var(--line); border-radius: 9px; padding: 9px 12px; margin-top: 8px; font-size: 12px; color: var(--muted); }
+      .chunk .head { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap; }
+      .chunk .file { font-family: var(--font-mono); font-size: 11px; color: var(--ink); }
+      .badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: #eee9dd; color: var(--muted); }
+      .badge.boost { background: var(--clay-deep); color: #fff; }
+
+      .how { padding: 6px 0 60px; }
+      .how h2 { font-family: var(--font-display); font-size: 20px; font-weight: 600; margin: 0 0 12px; }
+      .how ol { margin: 0; padding-left: 22px; color: var(--muted); font-size: 14px; display: grid; gap: 6px; }
+      .how code { font-family: var(--font-mono); font-size: .86em; background: var(--surface); border: 1px solid var(--line); border-radius: 5px; padding: 1px 6px; }
+      .links { margin-top: 18px; display: flex; gap: 16px; font-size: 14px; font-weight: 500; flex-wrap: wrap; }
+      .links a { text-decoration: none; border-bottom: 1.5px solid transparent; padding-bottom: 2px; }
+      .links a:hover { color: var(--clay-deep); border-color: var(--clay); }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <div class="wrap nav-in">
+        <span class="brand"><span class="dot">B</span>bonestudios</span>
+        <a class="back" href="../">← ポートフォリオへ戻る</a>
+      </div>
+    </nav>
+
+    <header class="hd">
+      <div class="wrap">
+        <div class="kicker">Replay Demo</div>
+        <h1>機密文書QA — ローカル完結RAG 再現デモ</h1>
+        <p>ローカルLLMはブラウザ上で動かせないため、このページは<b>実機で実行した本物の入出力の「再現」</b>です。質問を選ぶと、実際に生成された回答・根拠・応答時間をそのまま再生します。</p>
+        <div class="honest">
+          <b>収録について(盛っていません):</b> 以下の回答・根拠チャンク・応答時間は、<b>2026-07-02 に Apple M4 の MacBook 上で Ollama(qwen2.5:3b)を使い、実際に rag-chat の API を叩いて得た応答を無編集で保存したもの</b>です。外部APIへの送信はゼロ。ライブで動かす場合は <a href="https://github.com/messi10reo-beep/rag-chat" target="_blank" rel="noopener">GitHubのコード</a>を clone してローカルで実行できます(README に手順)。
+        </div>
+      </div>
+    </header>
+
+    <div class="wrap demo">
+      <div class="qlist" id="qlist">
+        <h2>質問を選んでください</h2>
+      </div>
+      <div class="chat">
+        <div class="bar"><i></i><i></i><i></i><span id="backendLabel">local · offline</span></div>
+        <div class="log" id="log"><div class="hintmsg">← 左の質問をクリックすると、実機収録の応答を再生します</div></div>
+      </div>
+    </div>
+
+    <div class="wrap how">
+      <h2>仕組み(30秒版)</h2>
+      <ol>
+        <li>社内文書51件(規程・安全マニュアル・型番カタログ)を分割し、<b>端末内で</b>ベクトル化して保存。</li>
+        <li>質問もベクトル化して意味で検索。型番(YB-6208等)の取り違えは<b>完全一致ブースト</b>で解消 — 根拠チャンクの score 1000 がそれです。検索Recall@1 85%→100%。</li>
+        <li>上位チャンクだけを根拠に<b>ローカルLLM</b>が回答。根拠が無い質問には「資料には記載がありません」と答える設計(ハルシネーション率 20%→5%)。</li>
+      </ol>
+      <div class="links">
+        <a href="https://github.com/messi10reo-beep/rag-chat" target="_blank" rel="noopener">コード ↗</a>
+        <a href="https://github.com/messi10reo-beep/rag-chat/blob/main/eval-results/results.md" target="_blank" rel="noopener">評価結果(20問) ↗</a>
+        <a href="transcripts.json" target="_blank">収録データ(JSON・無編集) ↗</a>
+        <a href="../">← ポートフォリオへ戻る</a>
+      </div>
+    </div>
+
+    <script>
+      // Replay of recorded transcripts. Pure DOM (textContent only) — no innerHTML for data.
+      (async () => {
+        const data = await fetch("transcripts.json").then((r) => r.json());
+        const qlist = document.getElementById("qlist");
+        const log = document.getElementById("log");
+        document.getElementById("backendLabel").textContent = data.machine;
+
+        let playing = false;
+        data.transcripts.forEach((t) => {
+          const b = document.createElement("button");
+          b.className = "qbtn";
+          const k = document.createElement("span");
+          k.className = "kind";
+          k.textContent = t.kind;
+          b.appendChild(k);
+          b.appendChild(document.createTextNode(t.question));
+          b.addEventListener("click", () => { if (!playing) play(t, b); });
+          qlist.appendChild(b);
+        });
+
+        const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+        async function play(t, btn) {
+          playing = true;
+          document.querySelectorAll(".qbtn").forEach((x) => x.classList.remove("active"));
+          btn.classList.add("active");
+          log.textContent = "";
+
+          const u = document.createElement("div");
+          u.className = "msg user";
+          u.textContent = t.question;
+          log.appendChild(u);
+          await sleep(350);
+
+          const bot = document.createElement("div");
+          bot.className = "msg bot";
+          const a = document.createElement("span");
+          a.className = "a";
+          const caret = document.createElement("span");
+          caret.className = "caret";
+          bot.appendChild(a);
+          bot.appendChild(caret);
+          log.appendChild(bot);
+
+          a.textContent = "検索中";
+          await sleep(Math.min(900, t.latencyMs / 3));
+          a.textContent = "";
+          for (const ch of Array.from(t.answer)) {
+            a.textContent += ch;
+            await sleep(22);
+          }
+          caret.remove();
+
+          const meta = document.createElement("div");
+          meta.className = "meta";
+          meta.textContent = `実測 ${(t.latencyMs / 1000).toFixed(1)}s ・ ${t.backend} ・ 外部送信 0 ・ ${data.recordedAt} 収録`;
+          bot.appendChild(meta);
+
+          if (t.sources && t.sources.length) {
+            const det = document.createElement("details");
+            det.className = "src";
+            const sum = document.createElement("summary");
+            sum.textContent = `根拠チャンク(${t.sources.length}件)を見る ▾`;
+            det.appendChild(sum);
+            t.sources.forEach((s) => {
+              const c = document.createElement("div");
+              c.className = "chunk";
+              const head = document.createElement("div");
+              head.className = "head";
+              const f = document.createElement("span");
+              f.className = "file";
+              f.textContent = s.source;
+              head.appendChild(f);
+              const badge = document.createElement("span");
+              if (s.score >= 999) {
+                badge.className = "badge boost";
+                badge.textContent = "完全一致ブースト";
+              } else {
+                badge.className = "badge";
+                badge.textContent = "類似度 " + Number(s.score).toFixed(2);
+              }
+              head.appendChild(badge);
+              c.appendChild(head);
+              const tx = document.createElement("div");
+              tx.textContent = s.text;
+              c.appendChild(tx);
+              det.appendChild(c);
+            });
+            det.open = true;
+            bot.appendChild(det);
+          }
+          playing = false;
+        }
+      })();
+    </script>
+  </body>
+</html>
