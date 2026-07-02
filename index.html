@@ -186,6 +186,14 @@
       .sec-head h2 { font-family: var(--font-display); font-weight: 600; font-size: clamp(26px, 3.6vw, 36px); letter-spacing: -.015em; margin: 10px 0 0; }
       .sec-head p { color: var(--muted); margin: 12px 0 0; max-width: 560px; line-height: 1.7; }
 
+      /* ---- Launch film ---- */
+      .film-frame {
+        border-radius: 18px; overflow: hidden; background: var(--ink);
+        border: 1px solid var(--line-strong);
+        box-shadow: 0 34px 64px -32px rgba(31,30,29,.45), 0 10px 24px -14px rgba(31,30,29,.25);
+      }
+      .film-frame video { display: block; width: 100%; height: auto; }
+
       /* ---- Project cards ---- */
       .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
       @media (max-width: 760px) { .grid { grid-template-columns: 1fr; } }
@@ -345,6 +353,22 @@
         </div>
       </div>
     </header>
+
+    <section id="film">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <div class="ey">Launch Film</div>
+          <h2>47秒でわかる、このポートフォリオ</h2>
+          <p>掲載プロジェクトと開発の流儀を、47秒のローンチ動画にまとめました。制作もこの動画自体もすべて個人制作です(音声が流れます)。</p>
+        </div>
+        <div class="film-frame reveal">
+          <video controls preload="metadata" playsinline poster="assets/launch-poster.jpg" width="1920" height="1080">
+            <source src="assets/launch.mp4" type="video/mp4" />
+            お使いのブラウザは動画再生に対応していません。
+          </video>
+        </div>
+      </div>
+    </section>
 
     <section id="projects">
       <div class="wrap">
