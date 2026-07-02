@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI FAQ チャット | 凪 NAGI（よくある質問にAIが即回答・デモ）</title>
+    <meta name="description" content="営業時間・料金・服装・予約変更など、よくある質問にAIが根拠つきで即回答するデモ。APIキー不要・簡易RAG風検索。架空サロン凪 NAGIのポートフォリオ。" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231b1814'/%3E%3Ctext x='16' y='23' font-size='19' font-family='Georgia,serif' fill='%23f2eee6' text-anchor='middle'%3E凪%3C/text%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Shippori+Mincho:wght@400;500;600;700;800&family=Zen+Kaku+Gothic+New:wght@300;400;500;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../assets/app.css" />
+  </head>
+  <body data-page="faq">
+    <section class="phero">
+      <div class="wrap">
+        <span class="kicker"><span class="dot"></span><span class="label">AI FAQ Assistant</span></span>
+        <h1>AIに質問する<span class="en">Ask the NAGI assistant</span></h1>
+        <p class="lead">営業時間・料金・服装・予約変更など、よくあるご質問にAIが<b>根拠（FAQ項目）つき</b>で即お答えします。お探しの答えが見つからないときは、お問い合わせへご案内します。<b>医療的な診断は行いません。</b></p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <div class="chat-shell reveal">
+          <div class="chat-top">
+            <span class="av"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4"/><circle cx="12" cy="12" r="3"/></svg></span>
+            <div class="t"><b>凪 AIアシスタント</b><small>よくある質問の自動回答（デモ）</small></div>
+            <span class="live">オンライン</span>
+          </div>
+          <div class="chat-log" id="chatLog" aria-live="polite"></div>
+          <div class="quick" id="quick"></div>
+          <form class="chat-input" id="chatForm">
+            <input id="chatInput" type="text" placeholder="例）初回はいくらですか？" autocomplete="off" />
+            <button type="submit" aria-label="送信"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
+          </form>
+        </div>
+        <p class="center muted" style="font-size:12px; margin-top:16px; max-width:60ch; margin-left:auto; margin-right:auto;">
+          ※ これはデモ回答です。AIはあらかじめ用意したFAQ（25項目）から、表記ゆれや言い換えに対応した意味検索で関連度の高いものを選んで回答します。症状が強い場合・不安がある場合は、医療機関へのご相談もご検討ください。
+        </p>
+      </div>
+    </section>
+
+    <script src="../assets/data.js"></script>
+    <script src="../assets/ai.js"></script>
+    <script src="../assets/llm.js"></script>
+    <script src="../assets/chrome.js"></script>
+    <script>
+      "use strict";
+      (function () {
+        var ICON_BOT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4"/><circle cx="12" cy="12" r="3"/></svg>';
+        var ICON_SRC = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>';
+        var QUICK = ["初回はいくらですか？", "どんな服装で行けばいいですか？", "予約変更はできますか？", "腰痛でも受けられますか？", "施術時間はどれくらいですか？", "駐車場はありますか？"];
+
+        var log = document.getElementById("chatLog");
+        var form = document.getElementById("chatForm");
+        var input = document.getElementById("chatInput");
+        var quick = document.getElementById("quick");
+
+        function scrollDown() { log.scrollTop = log.scrollHeight; }
+
+        function addUser(text) {
+          var m = document.createElement("div"); m.className = "msg user";
+          var b = document.createElement("div"); b.className = "bubble"; b.textContent = text;
+          m.appendChild(b); log.appendChild(m); scrollDown();
+        }
+
+        function addTyping() {
+          var m = document.createElement("div"); m.className = "msg bot"; m.dataset.typing = "1";
+          var av = document.createElement("div"); av.className = "ava"; av.insertAdjacentHTML("beforeend", ICON_BOT);
+          var b = document.createElement("div"); b.className = "bubble";
+          b.insertAdjacentHTML("beforeend", '<span class="typing"><span></span><span></span><span></span></span>');
+          m.appendChild(av); m.appendChild(b); log.appendChild(m); scrollDown();
+          return m;
+        }
+
+        // 追い質問・候補のチップ列（クリックで再質問）
+        function chipRow(items, labelText) {
+          if (!items || !items.length) return null;
+          var wrap = document.createElement("div");
+          wrap.style.cssText = "margin-top:12px; display:flex; flex-wrap:wrap; gap:8px;";
+          if (labelText) {
+            var l = document.createElement("div");
+            l.style.cssText = "flex-basis:100%; font-size:12px; color:var(--seiji,#5f8a7d); margin-bottom:2px;";
+            l.textContent = labelText; wrap.appendChild(l);
+          }
+          var seen = {};
+          items.forEach(function (f) {
+            var label = f.question.split("／")[0];
+            if (seen[label]) return; seen[label] = 1;
+            var c = document.createElement("button");
+            c.type = "button"; c.className = "chip";
+            c.textContent = label;
+            c.addEventListener("click", function () { ask(label); });
+            wrap.appendChild(c);
+          });
+          return wrap;
+        }
+
+        // 本文以外（根拠・信頼度・追い質問・問い合わせ導線）を組み立て
+        function buildExtras(b, res) {
+          if (res.fallback) {
+            var rel = chipRow(res.related, "もしかして、こちらですか？");
+            if (rel) b.appendChild(rel);
+            var cta = document.createElement("a");
+            cta.href = "../contact/"; cta.className = "btn btn-seiji";
+            cta.style.cssText = "margin-top:12px; padding:9px 18px; font-size:13px;";
+            cta.textContent = "お問い合わせフォームへ →";
+            b.appendChild(cta);
+            return;
+          }
+          if (res.sources && res.sources.length) {
+            var src = document.createElement("div"); src.className = "src";
+            var lbl = document.createElement("div"); lbl.className = "lbl";
+            lbl.insertAdjacentHTML("beforeend", ICON_SRC);
+            lbl.appendChild(document.createTextNode("回答の根拠（FAQ）"));
+            src.appendChild(lbl);
+            res.sources.slice(0, 3).forEach(function (f) {
+              var it = document.createElement("div"); it.className = "item";
+              var strong = document.createElement("b"); strong.textContent = "[" + f.category + "] ";
+              it.appendChild(strong); it.appendChild(document.createTextNode(f.question));
+              src.appendChild(it);
+            });
+            b.appendChild(src);
+            if (!res.llm) {
+              var conf = document.createElement("div"); conf.className = "conf";
+              conf.textContent = "信頼度: " + ({ high: "高", medium: "中", low: "低" }[res.confidence] || "—") + "（デモ回答 / 最終確認はスタッフ）";
+              b.appendChild(conf);
+            }
+          }
+          var rel2 = chipRow(res.related, "こちらもよく聞かれます");
+          if (rel2) b.appendChild(rel2);
+        }
+
+        // stream=true で本文を少しずつ表示（本番LLMのストリーミング風）
+        function addBot(res, stream) {
+          var m = document.createElement("div"); m.className = "msg bot";
+          var av = document.createElement("div"); av.className = "ava"; av.insertAdjacentHTML("beforeend", ICON_BOT);
+          var b = document.createElement("div"); b.className = "bubble";
+          var p = document.createElement("p"); p.style.margin = "0"; b.appendChild(p);
+          m.appendChild(av); m.appendChild(b); log.appendChild(m); scrollDown();
+
+          if (!stream) { p.textContent = res.text; buildExtras(b, res); scrollDown(); return; }
+          var full = res.text, i = 0;
+          (function tick() {
+            if (i <= full.length) {
+              p.textContent = full.slice(0, i);
+              i += 2; scrollDown();
+              window.setTimeout(tick, 16);
+            } else {
+              p.textContent = full;
+              buildExtras(b, res);
+              scrollDown();
+            }
+          })();
+        }
+
+        var llm = { ok: false, model: null };
+        var liveEl = document.querySelector(".chat-top .live");
+        function setMode() {
+          if (!liveEl) return;
+          if (llm.ok) { liveEl.textContent = "ローカルLLM: " + (llm.model || "接続中"); liveEl.title = "Ollamaに接続して回答を生成します"; }
+          else { liveEl.textContent = "FAQ検索モード"; liveEl.title = "Ollama未接続のためFAQ検索で回答します"; }
+        }
+
+        // ローカルLLM（Ollama）で回答を生成。RAG: 関連FAQを文脈として渡す。
+        function respondLLM(text) {
+          var faqs = window.NagiAI.retrieve(text, 4);
+          var typing = addTyping();
+          var started = false, finished = false, bubble = null, p = null, acc = "";
+          function ensureBubble() {
+            if (started) return; started = true;
+            if (typing && typing.parentNode) typing.parentNode.removeChild(typing);
+            var m = document.createElement("div"); m.className = "msg bot";
+            var av = document.createElement("div"); av.className = "ava"; av.insertAdjacentHTML("beforeend", ICON_BOT);
+            bubble = document.createElement("div"); bubble.className = "bubble";
+            p = document.createElement("p"); p.style.margin = "0"; bubble.appendChild(p);
+            m.appendChild(av); m.appendChild(bubble); log.appendChild(m); scrollDown();
+          }
+          window.NagiLLM.chatStream(window.NagiLLM.buildMessages(text, faqs), {
+            onToken: function (tok) { ensureBubble(); acc += tok; p.textContent = acc; scrollDown(); },
+            onDone: function () {
+              if (finished) return; finished = true; // done行とHTTP終端で二重発火するのを防ぐ
+              if (!acc.trim()) { // トークンが来なかった → FAQ検索にフォールバック
+                if (typing && typing.parentNode) typing.parentNode.removeChild(typing);
+                if (bubble && bubble.parentNode) bubble.parentNode.parentNode.removeChild(bubble.parentNode);
+                addBot(window.NagiAI.answer(text), true); return;
+              }
+              buildExtras(bubble, { fallback: false, llm: true, sources: faqs.slice(0, 3),
+                related: faqs.slice(1, 4) });
+              var tag = document.createElement("div"); tag.className = "conf";
+              tag.textContent = "🧠 ローカルLLM（" + (window.NagiLLM.getModel() || "") + "）が上記FAQを根拠に生成（外部送信なし）";
+              bubble.appendChild(tag); scrollDown();
+            },
+            onError: function () {
+              if (typing && typing.parentNode) typing.parentNode.removeChild(typing);
+              if (!started) { llm.ok = false; setMode(); addBot(window.NagiAI.answer(text), true); }
+            }
+          });
+        }
+
+        function respond(text) {
+          var typing = addTyping();
+          window.setTimeout(function () {
+            if (typing && typing.parentNode) typing.parentNode.removeChild(typing);
+            addBot(window.NagiAI.answer(text), true);
+          }, 500);
+        }
+
+        function ask(text) {
+          text = (text || "").trim(); if (!text) return;
+          addUser(text); input.value = "";
+          if (llm.ok) respondLLM(text); else respond(text);
+        }
+
+        form.addEventListener("submit", function (e) { e.preventDefault(); ask(input.value); });
+
+        QUICK.forEach(function (q) {
+          var c = document.createElement("button"); c.type = "button"; c.className = "chip"; c.textContent = q;
+          c.addEventListener("click", function () { ask(q); });
+          quick.appendChild(c);
+        });
+
+        // 初回ボットメッセージ
+        addBot({
+          fallback: false,
+          text: "こんにちは。凪 NAGI のAIアシスタントです。営業時間・料金・服装・予約の変更など、よくあるご質問にお答えします。下のボタンから選ぶか、自由にご質問ください。",
+          sources: [], confidence: "high"
+        });
+
+        // ローカルLLM（Ollama）が起動していれば接続。無ければFAQ検索モードのまま。
+        setMode();
+        window.NagiLLM.detect().then(function (r) {
+          llm.ok = !!r.ok; llm.model = r.model || null; setMode();
+        });
+      })();
+    </script>
+  </body>
+</html>

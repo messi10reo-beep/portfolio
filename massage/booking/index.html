@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ご予約 | 凪 NAGI（AI事前整理つき予約フォーム・デモ）</title>
+    <meta name="description" content="希望メニュー・日時・お悩みを入力すると、AIが内容を事前整理してスタッフの確認ポイントを提示します。架空サロン凪 NAGIのポートフォリオデモ。" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231b1814'/%3E%3Ctext x='16' y='23' font-size='19' font-family='Georgia,serif' fill='%23f2eee6' text-anchor='middle'%3E凪%3C/text%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Shippori+Mincho:wght@400;500;600;700;800&family=Zen+Kaku+Gothic+New:wght@300;400;500;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../assets/app.css" />
+  </head>
+  <body data-page="booking">
+    <section class="phero">
+      <div class="wrap">
+        <span class="kicker"><span class="dot"></span><span class="label">Online Booking</span></span>
+        <h1>ご予約<span class="en">Reserve your session</span></h1>
+        <p class="lead">ご希望のメニューと日時、いまのお悩みをお知らせください。送信すると、AIが内容を「事前整理」し、当日スタッフが確認すべきポイントを提示します。<b>最終確認・確定の連絡はスタッフが行います。</b></p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap bk-grid">
+        <!-- form -->
+        <div class="panel reveal" id="formPanel">
+          <form id="bookingForm" novalidate>
+            <div class="field">
+              <label for="bk-name">お名前<span class="req">必須</span></label>
+              <input class="input" id="bk-name" name="name" autocomplete="name" placeholder="凪 花子" />
+              <p class="err-msg" data-for="bk-name">お名前をご入力ください。</p>
+            </div>
+            <div class="row2">
+              <div class="field">
+                <label for="bk-email">メールアドレス<span class="req">必須</span></label>
+                <input class="input" id="bk-email" name="email" type="email" autocomplete="email" placeholder="hanako@example.com" />
+                <p class="err-msg" data-for="bk-email">正しいメールアドレスをご入力ください。</p>
+              </div>
+              <div class="field">
+                <label for="bk-phone">電話番号<span class="req">必須</span></label>
+                <input class="input" id="bk-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="090-1234-5678" />
+                <p class="err-msg" data-for="bk-phone">電話番号をご入力ください（数字10〜11桁）。</p>
+              </div>
+            </div>
+            <div class="field">
+              <label for="bk-menu">希望メニュー<span class="req">必須</span></label>
+              <select class="select" id="bk-menu" name="menu"><option value="">選択してください</option></select>
+              <p class="err-msg" data-for="bk-menu">メニューをお選びください。</p>
+            </div>
+            <div class="row2">
+              <div class="field">
+                <label for="bk-first">第一希望日時<span class="req">必須</span></label>
+                <input class="input" id="bk-first" name="firstChoice" type="datetime-local" />
+                <p class="err-msg" data-for="bk-first">第一希望日時をご入力ください。</p>
+              </div>
+              <div class="field">
+                <label for="bk-second">第二希望日時<span class="opt">任意</span></label>
+                <input class="input" id="bk-second" name="secondChoice" type="datetime-local" />
+              </div>
+            </div>
+            <div class="field">
+              <label for="bk-symptoms">悩み・症状<span class="req">必須</span></label>
+              <textarea class="textarea" id="bk-symptoms" name="symptoms" placeholder="例）在宅勤務で肩こりと首のはりがつらいです。夕方になると頭も重くなります。"></textarea>
+              <p class="hint">入力内容をもとに、AIがカテゴリを自動で振り分けます（肩こり・腰痛・姿勢 など）。</p>
+              <p class="err-msg" data-for="bk-symptoms">お悩み・症状をご入力ください。</p>
+            </div>
+            <div class="field">
+              <label>初回のご来院ですか？<span class="req">必須</span></label>
+              <div class="choices" role="radiogroup">
+                <div class="choice"><input type="radio" id="bk-first-yes" name="isFirstVisit" value="yes" /><label for="bk-first-yes">はい（初めて）</label></div>
+                <div class="choice"><input type="radio" id="bk-first-no" name="isFirstVisit" value="no" /><label for="bk-first-no">いいえ（再来）</label></div>
+              </div>
+              <p class="err-msg" data-for="isFirstVisit">いずれかをお選びください。</p>
+            </div>
+            <div class="field">
+              <label for="bk-note">事前に相談したいこと<span class="opt">任意</span></label>
+              <textarea class="textarea" id="bk-note" name="note" style="min-height:80px" placeholder="例）施術の強さは普通くらいが希望です／担当の指名 など"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block btn-lg">この内容で予約を申し込む</button>
+            <p class="ai-note" style="margin-top:14px">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4M12 16h.01"/><circle cx="12" cy="12" r="10"/></svg>
+              これはデモです。入力内容はお使いのブラウザ内（localStorage）にのみ保存され、外部には送信されません。
+            </p>
+          </form>
+        </div>
+
+        <!-- aside -->
+        <aside class="reveal" style="display:grid; gap:16px;">
+          <div class="card" style="padding:20px 22px;">
+            <h3 class="mincho" style="font-size:16px; margin-bottom:14px;">ご予約後の流れ</h3>
+            <ol style="list-style:none; display:grid; gap:14px;">
+              <li style="display:flex; gap:12px; font-size:13.5px; color:var(--sumi-soft);"><b class="latin" style="color:var(--shu); font-style:italic; font-size:18px;">01</b><span>フォーム送信（AIが内容を事前整理）</span></li>
+              <li style="display:flex; gap:12px; font-size:13.5px; color:var(--sumi-soft);"><b class="latin" style="color:var(--shu); font-style:italic; font-size:18px;">02</b><span>スタッフが空き状況を確認</span></li>
+              <li style="display:flex; gap:12px; font-size:13.5px; color:var(--sumi-soft);"><b class="latin" style="color:var(--shu); font-style:italic; font-size:18px;">03</b><span>確定のご連絡（メール / 電話）</span></li>
+              <li style="display:flex; gap:12px; font-size:13.5px; color:var(--sumi-soft);"><b class="latin" style="color:var(--shu); font-style:italic; font-size:18px;">04</b><span>ご来店・カウンセリング</span></li>
+            </ol>
+          </div>
+          <div class="ai-box">
+            <div class="ai-head">
+              <span class="ai-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4"/><circle cx="12" cy="12" r="3"/></svg></span>
+              <div class="t">AIが入力をサポート<small>Human-in-the-loop</small></div>
+            </div>
+            <p>送信後、AIがお悩みを分類して「当日確認すべきポイント」を提示します。あくまで下書きで、確定はスタッフが行います。</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <script src="../assets/data.js"></script>
+    <script src="../assets/ai.js"></script>
+    <script src="../assets/store.js"></script>
+    <script src="../assets/chrome.js"></script>
+    <script>
+      "use strict";
+      (function () {
+        var ICON_AI = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4"/><circle cx="12" cy="12" r="3"/></svg>';
+        var ICON_CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>';
+        var ICON_INFO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4M12 16h.01"/><circle cx="12" cy="12" r="10"/></svg>';
+
+        // メニュー選択肢：管理画面(Supabase massage_menus)から取得 → 未接続時は NAGI_MENUS にフォールバック
+        var sel = document.getElementById("bk-menu");
+        window.loadNagiMenus().then(function (menus) {
+          menus.forEach(function (m) {
+            var o = document.createElement("option");
+            o.value = m.name;
+            var extra = [];
+            if (m.price && m.price !== "—") extra.push(m.price);
+            if (m.duration_min) extra.push(m.duration_min + "分");
+            o.textContent = m.name + (extra.length ? "（" + extra.join("／") + "）" : "");
+            sel.appendChild(o);
+          });
+          var other = document.createElement("option");
+          other.value = "その他・相談したい"; other.textContent = "その他・相談したい";
+          sel.appendChild(other);
+        });
+
+        var form = document.getElementById("bookingForm");
+        function setBad(id, bad) {
+          var el = document.getElementById(id);
+          var field = el ? el.closest(".field") : null;
+          if (el) el.classList.toggle("bad", bad);
+          if (field) field.classList.toggle("bad", bad);
+        }
+        function val(id) { return (document.getElementById(id).value || "").trim(); }
+
+        function validate() {
+          var ok = true;
+          if (!val("bk-name")) { setBad("bk-name", true); ok = false; } else setBad("bk-name", false);
+          var email = val("bk-email");
+          if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setBad("bk-email", true); ok = false; } else setBad("bk-email", false);
+          var phone = val("bk-phone").replace(/[-\s]/g, "");
+          if (!/^\d{10,11}$/.test(phone)) { setBad("bk-phone", true); ok = false; } else setBad("bk-phone", false);
+          if (!val("bk-menu")) { setBad("bk-menu", true); ok = false; } else setBad("bk-menu", false);
+          if (!val("bk-first")) { setBad("bk-first", true); ok = false; } else setBad("bk-first", false);
+          if (!val("bk-symptoms")) { setBad("bk-symptoms", true); ok = false; } else setBad("bk-symptoms", false);
+          var fv = form.querySelector('input[name="isFirstVisit"]:checked');
+          var fvField = document.getElementById("bk-first-yes").closest(".field");
+          if (!fv) { fvField.classList.add("bad"); ok = false; } else fvField.classList.remove("bad");
+          return ok;
+        }
+
+        function fmtDT(v) {
+          if (!v) return "—";
+          var d = new Date(v);
+          if (isNaN(d.getTime())) return v;
+          var w = ["日","月","火","水","木","金","土"][d.getDay()];
+          return (d.getMonth() + 1) + "月" + d.getDate() + "日(" + w + ") " +
+            ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
+        }
+
+        form.addEventListener("submit", function (e) {
+          e.preventDefault();
+          if (!validate()) {
+            var firstBad = form.querySelector(".field.bad");
+            if (firstBad) firstBad.scrollIntoView({ behavior: "smooth", block: "center" });
+            return;
+          }
+          var rec = window.NagiStore.addBooking({
+            name: val("bk-name"), email: val("bk-email"), phone: val("bk-phone"),
+            menu: val("bk-menu"), firstChoice: val("bk-first"), secondChoice: val("bk-second"),
+            symptoms: val("bk-symptoms"),
+            isFirstVisit: form.querySelector('input[name="isFirstVisit"]:checked').value === "yes",
+            note: val("bk-note")
+          });
+          renderSuccess(rec);
+        });
+
+        function renderSuccess(rec) {
+          var meta = (window.NAGI_CAT_META || {})[rec.category] || { cls: "gray", en: "" };
+          var panel = document.getElementById("formPanel");
+          panel.textContent = "";
+
+          var mark = document.createElement("div"); mark.className = "success-mark";
+          mark.insertAdjacentHTML("beforeend", ICON_CHECK);
+          panel.appendChild(mark);
+
+          var h = document.createElement("h2");
+          h.className = "mincho center"; h.style.fontSize = "24px";
+          h.textContent = "ご予約を受け付けました";
+          panel.appendChild(h);
+
+          var p = document.createElement("p");
+          p.className = "center muted"; p.style.cssText = "margin:10px auto 24px; max-width:46ch; font-size:13.5px;";
+          p.textContent = "空き状況を確認し、スタッフより確定のご連絡をいたします。以下はAIによる事前整理の結果です（社内向けの下書き）。";
+          panel.appendChild(p);
+
+          var sumCard = document.createElement("div");
+          sumCard.className = "card"; sumCard.style.cssText = "padding:18px 20px; margin-bottom:18px;";
+          var rows = [
+            ["お名前", rec.name + " 様"],
+            ["メニュー", rec.menu],
+            ["第一希望", fmtDT(rec.firstChoice)],
+            ["第二希望", fmtDT(rec.secondChoice)],
+            ["来院区分", rec.isFirstVisit ? "初回" : "再来"]
+          ];
+          rows.forEach(function (r) {
+            var line = document.createElement("div");
+            line.style.cssText = "display:flex; gap:14px; padding:7px 0; border-bottom:1px solid var(--line-soft); font-size:13.5px;";
+            var k = document.createElement("span"); k.className = "muted"; k.style.minWidth = "84px"; k.textContent = r[0];
+            var v = document.createElement("span"); v.textContent = r[1];
+            line.appendChild(k); line.appendChild(v); sumCard.appendChild(line);
+          });
+          panel.appendChild(sumCard);
+
+          var box = document.createElement("div"); box.className = "ai-box";
+          var head = document.createElement("div"); head.className = "ai-head";
+          var mk = document.createElement("span"); mk.className = "ai-mark"; mk.insertAdjacentHTML("beforeend", ICON_AI);
+          var tt = document.createElement("div"); tt.className = "t";
+          tt.appendChild(document.createTextNode("AIによる事前整理"));
+          var sm = document.createElement("small"); sm.textContent = "Auto triage · draft"; tt.appendChild(sm);
+          head.appendChild(mk); head.appendChild(tt); box.appendChild(head);
+
+          var row = document.createElement("div"); row.className = "ai-row";
+          var k = document.createElement("span"); k.className = "k"; k.textContent = "自動分類カテゴリ：";
+          var badge = document.createElement("span"); badge.className = "badge badge-cat " + meta.cls; badge.textContent = rec.category;
+          row.appendChild(k); row.appendChild(badge); box.appendChild(row);
+
+          var sumP = document.createElement("p"); sumP.textContent = rec.aiSummary; box.appendChild(sumP);
+
+          var chTitle = document.createElement("p");
+          chTitle.style.cssText = "font-size:12.5px; color:var(--seiji); margin:14px 0 4px; letter-spacing:.04em;";
+          chTitle.textContent = "▸ カウンセリング時の確認ポイント";
+          box.appendChild(chTitle);
+          var ul = document.createElement("ul"); ul.className = "checks";
+          (rec.aiChecks || []).forEach(function (c) {
+            var li = document.createElement("li");
+            li.insertAdjacentHTML("beforeend", ICON_CHECK);
+            var sp = document.createElement("span"); sp.textContent = c; li.appendChild(sp); ul.appendChild(li);
+          });
+          box.appendChild(ul);
+
+          var note = document.createElement("p"); note.className = "ai-note";
+          note.insertAdjacentHTML("beforeend", ICON_INFO);
+          var ns = document.createElement("span"); ns.textContent = "この分類とポイントはAIの下書きです。実際の施術内容は、当日スタッフがカウンセリングで最終判断します。";
+          note.appendChild(ns); box.appendChild(note);
+          panel.appendChild(box);
+
+          var acts = document.createElement("div"); acts.style.cssText = "display:flex; gap:10px; flex-wrap:wrap; margin-top:18px;";
+          var a1 = document.createElement("a"); a1.className = "btn btn-ghost"; a1.href = "../dashboard/"; a1.textContent = "管理画面で確認 →";
+          var a2 = document.createElement("a"); a2.className = "btn btn-ghost"; a2.href = "../"; a2.textContent = "サイトに戻る";
+          acts.appendChild(a1); acts.appendChild(a2); panel.appendChild(acts);
+
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+      })();
+    </script>
+    <style>
+      .bk-grid { display:grid; grid-template-columns: 1.6fr 1fr; gap: 28px; align-items: start; }
+      @media (max-width: 880px){ .bk-grid { grid-template-columns:1fr; } }
+    </style>
+  </body>
+</html>

@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>予約管理 | nail salon luce（DM/LINE運用・デモ）</title>
+<meta name="description" content="nail salon luce の予約管理画面。SNS予約フォームから届いた予約を一覧管理し、DM/LINEにそのまま貼れる返信文を自動生成。流入元分析つき。架空サロンのポートフォリオデモ。" />
+<meta name="robots" content="noindex" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23b48a6a'/%3E%3Ctext x='16' y='22' font-family='Georgia,serif' font-size='16' fill='%23fdf6ef' text-anchor='middle'%3EL%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Tenor+Sans&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --milk: #fbf6f2; --cream: #f3e9e0; --surface: #ffffff;
+    --mocha: #b48a6a; --mocha-deep: #936b4e; --blush: #e8bdb4; --rose: #d99a8f;
+    --text: #463d37; --muted: #8c7d72; --faint: #b3a79d; --line: #ece0d6; --line-strong: #ddccbe;
+    --ig: #c2638a; --line-g: #4e9a4e; --tel: #8a7d72;
+    --shadow-sm: 0 4px 18px rgba(91,68,52,.07); --shadow-md: 0 22px 54px -26px rgba(91,68,52,.5);
+    --display: 'Tenor Sans', serif; --sans: 'Zen Kaku Gothic New', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--sans); color: var(--text); background: var(--cream); line-height: 1.7; font-size: 15px; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; }
+
+  /* gate */
+  #gate { min-height: 100vh; display: grid; place-items: center; padding: 1.5rem; }
+  .gate-card { width: min(400px, 100%); background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 2.4rem 2rem; box-shadow: var(--shadow-md); text-align: center; }
+  .gate-card .logo { font-family: var(--display); font-size: 2rem; letter-spacing: .04em; }
+  .gate-card .sub { font-size: .68rem; letter-spacing: .34em; color: var(--muted); margin-bottom: 1.6rem; text-transform: uppercase; }
+  .gate-card h1 { font-family: var(--display); font-size: 1.3rem; margin-bottom: .4rem; }
+  .gate-card p { font-size: .82rem; color: var(--muted); margin-bottom: 1.4rem; }
+  .gate-card input { width: 100%; text-align: center; letter-spacing: .5em; font-size: 1.2rem; padding: .7rem; border: 1px solid var(--line-strong); border-radius: 11px; background: var(--milk); }
+  .gate-card input:focus { outline: none; border-color: var(--mocha); box-shadow: 0 0 0 3px rgba(180,138,106,.16); }
+  .gate-err { color: #c0573f; font-size: .8rem; min-height: 1.2em; margin-top: .5rem; }
+  .gate-hint { font-size: .74rem; color: var(--muted); margin-top: 1rem; }
+  .gate-hint b { color: var(--mocha-deep); letter-spacing: .2em; }
+
+  #app { display: none; }
+  .topbar { background: linear-gradient(100deg, var(--mocha-deep), var(--mocha)); color: #fff; display: flex; align-items: center; justify-content: space-between; padding: .9rem clamp(1rem,4vw,2rem); position: sticky; top: 0; z-index: 20; flex-wrap: wrap; gap: .6rem; }
+  .topbar .brand { display: flex; align-items: baseline; gap: .7rem; }
+  .topbar .brand .logo { font-family: var(--display); font-size: 1.4rem; letter-spacing: .06em; }
+  .topbar .brand .tag { font-size: .72rem; letter-spacing: .12em; opacity: .85; }
+  .topbar nav { display: flex; gap: .4rem; flex-wrap: wrap; }
+  .tbtn { background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.28); color: #fff; font-size: .75rem; letter-spacing: .04em; padding: .42rem .8rem; border-radius: 999px; transition: .15s; }
+  .tbtn:hover { background: rgba(255,255,255,.26); }
+
+  main { width: min(1040px, 94vw); margin: 0 auto; padding: clamp(1.3rem,4vw,2.2rem) 0 4rem; }
+  .page-head { margin-bottom: 1.3rem; }
+  .page-head h2 { font-family: var(--display); font-size: 1.5rem; }
+  .page-head p { font-size: .82rem; color: var(--muted); }
+
+  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 13px; margin-bottom: 1.4rem; }
+  .kpi { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 1rem 1.1rem; }
+  .kpi.accent { background: linear-gradient(120deg, var(--mocha-deep), var(--mocha)); border-color: transparent; color: #fff; }
+  .kpi .l { font-size: .74rem; color: var(--muted); }
+  .kpi.accent .l { color: rgba(255,255,255,.85); }
+  .kpi .n { font-family: var(--display); font-size: 1.9rem; line-height: 1.2; margin-top: .15rem; }
+  .kpi .n small { font-family: var(--sans); font-size: .78rem; margin-left: 2px; }
+  .kpi .s { font-size: .71rem; color: var(--muted); margin-top: .15rem; }
+  .kpi.accent .s { color: rgba(255,255,255,.8); }
+
+  /* source analytics */
+  .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 1.1rem 1.3rem; margin-bottom: 1.4rem; }
+  .panel h3 { font-size: .9rem; font-weight: 500; display: flex; align-items: center; gap: .5rem; margin-bottom: .2rem; }
+  .panel h3 svg { width: 16px; height: 16px; color: var(--mocha); }
+  .panel .desc { font-size: .76rem; color: var(--muted); margin-bottom: 1rem; }
+  .bar { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 12.5px; }
+  .bar .bl { width: 108px; flex: none; }
+  .bar .track { flex: 1; height: 13px; background: var(--cream); border-radius: 999px; overflow: hidden; }
+  .bar .fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--blush), var(--mocha)); }
+  .bar .bv { width: 56px; flex: none; text-align: right; color: var(--muted); }
+  .bar .bv b { font-family: var(--display); color: var(--text); }
+
+  .filterbar { display: flex; flex-wrap: wrap; gap: 9px; align-items: center; margin-bottom: 1.1rem; }
+  .filterbar input, .filterbar select { font-family: inherit; font-size: .85rem; color: var(--text); background: var(--surface); border: 1px solid var(--line-strong); border-radius: 10px; padding: .52rem .8rem; }
+  .filterbar input:focus, .filterbar select:focus { outline: none; border-color: var(--mocha); }
+  .filterbar .search { flex: 1; min-width: 170px; }
+  .seg { display: inline-flex; background: var(--surface); border: 1px solid var(--line-strong); border-radius: 999px; padding: 3px; }
+  .seg button { background: transparent; border: none; font-size: .77rem; color: var(--muted); padding: .35rem .8rem; border-radius: 999px; }
+  .seg button.active { background: var(--mocha); color: #fff; }
+
+  .list { display: grid; gap: 13px; }
+  .rcard { background: var(--surface); border: 1px solid var(--line); border-radius: 15px; padding: 1.1rem 1.2rem; transition: box-shadow .2s; }
+  .rcard:hover { box-shadow: var(--shadow-sm); }
+  .rcard.s-new { border-left: 3px solid var(--mocha); }
+  .rcard.s-confirmed { border-left: 3px solid #6f9a6a; }
+  .rcard.s-done { border-left: 3px solid var(--faint); opacity: .9; }
+  .rcard.s-canceled { border-left: 3px solid #c2654c; opacity: .65; }
+  .rtop { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .rname { font-size: 1.05rem; font-weight: 500; display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
+  .chan { display: inline-flex; align-items: center; gap: 4px; font-size: .7rem; font-weight: 500; padding: .15rem .55rem; border-radius: 999px; }
+  .chan svg { width: 12px; height: 12px; }
+  .chan.Instagram { background: #f6e1ea; color: var(--ig); }
+  .chan.LINE { background: #e3f1e0; color: var(--line-g); }
+  .chan.電話 { background: var(--cream); color: var(--tel); }
+  .visit { font-size: .66rem; padding: .1rem .5rem; border-radius: 999px; background: var(--cream); color: var(--muted); }
+  .visit.first { background: #f1dcd2; color: var(--mocha-deep); }
+  .rmeta { font-size: .83rem; color: var(--muted); margin-top: .25rem; }
+  .rmeta .menu { color: var(--text); font-weight: 500; }
+  .rwhen { text-align: right; flex: none; }
+  .rwhen .dt { font-family: var(--display); font-size: .95rem; }
+  .status-pill { display: inline-block; font-size: .72rem; font-weight: 500; padding: .16rem .65rem; border-radius: 999px; margin-top: .2rem; }
+  .sp-new { background: #f1dcd2; color: var(--mocha-deep); }
+  .sp-confirmed { background: #e3f1e0; color: #4f7a4a; }
+  .sp-done { background: var(--cream); color: var(--muted); }
+  .sp-canceled { background: #f6e2da; color: #a44a32; }
+
+  .rrow2 { display: flex; align-items: center; gap: 9px; margin-top: .7rem; flex-wrap: wrap; }
+  .src-badge { font-size: .72rem; padding: .14rem .6rem; border-radius: 999px; background: #efe4dc; color: var(--mocha-deep); }
+  .expand { margin-left: auto; font-size: .76rem; color: var(--mocha-deep); background: none; border: none; }
+
+  .rbody { display: none; margin-top: .9rem; padding-top: .9rem; border-top: 1px dashed var(--line); }
+  .rcard.open .rbody { display: block; }
+  .detail { font-size: .84rem; color: var(--text); margin-bottom: .5rem; }
+  .detail .k { color: var(--muted); }
+  .design { background: var(--milk); border: 1px solid var(--line); border-radius: 10px; padding: .6rem .8rem; font-size: .84rem; margin: .6rem 0; }
+
+  /* reply generator */
+  .reply { background: var(--milk); border: 1px solid var(--line-strong); border-radius: 12px; padding: .9rem 1rem; margin-top: .8rem; }
+  .reply .rh { display: flex; align-items: center; gap: .5rem; font-size: .82rem; font-weight: 500; margin-bottom: .6rem; }
+  .reply .rh svg { width: 15px; height: 15px; color: var(--mocha); }
+  .tmpl { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: .6rem; }
+  .tmpl button { font-size: .76rem; padding: .35rem .75rem; border-radius: 999px; border: 1px solid var(--line-strong); background: var(--surface); color: var(--text); }
+  .tmpl button.active { background: var(--mocha); border-color: var(--mocha); color: #fff; }
+  .reply textarea { width: 100%; font-family: inherit; font-size: .84rem; line-height: 1.7; color: var(--text); background: var(--surface); border: 1px solid var(--line-strong); border-radius: 10px; padding: .7rem .85rem; min-height: 132px; resize: vertical; }
+  .reply textarea:focus { outline: none; border-color: var(--mocha); }
+  .reply-foot { display: flex; align-items: center; gap: .6rem; margin-top: .6rem; }
+  .copybtn { display: inline-flex; align-items: center; gap: 6px; font-size: .8rem; font-weight: 500; padding: .5rem 1rem; border-radius: 10px; border: none; background: linear-gradient(100deg, var(--mocha-deep), var(--mocha)); color: #fff; }
+  .copybtn svg { width: 15px; height: 15px; }
+  .copynote { font-size: .74rem; color: var(--muted); }
+
+  .ractions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: .9rem; }
+  .abtn { font-size: .78rem; padding: .42rem .9rem; border-radius: 999px; border: 1px solid var(--line-strong); background: var(--surface); color: var(--text); transition: .15s; }
+  .abtn:hover { border-color: var(--mocha); color: var(--mocha-deep); }
+  .abtn.go { background: var(--mocha); border-color: var(--mocha); color: #fff; }
+  .abtn.danger:hover { border-color: #c2654c; color: #a44a32; }
+  .empty { background: var(--surface); border: 1px dashed var(--line-strong); border-radius: 14px; padding: 3rem 1rem; text-align: center; color: var(--muted); }
+  .empty .big { font-family: var(--display); color: var(--text); font-size: 1.05rem; margin-bottom: .3rem; }
+
+  #toast { position: fixed; left: 50%; bottom: 1.4rem; transform: translateX(-50%) translateY(20px); background: var(--mocha-deep); color: #fff; font-size: .82rem; padding: .7rem 1.3rem; border-radius: 999px; opacity: 0; pointer-events: none; transition: .3s; z-index: 60; }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  @media (max-width: 760px) { .kpis { grid-template-columns: repeat(2, 1fr); } }
+</style>
+</head>
+<body>
+
+<div id="gate">
+  <div class="gate-card">
+    <div class="logo en">luce</div>
+    <div class="sub">Nail Salon — Admin</div>
+    <h1 class="en">予約管理</h1>
+    <p>スタッフ用のデモ管理画面です。パスコードを入力してください。</p>
+    <input id="passInput" type="password" inputmode="numeric" maxlength="4" placeholder="••••" aria-label="パスコード" />
+    <div class="gate-err" id="passErr"></div>
+    <button class="copybtn" id="passBtn" style="width:100%;justify-content:center;padding:.7rem;">ログイン</button>
+    <p class="gate-hint">デモ用パスコード： <b>2026</b></p>
+  </div>
+</div>
+
+<div id="app">
+  <div class="topbar">
+    <div class="brand"><span class="logo en">luce</span><span class="tag">予約管理 / Admin</span></div>
+    <nav>
+      <button class="tbtn" id="reloadBtn">最新に更新</button>
+      <button class="tbtn" id="resetBtn">デモを初期化</button>
+      <a class="tbtn" href="../" target="_blank" rel="noopener">予約フォーム ↗</a>
+      <button class="tbtn" id="logoutBtn">ログアウト</button>
+    </nav>
+  </div>
+
+  <main>
+    <div class="page-head">
+      <h2 class="en">予約一覧</h2>
+      <p>SNS予約フォームから届いた予約を管理。各予約の「DM/LINE返信文」をコピーして、そのままお客様に送れます。</p>
+    </div>
+
+    <div class="kpis" id="kpis"></div>
+
+    <div class="panel">
+      <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l3-3 3 3 4-5"/></svg>流入元レポート</h3>
+      <p class="desc">予約フォームの「どこで知りましたか？」を自動集計。どのSNSが集客につながっているかが分かります。</p>
+      <div id="srcChart"></div>
+    </div>
+
+    <div class="filterbar">
+      <input class="search" id="search" type="search" placeholder="名前・メニュー・連絡先で検索" aria-label="検索" />
+      <div class="seg" id="statusSeg">
+        <button data-s="" class="active">すべて</button>
+        <button data-s="new">未対応</button>
+        <button data-s="confirmed">確定</button>
+        <button data-s="done">来店済</button>
+      </div>
+      <select id="chanFilter" aria-label="連絡方法で絞り込み">
+        <option value="">すべての連絡方法</option>
+        <option value="Instagram">Instagram</option>
+        <option value="LINE">LINE</option>
+        <option value="電話">電話</option>
+      </select>
+    </div>
+
+    <div class="list" id="list"></div>
+  </main>
+</div>
+
+<div id="toast"></div>
+
+<script src="../assets/data.js"></script>
+<script src="../assets/store.js"></script>
+<script>
+"use strict";
+(function () {
+  var PASSCODE = "2026";
+  var STATUS_LABEL = { new: "未対応", confirmed: "確定", done: "来店済", canceled: "キャンセル" };
+  var TMPL = [{ k: "confirm", l: "確定の返信" }, { k: "remind", l: "前日リマインド" }, { k: "thanks", l: "来店後お礼" }];
+  var CHAN_ICON = {
+    Instagram: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>',
+    LINE: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11c0-4.2-4-7.5-9-7.5S3 6.8 3 11c0 3.8 3.2 7 7.6 7.6.9.1.8.6.7 1.1l-.2 1c-.1.5.3.7.8.4C16 18.7 21 15.3 21 11z"/></svg>',
+    "電話": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2 4.2 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L8 9.6a16 16 0 0 0 6 6l1.2-1.1a2 2 0 0 1 2.1-.5c.8.3 1.7.5 2.6.6a2 2 0 0 1 1.7 2z"/></svg>'
+  };
+  var state = { bookings: [], status: "", chan: "", search: "" };
+  var $ = function (s) { return document.querySelector(s); };
+
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; }
+  function toast(msg) { var t = $("#toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toast._t); toast._t = setTimeout(function () { t.classList.remove("show"); }, 2100); }
+  function ago(ts) { var d = Date.now() - ts; if (d < 36e5) return Math.max(1, Math.floor(d / 6e4)) + "分前"; if (d < 864e5) return Math.floor(d / 36e5) + "時間前"; return Math.floor(d / 864e5) + "日前"; }
+
+  function copyText(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text).then(function () { return true; }).catch(function () { return fallbackCopy(text); });
+    }
+    return Promise.resolve(fallbackCopy(text));
+  }
+  function fallbackCopy(text) {
+    var ta = document.createElement("textarea"); ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    var ok = false; try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+    document.body.removeChild(ta); return ok;
+  }
+
+  function load() { state.bookings = window.LuceStore.getBookings(); render(); }
+  function passFilter(b) {
+    if (state.status && b.status !== state.status) return false;
+    if (state.chan && b.contactType !== state.chan) return false;
+    if (state.search) { var q = state.search.toLowerCase(); if ([b.name, b.menu, b.contact, b.design, b.source].join(" ").toLowerCase().indexOf(q) === -1) return false; }
+    return true;
+  }
+  function render() { renderKpis(); renderChart(); renderList(); }
+
+  function renderKpis() {
+    var b = state.bookings;
+    var nNew = b.filter(function (x) { return x.status === "new"; }).length;
+    var nConf = b.filter(function (x) { return x.status === "confirmed"; }).length;
+    var active = b.filter(function (x) { return x.status !== "canceled"; }).length;
+    var nFirst = b.filter(function (x) { return x.firstVisit && x.status !== "canceled"; }).length;
+    var rate = active ? Math.round((nFirst / active) * 100) : 0;
+    var k = $("#kpis"); k.replaceChildren();
+    k.append(
+      kpi("総予約数", String(b.length), "件", "キャンセル含む", false),
+      kpi("未対応", String(nNew), "件", "返信が必要", true),
+      kpi("確定", String(nConf), "件", "来店待ち", false),
+      kpi("初回比率", String(rate), "%", nFirst + "件 / 有効" + active + "件", false)
+    );
+  }
+  function kpi(label, n, unit, sub, accent) {
+    var c = el("div", "kpi" + (accent ? " accent" : "")); c.appendChild(el("div", "l", label));
+    var nn = el("div", "n"); nn.appendChild(document.createTextNode(n)); if (unit) nn.appendChild(el("small", null, unit));
+    c.appendChild(nn); c.appendChild(el("div", "s", sub)); return c;
+  }
+
+  function renderChart() {
+    var counts = {}; window.LuceStore.SOURCES.forEach(function (s) { counts[s] = 0; });
+    state.bookings.forEach(function (b) { if (counts[b.source] != null) counts[b.source]++; });
+    var total = state.bookings.length || 1;
+    var max = Math.max.apply(null, window.LuceStore.SOURCES.map(function (s) { return counts[s]; }).concat([1]));
+    var chart = $("#srcChart"); chart.replaceChildren();
+    window.LuceStore.SOURCES.forEach(function (s) {
+      var row = el("div", "bar");
+      row.appendChild(el("div", "bl", s));
+      var track = el("div", "track"); var fill = el("div", "fill"); fill.style.width = Math.round((counts[s] / max) * 100) + "%"; track.appendChild(fill);
+      row.appendChild(track);
+      var bv = el("div", "bv"); var b = el("b", null, String(counts[s])); bv.appendChild(b); bv.appendChild(document.createTextNode(" / " + Math.round((counts[s] / total) * 100) + "%"));
+      row.appendChild(bv); chart.appendChild(row);
+    });
+  }
+
+  function renderList() {
+    var list = $("#list"); list.replaceChildren();
+    var visible = state.bookings.filter(passFilter);
+    if (visible.length === 0) {
+      var e = el("div", "empty"); e.appendChild(el("div", "big", "該当する予約がありません"));
+      e.appendChild(document.createTextNode("検索・絞り込みを変更してください。")); list.appendChild(e); return;
+    }
+    visible.forEach(function (b) { list.appendChild(card(b)); });
+  }
+
+  function chanBadge(type) {
+    var c = el("span", "chan " + type); c.insertAdjacentHTML("beforeend", CHAN_ICON[type] || "");
+    c.appendChild(el("span", null, type)); return c;
+  }
+
+  function card(b) {
+    var c = el("div", "rcard s-" + b.status);
+    var top = el("div", "rtop");
+    var left = el("div");
+    var nm = el("div", "rname");
+    nm.appendChild(document.createTextNode(b.name + " 様"));
+    nm.appendChild(chanBadge(b.contactType));
+    nm.appendChild(el("span", "visit" + (b.firstVisit ? " first" : ""), b.firstVisit ? "初回" : "再来"));
+    left.appendChild(nm);
+    var meta = el("div", "rmeta");
+    meta.appendChild(el("span", "menu", b.menu));
+    meta.appendChild(document.createTextNode("　/　" + b.contact + "　/　申込 " + ago(b.createdAt)));
+    left.appendChild(meta); top.appendChild(left);
+    var rw = el("div", "rwhen");
+    rw.appendChild(el("div", "dt", window.LuceStore.fmtDate(b.firstChoice)));
+    rw.appendChild(el("span", "status-pill sp-" + b.status, STATUS_LABEL[b.status]));
+    top.appendChild(rw); c.appendChild(top);
+
+    var row2 = el("div", "rrow2");
+    row2.appendChild(el("span", "src-badge", "流入：" + b.source));
+    var exp = el("button", "expand", "詳細・返信文 ▾"); row2.appendChild(exp); c.appendChild(row2);
+
+    var body = el("div", "rbody");
+    if (b.secondChoice) { var d2 = el("div", "detail"); d2.appendChild(el("span", "k", "第二希望：")); d2.appendChild(document.createTextNode(window.LuceStore.fmtDate(b.secondChoice))); body.appendChild(d2); }
+    if (b.coupon) { var dc = el("div", "detail"); dc.appendChild(el("span", "k", "クーポン：")); dc.appendChild(document.createTextNode(b.coupon)); body.appendChild(dc); }
+    if (b.design) { var dz = el("div", "design"); dz.textContent = "デザイン希望：" + b.design; body.appendChild(dz); }
+    body.appendChild(replyBox(b));
+    body.appendChild(actions(b));
+    c.appendChild(body);
+
+    exp.onclick = function () { var open = c.classList.toggle("open"); exp.textContent = open ? "閉じる ▴" : "詳細・返信文 ▾"; };
+    return c;
+  }
+
+  function replyBox(b) {
+    var box = el("div", "reply");
+    var rh = el("div", "rh");
+    rh.insertAdjacentHTML("beforeend", CHAN_ICON[b.contactType] || "");
+    rh.appendChild(el("span", null, b.contactType + " 返信文（コピーして送信）"));
+    box.appendChild(rh);
+
+    var tmpl = el("div", "tmpl");
+    var ta = el("textarea"); ta.spellcheck = false;
+    TMPL.forEach(function (t, i) {
+      var btn = el("button", i === 0 ? "active" : null, t.l);
+      btn.onclick = function () {
+        Array.prototype.forEach.call(tmpl.children, function (x) { x.classList.remove("active"); });
+        btn.classList.add("active");
+        ta.value = window.LuceStore.buildReply(b, t.k);
+      };
+      tmpl.appendChild(btn);
+    });
+    box.appendChild(tmpl);
+    ta.value = window.LuceStore.buildReply(b, "confirm");
+    box.appendChild(ta);
+
+    var foot = el("div", "reply-foot");
+    var copy = el("button", "copybtn");
+    copy.insertAdjacentHTML("beforeend", '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>');
+    copy.appendChild(el("span", null, "コピー"));
+    copy.onclick = function () { copyText(ta.value).then(function (ok) { toast(ok ? "コピーしました（" + b.contactType + "に貼り付け）" : "コピーに失敗しました"); }); };
+    foot.appendChild(copy);
+    foot.appendChild(el("span", "copynote", "→ " + b.contactType + " を開いて貼り付けるだけ"));
+    box.appendChild(foot);
+    return box;
+  }
+
+  function actions(b) {
+    var wrap = el("div", "ractions");
+    if (b.status === "new") wrap.appendChild(actBtn("確定にする", "go", b, "confirmed"));
+    if (b.status === "confirmed") wrap.appendChild(actBtn("来店済にする", "go", b, "done"));
+    if (b.status === "done") wrap.appendChild(actBtn("未対応に戻す", "", b, "new"));
+    if (b.status !== "canceled" && b.status !== "done") wrap.appendChild(actBtn("キャンセル", "danger", b, "canceled"));
+    if (b.status === "canceled") wrap.appendChild(actBtn("未対応に戻す", "", b, "new"));
+    return wrap;
+  }
+  function actBtn(label, cls, b, next) {
+    var btn = el("button", "abtn " + cls, label);
+    btn.onclick = function () { window.LuceStore.setStatus(b.id, next); load(); toast("「" + b.name + " 様」を" + STATUS_LABEL[next] + "にしました"); };
+    return btn;
+  }
+
+  function start() { $("#gate").style.display = "none"; $("#app").style.display = "block"; load(); }
+  function tryLogin() {
+    if ($("#passInput").value === PASSCODE) { sessionStorage.setItem("luce_admin", "1"); start(); }
+    else { $("#passErr").textContent = "パスコードが違います"; $("#passInput").value = ""; }
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    $("#passBtn").onclick = tryLogin;
+    $("#passInput").addEventListener("keydown", function (e) { if (e.key === "Enter") tryLogin(); });
+    $("#reloadBtn").onclick = function () { load(); toast("最新の状態に更新しました"); };
+    $("#resetBtn").onclick = function () { if (!confirm("デモデータを初期状態に戻しますか？\nフォームから追加した予約は削除されます。")) return; window.LuceStore.resetDemo(); load(); toast("デモデータを初期化しました"); };
+    $("#logoutBtn").onclick = function () { sessionStorage.removeItem("luce_admin"); location.reload(); };
+    $("#search").addEventListener("input", function (e) { state.search = e.target.value.trim(); renderList(); });
+    $("#chanFilter").addEventListener("change", function (e) { state.chan = e.target.value; renderList(); });
+    document.querySelectorAll("#statusSeg button").forEach(function (btn) {
+      btn.onclick = function () { document.querySelectorAll("#statusSeg button").forEach(function (x) { x.classList.toggle("active", x === btn); }); state.status = btn.dataset.s; renderList(); };
+    });
+    if (sessionStorage.getItem("luce_admin") === "1") start(); else $("#passInput").focus();
+  });
+})();
+</script>
+</body>
+</html>

@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>hair atelier hibi｜日々を、整える。</title>
 <meta name="description" content="hair atelier hibi（ヘアアトリエ ひび）は、日々の暮らしに寄り添う上質なヘアサロンです。カット・カラー・パーマ・トリートメント。" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="hair atelier hibi｜日々を、整える。" />
+<meta property="og:description" content="日々の暮らしに寄り添う上質なヘアサロン（架空デモ）。カット・カラー・パーマ。予約・店舗情報まで備えたサロンサイトの制作サンプル。" />
+<meta property="og:image" content="https://portfolio-three-tawny-17.vercel.app/assets/salon.jpg" />
+<meta property="og:url" content="https://portfolio-three-tawny-17.vercel.app/salon/" />
+<meta name="twitter:card" content="summary_large_image" />
 <!-- Inline SVG favicon (data URI) -->
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%233f3a36'/%3E%3Ctext x='16' y='22' font-family='Georgia,serif' font-size='17' fill='%23d8c3a5' text-anchor='middle'%3Eh%3C/text%3E%3C/svg%3E" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -383,6 +389,8 @@
   .hours-table th { color: var(--charcoal); font-weight: 500; }
   .hours-table td.closed { color: var(--accent-deep); }
   .map-placeholder {
+    position: relative;
+    overflow: hidden;
     margin-top: 1.6rem;
     height: 280px;
     border-radius: 8px;
@@ -398,6 +406,7 @@
   }
   .map-placeholder svg { opacity: 0.5; }
   .map-placeholder span { font-size: 0.82rem; letter-spacing: 0.1em; }
+  .map-placeholder iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; filter: grayscale(.3) contrast(.97); }
 
   /* ---------- CTA band ---------- */
   .cta-band {
@@ -514,7 +523,7 @@
       <li><a href="#menu">MENU</a></li>
       <li><a href="#gallery">GALLERY</a></li>
       <li><a href="#access">ACCESS</a></li>
-      <li><a href="#reserve" class="nav-cta">ご予約</a></li>
+      <li><a href="booking/" class="nav-cta">ご予約</a></li>
     </ul>
   </nav>
 </header>
@@ -528,7 +537,7 @@
       <p class="eyebrow">hair atelier hibi</p>
       <h1>日々を、整える。</h1>
       <p class="lede">慌ただしい毎日のなかに、自分を取り戻すひととき。髪を整えることは、心を整えること。</p>
-      <a href="#reserve" class="btn">ご予約はこちら <span class="arrow" aria-hidden="true">→</span></a>
+      <a href="booking/" class="btn">ご予約はこちら <span class="arrow" aria-hidden="true">→</span></a>
     </div>
     <div class="hero-scroll" aria-hidden="true">SCROLL</div>
   </section>
@@ -633,9 +642,10 @@
             <tr><th>定休日</th><td>毎週月曜日・第3火曜日</td></tr>
           </tbody>
         </table>
-        <div class="map-placeholder" role="img" aria-label="地図（デモ用プレースホルダ）">
+        <div class="map-placeholder" role="img" aria-label="hair atelier hibi 周辺の地図（東京都渋谷区神南）">
           <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21s-7-6.5-7-11a7 7 0 1 1 14 0c0 4.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
           <span>MAP — 渋谷区神南</span>
+          <iframe title="hair atelier hibi 周辺の地図（東京都渋谷区神南）" src="https://maps.google.com/maps?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%8B%E8%B0%B7%E5%8C%BA%E7%A5%9E%E5%8D%972-14-7&z=16&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
         </div>
       </div>
       <div class="reveal">
@@ -671,7 +681,7 @@
       <span class="eyebrow">Reservation</span>
       <h2>あなたの「整う」を、<br />ご予約ください。</h2>
       <p>ご希望の日時・メニューをお気軽にお知らせください。</p>
-      <a href="tel:0312345678" class="btn">電話で予約する <span class="arrow" aria-hidden="true">→</span></a>
+      <a href="booking/" class="btn">オンラインで予約する <span class="arrow" aria-hidden="true">→</span></a>
       <a href="tel:0312345678" class="tel">03-1234-5678<small>受付 10:00 - 19:00 / 月曜定休</small></a>
     </div>
   </section>
@@ -698,7 +708,7 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2026 hair atelier hibi</span>
+      <span>© 2026 hair atelier hibi　|　<a href="booking/" style="border-bottom:1px solid rgba(255,255,255,.3)">オンライン予約</a>　<a href="admin/" style="border-bottom:1px solid rgba(255,255,255,.3)">予約管理（スタッフ用）</a></span>
       <span class="demo-note">※ 本サイトはポートフォリオ用に制作した架空サロンのデモサイトです。実在の店舗・連絡先ではありません。</span>
     </div>
   </div>

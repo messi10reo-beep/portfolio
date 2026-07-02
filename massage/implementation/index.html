@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>実装解説｜AI業務改善デモの仕組み | 凪 NAGI</title>
+    <meta name="description" content="全体構成・データ保存・FAQ検索・問い合わせ分類・APIなしで動く理由・今後のAPI連携方針を、非エンジニアにも分かるように解説します。" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231b1814'/%3E%3Ctext x='16' y='23' font-size='19' font-family='Georgia,serif' fill='%23f2eee6' text-anchor='middle'%3E凪%3C/text%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Shippori+Mincho:wght@400;500;600;700;800&family=Zen+Kaku+Gothic+New:wght@300;400;500;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../assets/app.css" />
+    <style>
+      .im-block { max-width: 820px; }
+      .im-block p { color: var(--sumi-soft); font-size: 15px; margin-bottom: 1em; }
+      .arch { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; align-items: stretch; margin: 8px 0; }
+      .arch .node { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 16px 14px; text-align: center; position: relative; }
+      .arch .node .ic { width: 38px; height: 38px; border-radius: 9px; background: var(--seiji-bg); color: var(--seiji); display: grid; place-items: center; margin: 0 auto 10px; }
+      .arch .node .ic svg { width: 19px; height: 19px; }
+      .arch .node b { font-family: var(--mincho); font-size: 14px; display: block; }
+      .arch .node small { font-size: 11px; color: var(--muted); }
+      .arch .arrow { display: grid; place-items: center; color: var(--muted); font-size: 20px; }
+      @media (max-width: 760px){ .arch { grid-template-columns: 1fr; gap: 8px; } .arch .arrow { transform: rotate(90deg); padding: 2px 0; } }
+      .code { background: var(--dark-2); color: #e7e1d4; border-radius: 8px; padding: 18px 20px; font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12.5px; line-height: 1.85; overflow-x: auto; white-space: pre; }
+      .code .c { color: #8c8474; } .code .k { color: #c56a4f; } .code .s { color: #7ba596; }
+      .type-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+      .type-table th, .type-table td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+      .type-table th { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+      .type-table td code { background: var(--paper-2); border-radius: 4px; padding: 2px 6px; font-size: 12px; }
+      .qa { display: grid; gap: 14px; }
+      .qa .item { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 18px 20px; }
+      .qa .item h4 { font-family: var(--mincho); font-size: 15.5px; margin-bottom: 6px; display: flex; gap: 9px; align-items: center; }
+      .qa .item h4 .q { color: var(--shu); font-family: var(--latin); font-style: italic; font-size: 18px; }
+      .qa .item p { font-size: 13.5px; color: var(--sumi-soft); margin: 0; }
+      .step-list { display: grid; gap: 12px; counter-reset: st; }
+      .step-list .s { display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: start; }
+      .step-list .s .num { width: 28px; height: 28px; border-radius: 50%; background: var(--sumi); color: var(--paper); display: grid; place-items: center; font-size: 13px; font-family: var(--latin); flex-shrink: 0; }
+      .step-list .s div b { font-family: var(--mincho); }
+      .step-list .s div p { font-size: 13.5px; color: var(--sumi-soft); margin: 2px 0 0; }
+    </style>
+  </head>
+  <body data-page="impl">
+    <section class="phero">
+      <div class="wrap">
+        <span class="kicker"><span class="dot"></span><span class="label">How it works</span></span>
+        <h1>実装解説<span class="en">Under the hood, in plain words</span></h1>
+        <p class="lead">このデモがどう動いているかを、<b>コードが分からない方にも</b>分かるように解説します。全体構成・データの保存・FAQ検索・分類ロジック・APIなしで動く理由・今後の拡張方針の順です。</p>
+      </div>
+    </section>
+
+    <!-- 全体構成 -->
+    <section class="section">
+      <div class="wrap im-block">
+        <div class="sec-head reveal"><span class="no">01</span><h2>全体構成</h2><p>「集める → AIで整理する → 人が確認して返す」の3ステップ。</p></div>
+        <div class="arch reveal">
+          <div class="node"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 16l-4 4-4-4M12 4v16"/><rect x="3" y="3" width="18" height="4" rx="1"/></svg></div><b>入力</b><small>予約 / 問い合わせ / FAQ質問</small></div>
+          <div class="arrow">→</div>
+          <div class="node"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4"/><circle cx="12" cy="12" r="3"/></svg></div><b>AI整理</b><small>分類・検索・たたき台生成</small></div>
+          <div class="arrow">→</div>
+          <div class="node"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg></div><b>集約</b><small>ダッシュボードに保存</small></div>
+          <div class="arrow">→</div>
+          <div class="node"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></div><b>人が確認</b><small>最終判断・返信・確定</small></div>
+        </div>
+        <p class="reveal" style="margin-top:18px;">画面は、公開サイト（LP・予約・FAQ・問い合わせ）と、スタッフが見る管理ダッシュボードに分かれています。AIは中間で「下ごしらえ」をするだけで、<b>最後は必ず人が確認</b>する設計です。</p>
+      </div>
+    </section>
+
+    <!-- データ保存 -->
+    <section class="section alt">
+      <div class="wrap im-block">
+        <div class="sec-head reveal"><span class="no">02</span><h2>データ保存の方法</h2><p>このデモではブラウザ内の <code>localStorage</code> を使用。</p></div>
+        <p class="reveal">予約や問い合わせは、サーバーではなく<b>あなたのブラウザの中</b>（localStorage）に保存されます。だからログイン不要・APIキー不要で、送信内容がそのままダッシュボードに反映されます。外部に送信されないため、デモとして安全に触っていただけます。</p>
+        <p class="reveal">データは下記のような「型」で整理しています（TypeScript設計に準拠）。</p>
+        <div class="reveal" style="overflow-x:auto; margin-bottom:18px;">
+          <table class="type-table">
+            <thead><tr><th>型</th><th>主なフィールド</th></tr></thead>
+            <tbody>
+              <tr><td><code>Booking</code></td><td>id / name / email / phone / menu / firstChoice / secondChoice / symptoms / isFirstVisit / note / <b>category</b> / <b>aiSummary</b> / createdAt / status</td></tr>
+              <tr><td><code>Inquiry</code></td><td>id / name / email / type / message / <b>category</b> / <b>aiSuggestedReply</b> / createdAt / status</td></tr>
+              <tr><td><code>FAQItem</code></td><td>id / category / question / answer / keywords</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="reveal muted" style="font-size:13px;">※ <b>category / aiSummary / aiSuggestedReply</b> がAIによって自動付与される部分です。本番では Supabase などの永続DBに置き換えるだけで、画面ロジックはほぼそのまま使えます。</p>
+      </div>
+    </section>
+
+    <!-- FAQ検索 -->
+    <section class="section">
+      <div class="wrap im-block">
+        <div class="sec-head reveal"><span class="no">03</span><h2>FAQ検索の仕組み（簡易RAG風）</h2><p>あらかじめ用意したFAQ15項目から、関連度の高いものを探して答えます。</p></div>
+        <div class="step-list reveal" style="margin-bottom:20px;">
+          <div class="s"><span class="num">1</span><div><b>質問を正規化</b><p>大文字・全角・空白・記号を整え、表記ゆれを吸収します。</p></div></div>
+          <div class="s"><span class="num">2</span><div><b>キーワード照合でスコア化</b><p>各FAQの「キーワード」が質問に含まれるかを見て、点数をつけます（長い語ほど高配点）。</p></div></div>
+          <div class="s"><span class="num">3</span><div><b>最上位を回答＋根拠提示</b><p>一番点数の高いFAQで回答し、関連FAQを「根拠」として表示します。</p></div></div>
+          <div class="s"><span class="num">4</span><div><b>自信がなければ案内</b><p>点数が低いときは断定せず、「お問い合わせください」と誘導します。</p></div></div>
+        </div>
+        <div class="code reveal"><span class="c">// 質問に含まれるキーワードでスコアリング（簡易RAG風）</span>
+faq.keywords.forEach(<span class="k">function</span> (kw) {
+  <span class="k">if</span> (query.indexOf(kw) !== -1) score += Math.min(kw.length, <span class="s">4</span>);
+});
+<span class="c">// 最上位スコアが低ければ断定せず問い合わせへ誘導</span></div>
+      </div>
+    </section>
+
+    <!-- 分類ロジック -->
+    <section class="section alt">
+      <div class="wrap im-block">
+        <div class="sec-head reveal"><span class="no">04</span><h2>問い合わせ・予約の分類ロジック</h2><p>キーワードのルールベースで、カテゴリと確認ポイントを決めます。</p></div>
+        <p class="reveal"><b>予約</b>は、症状文に「腰」が含まれれば<span class="badge badge-cat shu">腰痛相談</span>、「姿勢・猫背」なら<span class="badge badge-cat gold">姿勢改善</span>、「肩・首」なら<span class="badge badge-cat">肩こり・首こり相談</span>… のように分類し、それぞれ<b>カウンセリングで確認すべき項目</b>を提示します。</p>
+        <p class="reveal"><b>問い合わせ</b>は、選択された種別（予約 / 料金 / 症状 / キャンセル / その他）をもとにカテゴリを決め、種別が「その他」のときは本文から推定します。カテゴリごとに<b>返信文のたたき台</b>を生成します。</p>
+        <div class="code reveal"><span class="c">// 予約：症状文からカテゴリ判定（優先順にマッチ）</span>
+<span class="k">if</span> (/腰|ぎっくり|坐骨/.test(text))      cat = <span class="s">"腰痛相談"</span>;
+<span class="k">else if</span> (/姿勢|猫背|反り腰/.test(text)) cat = <span class="s">"姿勢改善"</span>;
+<span class="k">else if</span> (/肩|首|こり|張り/.test(text)) cat = <span class="s">"肩こり・首こり相談"</span>;
+<span class="k">else</span>                                   cat = <span class="s">"一般相談"</span>;</div>
+        <p class="reveal muted" style="font-size:13px; margin-top:16px;">※ ルールベースは「なぜその分類になったか」が説明できるのが強みです。誤りを見つけたら、その場でルールを直せます（ブラックボックスになりにくい）。</p>
+      </div>
+    </section>
+
+    <!-- APIなしで動く理由 -->
+    <section class="section">
+      <div class="wrap im-block">
+        <div class="sec-head reveal"><span class="no">05</span><h2>APIキーなしでも動く理由</h2></div>
+        <div class="qa reveal">
+          <div class="item"><h4><span class="q">Q.</span> なぜAPIキーが要らないの？</h4><p>FAQの知識・分類ルール・返信テンプレートを、すべて<b>アプリ内に同梱</b>しているからです。外部のAIサービスを呼び出さないので、キーも通信も不要で、その場ですぐ動きます。</p></div>
+          <div class="item"><h4><span class="q">Q.</span> 本物のAIじゃないの？</h4><p>このデモは「AIらしい体験」をルールベースで再現したものです。仕組み（集める→整理→人が確認）はそのままに、整理部分を本物のLLM APIへ差し替えれば、回答の精度を上げられます。</p></div>
+          <div class="item"><h4><span class="q">Q.</span> 安全面は？</h4><p>入力はブラウザ内にのみ保存し外部送信しません。AIの回答範囲をFAQに限定し、医療的な断定は避ける設計です。最終確認は必ず人が行います。</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 今後のAPI連携 -->
+    <section class="section alt">
+      <div class="wrap im-block">
+        <div class="sec-head reveal"><span class="no">06</span><h2>今後API連携する場合の拡張方針</h2></div>
+        <ul class="cs-list reveal" style="list-style:none; display:grid; gap:12px;">
+          <li style="display:flex; gap:12px; font-size:14.5px; color:var(--sumi-soft);"><b style="color:var(--seiji);">→</b><span><b>FAQ回答</b>：キーワード検索を、ベクトル検索＋LLM（Claude / OpenAI）に置き換え、表現ゆれや複合質問に強くする。</span></li>
+          <li style="display:flex; gap:12px; font-size:14.5px; color:var(--sumi-soft);"><b style="color:var(--seiji);">→</b><span><b>データ保存</b>：localStorage を Supabase などの永続DBに変更。複数スタッフで共有・検索・CSV出力。</span></li>
+          <li style="display:flex; gap:12px; font-size:14.5px; color:var(--sumi-soft);"><b style="color:var(--seiji);">→</b><span><b>予約連携</b>：Google Calendar / LINE と連携し、空き状況の自動反映・確定通知を実現。</span></li>
+          <li style="display:flex; gap:12px; font-size:14.5px; color:var(--sumi-soft);"><b style="color:var(--seiji);">→</b><span><b>運用</b>：AIの提案精度をログで計測し、確認・修正された内容を学習データとして改善に回す。</span></li>
+        </ul>
+        <p class="reveal muted" style="font-size:13px; margin-top:18px;">画面とデータの「型」を先に固めてあるため、これらの拡張は<b>裏側の差し替え</b>で進められます。</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap im-block">
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+          <a href="../case-study/" class="btn btn-primary">ケーススタディを読む</a>
+          <a href="../dashboard/" class="btn btn-ghost">管理ダッシュボードを見る</a>
+          <a href="../" class="btn btn-ghost">サイトに戻る</a>
+        </div>
+      </div>
+    </section>
+
+    <script src="../assets/chrome.js"></script>
+  </body>
+</html>

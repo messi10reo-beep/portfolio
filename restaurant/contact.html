@@ -112,8 +112,32 @@
             </div>
           </div>
 
+          <div class="field-grid">
+            <div class="field">
+              <label for="seat">ご希望のお席<span class="req">必須</span></label>
+              <select id="seat" name="seat" required aria-required="true" aria-describedby="seat-error">
+                <option value="">選択してください</option>
+                <option value="カウンター">カウンター</option>
+                <option value="テーブル席">テーブル席</option>
+                <option value="個室">個室</option>
+              </select>
+              <span class="field__error" id="seat-error" aria-live="polite"></span>
+            </div>
+            <div class="field">
+              <label for="course">ご利用内容<span class="req">必須</span></label>
+              <select id="course" name="course" required aria-required="true" aria-describedby="course-error">
+                <option value="">選択してください</option>
+                <option value="季節のおまかせコース">季節のおまかせコース</option>
+                <option value="結コース">結コース</option>
+                <option value="アラカルト・飲みのみ">アラカルト・飲みのみ</option>
+                <option value="ご相談">当日相談したい</option>
+              </select>
+              <span class="field__error" id="course-error" aria-live="polite"></span>
+            </div>
+          </div>
+
           <div class="field">
-            <label for="message">ご要望<span class="opt">任意</span></label>
+            <label for="message">ご要望・アレルギー<span class="opt">任意</span></label>
             <textarea id="message" name="message" aria-describedby="message-error" placeholder="アレルギー、記念日のサプライズ、苦手な食材など、ご要望をお書きください。"></textarea>
             <span class="field__error" id="message-error" aria-live="polite"></span>
           </div>
@@ -187,6 +211,8 @@
 
   <!-- 共通演出スクリプト（contact.js より先に読み込む） -->
   <script src="assets/js/site.js"></script>
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/store.js"></script>
   <script src="assets/js/contact.js"></script>
 </body>
 </html>

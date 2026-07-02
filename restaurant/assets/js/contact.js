@@ -81,6 +81,22 @@
         },
       },
       {
+        id: "seat",
+        label: "ご希望のお席",
+        validate: function (v) {
+          if (!v) return "ご希望のお席を選択してください。";
+          return "";
+        },
+      },
+      {
+        id: "course",
+        label: "ご利用内容",
+        validate: function (v) {
+          if (!v) return "ご利用内容を選択してください。";
+          return "";
+        },
+      },
+      {
         id: "datetime",
         label: "ご希望日時",
         validate: function (v) {
@@ -179,13 +195,33 @@
         return;
       }
 
-      // 検証成功 — 本来はここでサーバ送信。デモのため成功表示のみ。
-      var name = document.getElementById("name").value.trim();
-      renderStatus("success", "ご予約リクエストを受け付けました", [
-        name + " 様、ありがとうございます。",
-        "内容を確認のうえ、担当者より折り返しご連絡いたします。",
-        "（※ これはポートフォリオ用デモのため、実際の送信は行われません）",
-      ]);
+      // 検証成功 — localStorage の予約台帳へ保存（デモ：外部送信なし）
+      function fieldVal(id) { var el = document.getElementById(id); return el ? el.value.trim() : ""; }
+      var rec = null;
+      if (window.YuiStore) {
+        rec = window.YuiStore.addReservation({
+          name: fieldVal("name"), tel: fieldVal("tel"), email: fieldVal("email"),
+          guests: fieldVal("guests"), seat: fieldVal("seat"), course: fieldVal("course"),
+          datetime: fieldVal("datetime"), message: fieldVal("message"),
+        });
+      }
+
+      var name = fieldVal("name");
+      var lines = [name + " 様、ご予約ありがとうございます。"];
+      if (rec && window.YuiStore) {
+        lines.push("【ご予約内容】" + window.YuiStore.dateLabel(rec.datetime) + " " + window.YuiStore.timeLabel(rec.datetime) +
+          "／" + window.YuiStore.guestsLabel(rec.guests) + "／" + rec.seat + "／" + rec.course);
+      }
+      lines.push("空席を確認のうえ、確定のご連絡をいたします。");
+      renderStatus("success", "ご予約リクエストを受け付けました", lines);
+
+      // 予約台帳（管理画面）への導線を追加
+      var link = document.createElement("a");
+      link.href = "admin/";
+      link.textContent = "店舗の方：予約台帳で確認する →";
+      link.className = "ledger-link";
+      link.style.cssText = "display:inline-block;margin-top:12px;color:var(--kin-bright);border-bottom:1px solid var(--line);";
+      statusBox.appendChild(link);
 
       form.reset();
       rules.forEach(function (rule) {
